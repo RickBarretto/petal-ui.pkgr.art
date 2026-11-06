@@ -4,7 +4,7 @@
 ; The first image is visible initially; hovering across the gallery reveals
 ; the other images. No item wrappers are generated.
 
-hoverGallery [
+gallery [
     img.alt: "Front view" "front.jpg"
     img.alt: "Side view" "side.jpg"
     img.alt: "Back view" "back.jpg"
@@ -21,7 +21,7 @@ hoverGallery [
 ;
 ; Utility attributes apply to the gallery container.
 
-hoverGallery.w: 64 [
+gallery.w: 64 [
     img.alt: "Front view" "front.jpg"
     img.alt: "Side view" "side.jpg"
 ]

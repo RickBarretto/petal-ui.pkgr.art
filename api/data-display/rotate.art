@@ -4,7 +4,7 @@
 ; attributes. Generates the outer text-rotate span and inner line container.
 ; The animation loops and pauses on hover. The default full cycle is 10 seconds.
 
-textRotate ["Design" "Develop" "Deploy"]
+rotate ["Design" "Develop" "Deploy"]
 
 ; => <span class="text-rotate">
 ;   <span>
@@ -19,7 +19,7 @@ textRotate ["Design" "Develop" "Deploy"]
 ;
 ; .duration is the full cycle duration in milliseconds, not time per line.
 
-textRotate.duration: 6000 [
+rotate.duration: 6000 [
     "Fast"
     span "Beautiful"
     "Simple"

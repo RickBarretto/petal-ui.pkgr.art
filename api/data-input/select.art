@@ -4,7 +4,7 @@
 ; default matching value; explicit option supports .value, .selected, .disabled.
 ; Selection and submission use native select behavior.
 
-select.name: "color" .ariaLabel: "Color" ["Crimson" "Amber" "Velvet"]
+select.name: "color" .label: "Color" ["Crimson" "Amber" "Velvet"]
 
 ; => <select class="select" name="color" aria-label="Color">
 ;   <option>Crimson</option>
@@ -15,7 +15,7 @@ select.name: "color" .ariaLabel: "Color" ["Crimson" "Amber" "Velvet"]
 
 ; Explicit option values and a selected option
 
-select.primary.sm.name: "plan" .ariaLabel: "Plan" [
+select.primary.sm.name: "plan" .label: "Plan" [
     option.value: "free" "Free"
     option.selected.value: "pro" "Pro"
 ]
@@ -30,7 +30,7 @@ select.primary.sm.name: "plan" .ariaLabel: "Plan" [
 ;
 ; The placeholder is an explicit disabled option with an empty value.
 
-select.required.name: "plan" .ariaLabel: "Plan" [
+select.required.name: "plan" .label: "Plan" [
     option.disabled.selected.value: "" "Choose a plan"
     option.value: "free" "Free"
     option.value: "pro" "Pro"
@@ -45,7 +45,7 @@ select.required.name: "plan" .ariaLabel: "Plan" [
 
 ; Disabled Ghost Select
 
-select.ghost.disabled.ariaLabel: "Plan" ["Free" "Pro"]
+select.ghost.disabled.label: "Plan" ["Free" "Pro"]
 
 ; => <select class="select select-ghost" aria-label="Plan" disabled>
 ;   <option>Free</option>

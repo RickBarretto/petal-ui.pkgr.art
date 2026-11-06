@@ -2,16 +2,16 @@
 ;
 ; A numeric value generates the native progress value attribute.
 ; Maximum defaults to 100; .max overrides it and must be positive.
-; Values must be between zero and max. .ariaLabel labels the progress element.
+; Values must be between zero and max. .label labels the progress element.
 
-progress.ariaLabel: "Upload" 40
+progress.label: "Upload" 40
 
 ; => <progress class="progress" value="40" max="100" aria-label="Upload"></progress>
 
 
 ; Colored Progress with custom maximum
 
-progress.primary.max: 200 .ariaLabel: "Files uploaded" 80
+progress.primary.max: 200 .label: "Files uploaded" 80
 
 ; => <progress class="progress progress-primary" value="80" max="200" aria-label="Files uploaded"></progress>
 
@@ -20,17 +20,17 @@ progress.primary.max: 200 .ariaLabel: "Files uploaded" 80
 ;
 ; null omits value entirely, preserving the native indeterminate state.
 
-progress.ariaLabel: "Searching" null
+progress.label: "Searching" null
 
 ; => <progress class="progress" max="100" aria-label="Searching"></progress>
 
 
 ; Progress colors
 
-progress.neutral.ariaLabel: "Upload" 40    ; => <progress class="progress progress-neutral" value="40" max="100" aria-label="Upload"></progress>
-progress.secondary.ariaLabel: "Upload" 40  ; => <progress class="progress progress-secondary" value="40" max="100" aria-label="Upload"></progress>
-progress.accent.ariaLabel: "Upload" 40     ; => <progress class="progress progress-accent" value="40" max="100" aria-label="Upload"></progress>
-progress.info.ariaLabel: "Upload" 40       ; => <progress class="progress progress-info" value="40" max="100" aria-label="Upload"></progress>
-progress.success.ariaLabel: "Upload" 100   ; => <progress class="progress progress-success" value="100" max="100" aria-label="Upload"></progress>
-progress.warning.ariaLabel: "Upload" 40    ; => <progress class="progress progress-warning" value="40" max="100" aria-label="Upload"></progress>
-progress.error.ariaLabel: "Upload" 0       ; => <progress class="progress progress-error" value="0" max="100" aria-label="Upload"></progress>
+progress.neutral.label: "Upload" 40    ; => <progress class="progress progress-neutral" value="40" max="100" aria-label="Upload"></progress>
+progress.secondary.label: "Upload" 40  ; => <progress class="progress progress-secondary" value="40" max="100" aria-label="Upload"></progress>
+progress.accent.label: "Upload" 40     ; => <progress class="progress progress-accent" value="40" max="100" aria-label="Upload"></progress>
+progress.info.label: "Upload" 40       ; => <progress class="progress progress-info" value="40" max="100" aria-label="Upload"></progress>
+progress.success.label: "Upload" 100   ; => <progress class="progress progress-success" value="100" max="100" aria-label="Upload"></progress>
+progress.warning.label: "Upload" 40    ; => <progress class="progress progress-warning" value="40" max="100" aria-label="Upload"></progress>
+progress.error.label: "Upload" 0       ; => <progress class="progress progress-error" value="0" max="100" aria-label="Upload"></progress>

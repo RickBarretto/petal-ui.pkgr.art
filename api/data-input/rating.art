@@ -32,7 +32,7 @@ rating.sm.mask: :heart .count: 3 .name: "satisfaction" 2
 ; Generates decorative shapes instead of radio inputs. The outer image role
 ; announces the whole score. aria-current marks the filled boundary for CSS.
 
-rating.readOnly 4
+rating.frozen 4
 
 ; => <div class="rating" role="img" aria-label="4 out of 5">
 ;   <div class="mask mask-star" aria-hidden="true"></div>

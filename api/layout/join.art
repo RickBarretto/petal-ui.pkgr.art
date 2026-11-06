@@ -32,7 +32,7 @@ join.vertical [
 ; Join with different controls
 
 join [
-    input.search.name: "query" .placeholder: "Search" .ariaLabel: "Search query" ""
+    input.search.name: "query" .placeholder: "Search" .label: "Search query" ""
     button.primary "Search"
 ]
 
