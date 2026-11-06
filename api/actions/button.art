@@ -1,0 +1,92 @@
+; Basic Button
+
+button "Click me!"
+
+
+; Button sizes
+
+button.xs "Xsmall"                      ; => <button class="btn btn-xs">Xsmall</button>
+button.sm "Small"                       ; => <button class="btn btn-sm">Small</button>
+button "Medium"                         ; => <button class="btn">Medium</button>
+button.lg "Large"                       ; => <button class="btn btn-lg">Large</button>
+button.xl "Xlarge"                      ; => <button class="btn btn-xl">Xlarge</button>
+
+button.responsive "Responsive"          ; => <button class="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl">Responsive</button>
+button.wide "Wide"                      ; => <button class="btn btn-wide">Wide</button>
+
+
+; Buttons colors
+
+button.neutral "Neutral"                ; => <button class="btn btn-neutral">Neutral</button>
+button.primary "Primary"                ; => <button class="btn btn-primary">Primary</button>
+button.secondary "Secondary"            ; => <button class="btn btn-secondary">Secondary</button>
+button.accent "Accent"                  ; => <button class="btn btn-accent">Accent</button>
+button.info "Info"                      ; => <button class="btn btn-info">Info</button>
+button.success "Success"                ; => <button class="btn btn-success">Success</button>
+button.warning "Warning"                ; => <button class="btn btn-warning">Warning</button>
+button.error "Error"                    ; => <button class="btn btn-error">Error</button>
+
+
+; Buttons Soft
+
+button.soft.neutral "Neutral"           ; => <button class="btn btn-soft">Default</button>
+button.soft.primary "Primary"           ; => <button class="btn btn-soft btn-primary">Primary</button>
+button.soft.secondary "Secondary"       ; => <button class="btn btn-soft btn-secondary">Secondary</button>
+button.soft.accent "Accent"             ; => <button class="btn btn-soft btn-accent">Accent</button>
+button.soft.info "Info"                 ; => <button class="btn btn-soft btn-info">Info</button>
+button.soft.success "Success"           ; => <button class="btn btn-soft btn-success">Success</button>
+button.soft.warning "Warning"           ; => <button class="btn btn-soft btn-warning">Warning</button>
+button.soft.error "Error"               ; => <button class="btn btn-soft btn-error">Error</button>
+
+
+; Outline Buttons
+
+button.outline.neutral "Neutral"        ; => <button class="btn btn-outline">Default</button>
+button.outline.primary "Primary"        ; => <button class="btn btn-outline btn-primary">Primary</button>
+button.outline.secondary "Secondary"    ; => <button class="btn btn-outline btn-secondary">Secondary</button>
+button.outline.accent "Accent"          ; => <button class="btn btn-outline btn-accent">Accent</button>
+button.outline.info "Info"              ; => <button class="btn btn-outline btn-info">Info</button>
+button.outline.success "Success"        ; => <button class="btn btn-outline btn-success">Success</button>
+button.outline.warning "Warning"        ; => <button class="btn btn-outline btn-warning">Warning</button>
+button.outline.error "Error"            ; => <button class="btn btn-outline btn-error">Error</button>
+
+
+; Dash Buttons
+
+button.dash.neutral "Neutral"           ; => <button class="btn btn-dash">Default</button>
+button.dash.primary "Primary"           ; => <button class="btn btn-dash btn-primary">Primary</button>
+button.dash.secondary "Secondary"       ; => <button class="btn btn-dash btn-secondary">Secondary</button>
+button.dash.accent "Accent"             ; => <button class="btn btn-dash btn-accent">Accent</button>
+button.dash.info "Info"                 ; => <button class="btn btn-dash btn-info">Info</button>
+button.dash.success "Success"           ; => <button class="btn btn-dash btn-success">Success</button>
+button.dash.warning "Warning"           ; => <button class="btn btn-dash btn-warning">Warning</button>
+button.dash.error "Error"               ; => <button class="btn btn-dash btn-error">Error</button>
+
+
+; Active Buttons
+
+button.active.neutral "Neutral"         ; => <button class="btn btn-active">Default</button>
+button.active.primary "Primary"         ; => <button class="btn btn-active btn-primary">Primary</button>
+button.active.secondary "Secondary"     ; => <button class="btn btn-active btn-secondary">Secondary</button>
+button.active.accent "Accent"           ; => <button class="btn btn-active btn-accent">Accent</button>
+button.active.info "Info"               ; => <button class="btn btn-active btn-info">Info</button>
+button.active.success "Success"         ; => <button class="btn btn-active btn-success">Success</button>
+button.active.warning "Warning"         ; => <button class="btn btn-active btn-warning">Warning</button>
+button.active.error "Error"             ; => <button class="btn btn-active btn-error">Error</button>
+
+
+; Special Buttons
+
+button.ghost "Ghost"                    ; => <button class="btn btn-ghost">Ghost</button>
+button.link "Link"                      ; => <button class="btn btn-link">Link</button>
+
+
+; Other elements as buttons
+
+a.as: :button "Link"                    ; => <a role="button" class="btn">Link</a>
+button.submit "Submit"                  ; => <button type="submit" class="btn">Submit</button>
+input.as: :button "Input"               ; => <input type="button" value="Input" class="btn" />
+input.submit.as: :button "Submit"       ; => <input type="submit" value="Submit" class="btn" />
+input.radio.as: :button "Radio"         ; => <input type="radio" aria-label="Radio" class="btn" />
+input.checkbox.as: :button "Checkbox"   ; => <input type="checkbox" aria-label="Checkbox" class="btn" />
+input.reset.as: :button "Reset"         ; => <input type="reset" value="Reset" class="btn" /> 

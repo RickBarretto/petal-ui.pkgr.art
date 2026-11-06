@@ -1,0 +1,56 @@
+; Dialog Modal
+;
+; Generates a random ID and wires the opening button to showModal().
+; The generated ID below is illustrative; each modal gets its own ID.
+; Content is wrapped in modal-box; close is wrapped in modal-action.
+; The close button uses a form with method="dialog". Escape also closes it.
+
+modal #[
+    open: button.primary "Open"
+    content: [
+        h3 "Hello!"
+        p "Welcome to Petal UI."
+    ]
+    close: button "Close"
+]
+
+; => <button class="btn btn-primary" onclick="document.getElementById('modal-a7f3c9e2').showModal()">Open</button>
+; <dialog id="modal-a7f3c9e2" class="modal">
+;   <div class="modal-box">
+;     <h3>Hello!</h3>
+;     <p>Welcome to Petal UI.</p>
+;     <div class="modal-action">
+;       <form method="dialog">
+;         <button class="btn">Close</button>
+;       </form>
+;     </div>
+;   </div>
+; </dialog>
+
+
+; Dialog Modal with a custom ID
+;
+; .id overrides the generated ID, including the opening button's target.
+; Use a unique ID for each modal, for example to make tests predictable.
+
+modal.id: "welcome" #[
+    open: button.primary "Open"
+    content: [
+        h3 "Hello!"
+        p "Welcome to Petal UI."
+    ]
+    close: button "Close"
+]
+
+; => <button class="btn btn-primary" onclick="document.getElementById('welcome').showModal()">Open</button>
+; <dialog id="welcome" class="modal">
+;   <div class="modal-box">
+;     <h3>Hello!</h3>
+;     <p>Welcome to Petal UI.</p>
+;     <div class="modal-action">
+;       <form method="dialog">
+;         <button class="btn">Close</button>
+;       </form>
+;     </div>
+;   </div>
+; </dialog>

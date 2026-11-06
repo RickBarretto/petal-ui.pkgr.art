@@ -1,0 +1,132 @@
+; Basic Swap
+;
+; Generates a checkbox to toggle between the on and off slots.
+; The off slot is visible initially; checking the checkbox shows on.
+; Strings are wrapped in div elements with the corresponding swap class.
+
+swap #[
+    on: "ON"
+    off: "OFF"
+]
+
+; => <label class="swap">
+;   <input type="checkbox" />
+;   <div class="swap-on">ON</div>
+;   <div class="swap-off">OFF</div>
+; </label>
+
+
+; Positional Swap
+;
+; A block evaluates to exactly two items, in on, off order.
+; Uses the same string wrapping and element handling as the dictionary form.
+
+swap ["ON" "OFF"]
+
+; => <label class="swap">
+;   <input type="checkbox" />
+;   <div class="swap-on">ON</div>
+;   <div class="swap-off">OFF</div>
+; </label>
+
+
+; Positional Swap with elements and rotate effect
+
+swap.rotate [
+    span "☀"
+    span "☾"
+]
+
+; => <label class="swap swap-rotate">
+;   <input type="checkbox" />
+;   <span class="swap-on">☀</span>
+;   <span class="swap-off">☾</span>
+; </label>
+
+
+; Swap elements
+;
+; Elements receive the corresponding swap class directly, without a wrapper.
+; Existing classes are preserved.
+
+swap #[
+    on: span "ON"
+    off: span "OFF"
+]
+
+; => <label class="swap">
+;   <input type="checkbox" />
+;   <span class="swap-on">ON</span>
+;   <span class="swap-off">OFF</span>
+; </label>
+
+
+; Initially checked Swap
+;
+; .checked applies to the generated checkbox, so on is visible initially.
+
+swap.checked #[
+    on: "ON"
+    off: "OFF"
+]
+
+; => <label class="swap">
+;   <input type="checkbox" checked />
+;   <div class="swap-on">ON</div>
+;   <div class="swap-off">OFF</div>
+; </label>
+
+
+; Active Swap
+;
+; .active adds swap-active and omits the checkbox.
+; The on slot is visible; state is controlled by the class instead of a checkbox.
+
+swap.active ["ON" "OFF"]
+
+; => <label class="swap swap-active">
+;   <div class="swap-on">ON</div>
+;   <div class="swap-off">OFF</div>
+; </label>
+
+
+; Swap with rotate effect
+
+swap.rotate #[
+    on: span "☀"
+    off: span "☾"
+]
+
+; => <label class="swap swap-rotate">
+;   <input type="checkbox" />
+;   <span class="swap-on">☀</span>
+;   <span class="swap-off">☾</span>
+; </label>
+
+
+; Swap with flip effect
+
+swap.flip #[
+    on: span "☀"
+    off: span "☾"
+]
+
+; => <label class="swap swap-flip">
+;   <input type="checkbox" />
+;   <span class="swap-on">☀</span>
+;   <span class="swap-off">☾</span>
+; </label>
+
+
+; Initially checked Swap with rotate effect
+
+swap.checked.rotate #[
+    on: span "☀"
+    off: span "☾"
+]
+
+; => <label class="swap swap-rotate">
+;   <input type="checkbox" checked />
+;   <span class="swap-on">☀</span>
+;   <span class="swap-off">☾</span>
+; </label>

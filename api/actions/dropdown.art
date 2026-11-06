@@ -1,0 +1,263 @@
+; Basic Dropdown
+
+dropdown #[
+    open: button.m: 1 "Click"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown">
+;   <div tabindex="0" role="button" class="btn m-1">Click</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+
+; Dropdown alignments
+
+dropdown.start #[
+    open: button.m: 1 "Click ⬅️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-start">
+;   <div tabindex="0" role="button" class="btn m-1">Click ⬅️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.end #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-end">
+;   <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.center #[
+    open: button.m: 1 "Click ⬇️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-center">
+;   <div tabindex="0" role="button" class="btn m-1">Click ⬇️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.top #[
+    open: button.m: 1 "Click ⬆️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-top">
+;   <div tabindex="0" role="button" class="btn m-1">Click ⬆️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.top.center #[
+    open: button.m: 1 "Click ⬆️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-top dropdown-center">
+;   <div tabindex="0" role="button" class="btn m-1">Click ⬆️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.top.end #[
+    open: button.m: 1 "Click ⬆️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-top dropdown-end">
+;   <div tabindex="0" role="button" class="btn m-1">Click ⬆️</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;   <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.left #[
+    open: button.m: 1 "Click ⬅️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-left"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ⬅️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+dropdown.left.center #[
+    open: button.m: 1 "Click ⬅️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-left dropdown-center"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ⬅️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+dropdown.left.end #[
+    open: button.m: 1 "Click ⬅️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-left dropdown-end"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ⬅️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+dropdown.right #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-right"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+dropdown.right.center #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-right dropdown-center"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+dropdown.right.end #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-right dropdown-end"> 
+;  <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
+;  <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;    <li><a>Item 1</a></li>
+;    <li><a>Item 2</a></li>
+;  </ul>
+; </div>
+
+
+; Modifiers
+
+dropdown.hover #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-hover">
+;   <div tabindex="0" role="button" class="btn m-1">Hover</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.open #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-open">
+;   <div tabindex="0" role="button" class="btn m-1">Hover</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
+
+dropdown.close #[
+    open: button.m: 1 "Click ➡️"
+    content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
+        li -> a "Item 1"
+        li -> a "Item 2"
+    ]
+]
+
+; => <div class="dropdown dropdown-close">
+;   <div tabindex="0" role="button" class="btn m-1">Hover</div>
+;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+;     <li><a>Item 1</a></li>
+;     <li><a>Item 2</a></li>
+;   </ul>
+; </div>
