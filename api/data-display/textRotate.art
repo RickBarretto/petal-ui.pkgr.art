@@ -1,0 +1,34 @@
+; Text Rotate
+;
+; Accepts 2 to 6 lines. Strings become spans; supplied elements keep their
+; attributes. Generates the outer text-rotate span and inner line container.
+; The animation loops and pauses on hover. The default full cycle is 10 seconds.
+
+textRotate ["Design" "Develop" "Deploy"]
+
+; => <span class="text-rotate">
+;   <span>
+;     <span>Design</span>
+;     <span>Develop</span>
+;     <span>Deploy</span>
+;   </span>
+; </span>
+
+
+; Text Rotate with custom duration and composed lines
+;
+; .duration is the full cycle duration in milliseconds, not time per line.
+
+textRotate.duration: 6000 [
+    "Fast"
+    span "Beautiful"
+    "Simple"
+]
+
+; => <span class="text-rotate duration-6000">
+;   <span>
+;     <span>Fast</span>
+;     <span>Beautiful</span>
+;     <span>Simple</span>
+;   </span>
+; </span>

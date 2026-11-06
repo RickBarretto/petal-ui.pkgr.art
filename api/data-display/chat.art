@@ -1,0 +1,71 @@
+; Basic Chat Bubble
+;
+; A string becomes the bubble content. Start alignment is the default.
+; .end changes alignment; color modifiers apply to the bubble, not the container.
+
+chat "Hello!"
+
+; => <div class="chat chat-start">
+;   <div class="chat-bubble">Hello!</div>
+; </div>
+
+
+; End-aligned Chat Bubble with color
+
+chat.end.primary "Hi!"
+
+; => <div class="chat chat-end">
+;   <div class="chat-bubble chat-bubble-primary">Hi!</div>
+; </div>
+
+
+; Chat with named slots
+;
+; Content supplies the bubble. Image, header, and footer are optional.
+; An avatar receives chat-image directly, preserving its existing structure.
+; Header and footer get their own wrappers; omitted slots emit no wrapper.
+
+chat #[
+    image: avatar.circle.alt: "Ana" "ana.jpg"
+    header: "Ana"
+    content: "See you tomorrow!"
+    footer: "Delivered"
+]
+
+; => <div class="chat chat-start">
+;   <div class="chat-image avatar">
+;     <div class="w-12 rounded-full">
+;       <img src="ana.jpg" alt="Ana" />
+;     </div>
+;   </div>
+;   <div class="chat-header">Ana</div>
+;   <div class="chat-bubble">See you tomorrow!</div>
+;   <div class="chat-footer">Delivered</div>
+; </div>
+
+
+; Chat with header and footer, without an image
+
+chat.end.success #[
+    header: "Rick"
+    content: "See you there!"
+    footer: "Seen"
+]
+
+; => <div class="chat chat-end">
+;   <div class="chat-header">Rick</div>
+;   <div class="chat-bubble chat-bubble-success">See you there!</div>
+;   <div class="chat-footer">Seen</div>
+; </div>
+
+
+; Bubble colors
+;
+; Also supports .primary and .success as shown above.
+
+chat.neutral "Hello"                    ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-neutral">Hello</div></div>
+chat.secondary "Hello"                  ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-secondary">Hello</div></div>
+chat.accent "Hello"                     ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-accent">Hello</div></div>
+chat.info "Hello"                       ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-info">Hello</div></div>
+chat.warning "Hello"                    ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-warning">Hello</div></div>
+chat.error "Hello"                      ; => <div class="chat chat-start"><div class="chat-bubble chat-bubble-error">Hello</div></div>

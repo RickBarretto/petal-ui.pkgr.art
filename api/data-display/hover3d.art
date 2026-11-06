@@ -1,0 +1,46 @@
+; Hover 3D wrapper
+;
+; Takes one content element, followed by eight generated empty hover zones.
+; The block and single-expression -> forms use the same structure.
+; Hover zones overlay the content, so use non-interactive content inside.
+
+hover3d [
+    card #[
+        title: "Explore"
+        content: [p "Find your next adventure."]
+    ]
+]
+
+; => <div class="hover-3d">
+;   <div class="card">
+;     <div class="card-body">
+;       <h2 class="card-title">Explore</h2>
+;       <p>Find your next adventure.</p>
+;     </div>
+;   </div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+; </div>
+
+
+; Hover 3D image
+
+hover3d -> img.alt: "Mountains" "mountains.jpg"
+
+; => <div class="hover-3d">
+;   <img src="mountains.jpg" alt="Mountains" />
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+;   <div></div>
+; </div>

@@ -1,0 +1,75 @@
+; Basic Carousel
+;
+; Horizontal and start-aligned by default.
+; Each expression in the block is wrapped in a carousel-item div.
+; Explicit item adds attributes to that wrapper without an extra wrapper.
+; Slides can contain images or other content. Navigation and autoplay are
+; outside this initial API.
+
+carousel [
+    img.alt: "Mountains" "mountains.jpg"
+    img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="carousel">
+;   <div class="carousel-item">
+;     <img src="mountains.jpg" alt="Mountains" />
+;   </div>
+;   <div class="carousel-item">
+;     <img src="forest.jpg" alt="Forest" />
+;   </div>
+; </div>
+
+
+; Centered Carousel with custom slide widths
+
+carousel.center [
+    item.w: 64 -> img.alt: "Mountains" "mountains.jpg"
+    item.w: 64 -> img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="carousel carousel-center">
+;   <div class="carousel-item w-64">
+;     <img src="mountains.jpg" alt="Mountains" />
+;   </div>
+;   <div class="carousel-item w-64">
+;     <img src="forest.jpg" alt="Forest" />
+;   </div>
+; </div>
+
+
+; End-aligned Carousel
+
+carousel.end [
+    img.alt: "Mountains" "mountains.jpg"
+    img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="carousel carousel-end">
+;   <div class="carousel-item">
+;     <img src="mountains.jpg" alt="Mountains" />
+;   </div>
+;   <div class="carousel-item">
+;     <img src="forest.jpg" alt="Forest" />
+;   </div>
+; </div>
+
+
+; Vertical Carousel
+;
+; Set a bounded height on the carousel to allow vertical scrolling.
+; Utility attributes on item style the slide rather than its content.
+
+carousel.vertical.h: 64 [
+    item.h: 64 -> img.alt: "Mountains" "mountains.jpg"
+    item.h: 64 -> img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="carousel carousel-vertical h-64">
+;   <div class="carousel-item h-64">
+;     <img src="mountains.jpg" alt="Mountains" />
+;   </div>
+;   <div class="carousel-item h-64">
+;     <img src="forest.jpg" alt="Forest" />
+;   </div>
+; </div>

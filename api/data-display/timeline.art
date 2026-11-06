@@ -1,0 +1,115 @@
+; Basic Timeline
+;
+; Horizontal by default. Items have optional start, end, and icon slots.
+; Generates a ul with li elements and connections between adjacent events.
+; No leading connection on the first item or trailing connection on the last.
+; A decorative dot is supplied when icon is omitted.
+
+timeline [
+    item #[start: "2024" end: "Founded"]
+    item #[start: "2025" end: "First release"]
+]
+
+; => <ul class="timeline">
+;   <li>
+;     <div class="timeline-start">2024</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end">Founded</div>
+;     <hr />
+;   </li>
+;   <li>
+;     <hr />
+;     <div class="timeline-start">2025</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end">First release</div>
+;   </li>
+; </ul>
+
+
+; Vertical Timeline
+
+timeline.vertical [
+    item #[start: "2024" end: "Founded"]
+    item #[start: "2025" end: "First release"]
+]
+
+; => <ul class="timeline timeline-vertical">
+;   <li>
+;     <div class="timeline-start">2024</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end">Founded</div>
+;     <hr />
+;   </li>
+;   <li>
+;     <hr />
+;     <div class="timeline-start">2025</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end">First release</div>
+;   </li>
+; </ul>
+
+
+; Compact Timeline with boxed event content
+;
+; .compact places event content on one side. .box applies timeline-box to
+; each end slot; start remains available for dates without a box.
+
+timeline.vertical.compact.box [
+    item #[start: "2024" end: "Founded"]
+    item #[start: "2025" end: "First release"]
+]
+
+; => <ul class="timeline timeline-vertical timeline-compact">
+;   <li>
+;     <div class="timeline-start">2024</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end timeline-box">Founded</div>
+;     <hr />
+;   </li>
+;   <li>
+;     <hr />
+;     <div class="timeline-start">2025</div>
+;     <div class="timeline-middle">
+;       <span class="inline-block size-3 rounded-full bg-current" aria-hidden="true"></span>
+;     </div>
+;     <div class="timeline-end timeline-box">First release</div>
+;   </li>
+; </ul>
+
+
+; Timeline with a custom marker and composed event content
+;
+; icon replaces the default dot inside timeline-middle.
+; A single event has no connecting lines. Omitted start emits no wrapper.
+
+timeline.vertical [
+    item #[
+        icon: status.success "Completed"
+        end: [
+            h3 "First release"
+            p "Petal UI is ready to explore."
+        ]
+    ]
+]
+
+; => <ul class="timeline timeline-vertical">
+;   <li>
+;     <div class="timeline-middle">
+;       <span class="status status-success" role="img" aria-label="Completed"></span>
+;     </div>
+;     <div class="timeline-end">
+;       <h3>First release</h3>
+;       <p>Petal UI is ready to explore.</p>
+;     </div>
+;   </li>
+; </ul>

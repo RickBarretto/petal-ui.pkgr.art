@@ -1,0 +1,105 @@
+; Basic Avatar
+;
+; A string is the image URL. .alt applies to the image.
+; The inner container defaults to w-12; .w changes that width.
+; Shape and width attributes apply to the inner container, status to the outer.
+
+avatar.alt: "Rick" "rick.jpg"
+
+; => <div class="avatar">
+;   <div class="w-12">
+;     <img src="rick.jpg" alt="Rick" />
+;   </div>
+; </div>
+
+
+; Circular Avatar with online indicator and custom width
+
+avatar.circle.online.w: 16 .alt: "Rick" "rick.jpg"
+
+; => <div class="avatar avatar-online">
+;   <div class="w-16 rounded-full">
+;     <img src="rick.jpg" alt="Rick" />
+;   </div>
+; </div>
+
+
+; Circular Avatar with offline indicator
+
+avatar.circle.offline.alt: "Ana" "ana.jpg"
+
+; => <div class="avatar avatar-offline">
+;   <div class="w-12 rounded-full">
+;     <img src="ana.jpg" alt="Ana" />
+;   </div>
+; </div>
+
+
+; Rounded Avatar
+
+avatar.rounded.alt: "Rick" "rick.jpg"
+
+; => <div class="avatar">
+;   <div class="w-12 rounded">
+;     <img src="rick.jpg" alt="Rick" />
+;   </div>
+; </div>
+
+
+; Masked Avatar
+;
+; .mask supplies the mask shape instead of rounding.
+
+avatar.mask: :heart .alt: "Ana" "ana.jpg"
+
+; => <div class="avatar">
+;   <div class="w-12 mask mask-heart">
+;     <img src="ana.jpg" alt="Ana" />
+;   </div>
+; </div>
+
+
+; Placeholder Avatar
+;
+; .placeholder treats the string as text and wraps it in a span.
+; The placeholder is square with a neutral background and matching text color.
+; It displays the supplied text directly, without generating initials or
+; acting as an automatic fallback for a failed image.
+
+avatar.placeholder.circle "RD"
+
+; => <div class="avatar avatar-placeholder">
+;   <div class="w-12 aspect-square rounded-full bg-neutral text-neutral-content">
+;     <span>RD</span>
+;   </div>
+; </div>
+
+
+; Avatar group with a placeholder count
+;
+; .group takes a block of avatars and supplies the overlapping group layout.
+; The count is explicit text; it is not calculated from a hidden list.
+
+avatar.group [
+    avatar.alt: "Rick" "rick.jpg"
+    avatar.alt: "Ana" "ana.jpg"
+    avatar.placeholder "+3"
+]
+
+; => <div class="avatar-group -space-x-6">
+;   <div class="avatar">
+;     <div class="w-12">
+;       <img src="rick.jpg" alt="Rick" />
+;     </div>
+;   </div>
+;   <div class="avatar">
+;     <div class="w-12">
+;       <img src="ana.jpg" alt="Ana" />
+;     </div>
+;   </div>
+;   <div class="avatar avatar-placeholder">
+;     <div class="w-12 aspect-square bg-neutral text-neutral-content">
+;       <span>+3</span>
+;     </div>
+;   </div>
+; </div>

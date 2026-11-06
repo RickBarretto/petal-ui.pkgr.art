@@ -1,0 +1,73 @@
+; Basic Badge
+;
+; Badge renders a span. Accepts a string or a block of content.
+; Medium is the default size and requires no modifier.
+
+badge "New"                             ; => <span class="badge">New</span>
+
+
+; Badge sizes
+
+badge.xs "Xsmall"                       ; => <span class="badge badge-xs">Xsmall</span>
+badge.sm "Small"                        ; => <span class="badge badge-sm">Small</span>
+badge "Medium"                          ; => <span class="badge">Medium</span>
+badge.lg "Large"                        ; => <span class="badge badge-lg">Large</span>
+badge.xl "Xlarge"                       ; => <span class="badge badge-xl">Xlarge</span>
+
+
+; Badge colors
+
+badge.neutral "Neutral"                 ; => <span class="badge badge-neutral">Neutral</span>
+badge.primary "Primary"                 ; => <span class="badge badge-primary">Primary</span>
+badge.secondary "Secondary"             ; => <span class="badge badge-secondary">Secondary</span>
+badge.accent "Accent"                   ; => <span class="badge badge-accent">Accent</span>
+badge.info "Info"                       ; => <span class="badge badge-info">Info</span>
+badge.success "Success"                 ; => <span class="badge badge-success">Success</span>
+badge.warning "Warning"                 ; => <span class="badge badge-warning">Warning</span>
+badge.error "Error"                     ; => <span class="badge badge-error">Error</span>
+
+
+; Badge styles
+;
+; Style, color, and size modifiers can be combined, as with Button.
+
+badge.soft.success "Published"          ; => <span class="badge badge-soft badge-success">Published</span>
+badge.outline.warning "Pending"         ; => <span class="badge badge-outline badge-warning">Pending</span>
+badge.dash.error "Failed"                ; => <span class="badge badge-dash badge-error">Failed</span>
+badge.ghost "Draft"                     ; => <span class="badge badge-ghost">Draft</span>
+badge.soft.primary.lg "Featured"         ; => <span class="badge badge-soft badge-primary badge-lg">Featured</span>
+
+
+; Empty Badge
+;
+; An empty block produces a badge without text or child elements.
+
+badge.primary []                        ; => <span class="badge badge-primary"></span>
+
+
+; Badge with composed content
+;
+; Icons and text use ordinary content composition.
+
+badge.success [
+    span "✓"
+    "Saved"
+]
+
+; => <span class="badge badge-success">
+;   <span>✓</span>
+;   Saved
+; </span>
+
+
+; Badge inside a Button
+
+button [
+    "Inbox"
+    badge.secondary "3"
+]
+
+; => <button class="btn">
+;   Inbox
+;   <span class="badge badge-secondary">3</span>
+; </button>

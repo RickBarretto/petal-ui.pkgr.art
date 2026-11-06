@@ -1,0 +1,81 @@
+; Stats group
+;
+; Horizontal by default. Each stat accepts named slots and generates only the
+; supplied parts. Numbers are converted to text without automatic formatting.
+; description maps to stat-desc; figure and actions are optional.
+
+stats [
+    stat #[
+        title: "Downloads"
+        value: "31K"
+        description: "Up 12% this month"
+    ]
+    stat #[
+        title: "Users"
+        value: 4200
+    ]
+]
+
+; => <div class="stats">
+;   <div class="stat">
+;     <div class="stat-title">Downloads</div>
+;     <div class="stat-value">31K</div>
+;     <div class="stat-desc">Up 12% this month</div>
+;   </div>
+;   <div class="stat">
+;     <div class="stat-title">Users</div>
+;     <div class="stat-value">4200</div>
+;   </div>
+; </div>
+
+
+; Vertical Stats
+
+stats.vertical [
+    stat #[title: "Downloads" value: "31K"]
+    stat #[title: "Users" value: 4200]
+]
+
+; => <div class="stats stats-vertical">
+;   <div class="stat">
+;     <div class="stat-title">Downloads</div>
+;     <div class="stat-value">31K</div>
+;   </div>
+;   <div class="stat">
+;     <div class="stat-title">Users</div>
+;     <div class="stat-value">4200</div>
+;   </div>
+; </div>
+
+
+; Stat with figure and actions
+;
+; Figure is wrapped in stat-figure; actions in stat-actions.
+
+stats [
+    stat #[
+        figure: avatar.circle.alt: "Ana" "ana.jpg"
+        title: "Team members"
+        value: 12
+        description: "Two invitations pending"
+        actions: [button.primary "Invite"]
+    ]
+]
+
+; => <div class="stats">
+;   <div class="stat">
+;     <div class="stat-figure">
+;       <div class="avatar">
+;         <div class="w-12 rounded-full">
+;           <img src="ana.jpg" alt="Ana" />
+;         </div>
+;       </div>
+;     </div>
+;     <div class="stat-title">Team members</div>
+;     <div class="stat-value">12</div>
+;     <div class="stat-desc">Two invitations pending</div>
+;     <div class="stat-actions">
+;       <button class="btn btn-primary">Invite</button>
+;     </div>
+;   </div>
+; </div>

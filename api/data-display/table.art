@@ -1,0 +1,163 @@
+; Basic Table
+;
+; Tabular-inspired API: rows are the positional argument; options are attributes.
+; Generates an overflow-x-auto wrapper and table with tbody/tr/td elements.
+; Row blocks supply cells, including text, numbers, or component expressions.
+; Every row must have the same number of cells. Header, footer, and per-column
+; alignment blocks, when supplied, must match that column count.
+; No sorting, selection, or sticky columns in this initial API.
+
+table [
+    ["Apples" 5 2.99]
+    ["Oranges" 10 3.49]
+]
+
+; => <div class="overflow-x-auto">
+;   <table class="table">
+;     <tbody>
+;       <tr>
+;         <td>Apples</td>
+;         <td>5</td>
+;         <td>2.99</td>
+;       </tr>
+;       <tr>
+;         <td>Oranges</td>
+;         <td>10</td>
+;         <td>3.49</td>
+;       </tr>
+;     </tbody>
+;   </table>
+; </div>
+
+
+; Table with header, zebra stripes, per-column alignment, and components
+;
+; .header generates thead with th scope="col" cells.
+; .align accepts 'left, 'center, or 'right, individually or in a column block.
+; Alignment applies to header, body, and footer cells.
+
+table.zebra.header: ["Name" "Score" "Status"] .align: ['left 'right 'center] [
+    ["Ana" 95 badge.success "Active"]
+    ["Rick" 87 badge.ghost "Away"]
+]
+
+; => <div class="overflow-x-auto">
+;   <table class="table table-zebra">
+;     <thead>
+;       <tr>
+;         <th scope="col" class="text-left">Name</th>
+;         <th scope="col" class="text-right">Score</th>
+;         <th scope="col" class="text-center">Status</th>
+;       </tr>
+;     </thead>
+;     <tbody>
+;       <tr>
+;         <td class="text-left">Ana</td>
+;         <td class="text-right">95</td>
+;         <td class="text-center"><span class="badge badge-success">Active</span></td>
+;       </tr>
+;       <tr>
+;         <td class="text-left">Rick</td>
+;         <td class="text-right">87</td>
+;         <td class="text-center"><span class="badge badge-ghost">Away</span></td>
+;       </tr>
+;     </tbody>
+;   </table>
+; </div>
+
+
+; Table with footer and a single alignment for all columns
+;
+; .footer generates tfoot with td cells. Omitted header/footer emit no section.
+
+table.header: ["Item" "Quantity"] .footer: ["Total" 15] .align: 'right [
+    ["Apples" 5]
+    ["Oranges" 10]
+]
+
+; => <div class="overflow-x-auto">
+;   <table class="table">
+;     <thead>
+;       <tr>
+;         <th scope="col" class="text-right">Item</th>
+;         <th scope="col" class="text-right">Quantity</th>
+;       </tr>
+;     </thead>
+;     <tbody>
+;       <tr>
+;         <td class="text-right">Apples</td>
+;         <td class="text-right">5</td>
+;       </tr>
+;       <tr>
+;         <td class="text-right">Oranges</td>
+;         <td class="text-right">10</td>
+;       </tr>
+;     </tbody>
+;     <tfoot>
+;       <tr>
+;         <td class="text-right">Total</td>
+;         <td class="text-right">15</td>
+;       </tr>
+;     </tfoot>
+;   </table>
+; </div>
+
+
+; Table from existing row data
+
+rows: [
+    ["Apples" 5]
+    ["Oranges" 10]
+]
+
+table.header: ["Item" "Quantity"] rows
+
+; => <div class="overflow-x-auto">
+;   <table class="table">
+;     <thead>
+;       <tr>
+;         <th scope="col">Item</th>
+;         <th scope="col">Quantity</th>
+;       </tr>
+;     </thead>
+;     <tbody>
+;       <tr>
+;         <td>Apples</td>
+;         <td>5</td>
+;       </tr>
+;       <tr>
+;         <td>Oranges</td>
+;         <td>10</td>
+;       </tr>
+;     </tbody>
+;   </table>
+; </div>
+
+
+; Table sizes
+;
+; Medium is the default size. Modifiers apply to table, not the overflow wrapper.
+
+table.xs [["Ana" 95]]                   ; => <div class="overflow-x-auto"><table class="table table-xs"><tbody><tr><td>Ana</td><td>95</td></tr></tbody></table></div>
+table.sm [["Ana" 95]]                   ; => <div class="overflow-x-auto"><table class="table table-sm"><tbody><tr><td>Ana</td><td>95</td></tr></tbody></table></div>
+table.lg [["Ana" 95]]                   ; => <div class="overflow-x-auto"><table class="table table-lg"><tbody><tr><td>Ana</td><td>95</td></tr></tbody></table></div>
+table.xl [["Ana" 95]]                   ; => <div class="overflow-x-auto"><table class="table table-xl"><tbody><tr><td>Ana</td><td>95</td></tr></tbody></table></div>
+
+
+; Empty Table with header
+;
+; Empty row collections are valid. No placeholder row is invented.
+
+table.header: ["Name" "Score"] []
+
+; => <div class="overflow-x-auto">
+;   <table class="table">
+;     <thead>
+;       <tr>
+;         <th scope="col">Name</th>
+;         <th scope="col">Score</th>
+;       </tr>
+;     </thead>
+;     <tbody></tbody>
+;   </table>
+; </div>

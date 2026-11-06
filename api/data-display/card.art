@@ -1,0 +1,157 @@
+; Basic Card
+;
+; Card takes named slots: image, title, content, and actions. All are optional.
+; Image goes in figure, followed by card-body containing the other slots.
+; Title becomes h2.card-title; content is inserted directly into card-body.
+; Actions are wrapped in card-actions and aligned to the end.
+; Omitted slots produce no corresponding wrapper; card-body is only needed
+; when title, content, or actions are supplied.
+; Width, background, and shadow are set explicitly through utility attributes.
+
+card.bg: 'base100 .w: 96 .shadow: 'sm #[
+    image: img.alt: "Shoes" "shoes.jpg"
+    title: "New shoes"
+    content: [p "Ready for your next adventure."]
+    actions: [button.primary "Buy now"]
+]
+
+; => <div class="card bg-base-100 w-96 shadow-sm">
+;   <figure>
+;     <img src="shoes.jpg" alt="Shoes" />
+;   </figure>
+;   <div class="card-body">
+;     <h2 class="card-title">New shoes</h2>
+;     <p>Ready for your next adventure.</p>
+;     <div class="card-actions justify-end">
+;       <button class="btn btn-primary">Buy now</button>
+;     </div>
+;   </div>
+; </div>
+
+
+; Card without image or actions
+
+card #[
+    title: "Welcome"
+    content: [p "Make yourself at home."]
+]
+
+; => <div class="card">
+;   <div class="card-body">
+;     <h2 class="card-title">Welcome</h2>
+;     <p>Make yourself at home.</p>
+;   </div>
+; </div>
+
+
+; Bordered Card
+
+card.border #[
+    title: "Account"
+    content: [p "Manage your account."]
+]
+
+; => <div class="card card-border">
+;   <div class="card-body">
+;     <h2 class="card-title">Account</h2>
+;     <p>Manage your account.</p>
+;   </div>
+; </div>
+
+
+; Dashed Card
+
+card.dash #[
+    content: [p "Add something new."]
+    actions: [button "Add"]
+]
+
+; => <div class="card card-dash">
+;   <div class="card-body">
+;     <p>Add something new.</p>
+;     <div class="card-actions justify-end">
+;       <button class="btn">Add</button>
+;     </div>
+;   </div>
+; </div>
+
+
+; Card with image beside the body
+
+card.side #[
+    image: img.alt: "Shoes" "shoes.jpg"
+    title: "New shoes"
+    content: [p "Ready for your next adventure."]
+]
+
+; => <div class="card card-side">
+;   <figure>
+;     <img src="shoes.jpg" alt="Shoes" />
+;   </figure>
+;   <div class="card-body">
+;     <h2 class="card-title">New shoes</h2>
+;     <p>Ready for your next adventure.</p>
+;   </div>
+; </div>
+
+
+; Card with image behind the body
+;
+; .cover maps to DaisyUI's image-full class.
+
+card.cover #[
+    image: img.alt: "Mountain landscape" "mountains.jpg"
+    title: "Explore"
+    content: [p "Find your next adventure."]
+    actions: [button.primary "Discover"]
+]
+
+; => <div class="card image-full">
+;   <figure>
+;     <img src="mountains.jpg" alt="Mountain landscape" />
+;   </figure>
+;   <div class="card-body">
+;     <h2 class="card-title">Explore</h2>
+;     <p>Find your next adventure.</p>
+;     <div class="card-actions justify-end">
+;       <button class="btn btn-primary">Discover</button>
+;     </div>
+;   </div>
+; </div>
+
+
+; Card sizes
+;
+; Medium is the default. Size affects spacing and typography, not fixed width.
+
+card.xs #[title: "Xsmall"]
+
+; => <div class="card card-xs">
+;   <div class="card-body">
+;     <h2 class="card-title">Xsmall</h2>
+;   </div>
+; </div>
+
+card.sm #[title: "Small"]
+
+; => <div class="card card-sm">
+;   <div class="card-body">
+;     <h2 class="card-title">Small</h2>
+;   </div>
+; </div>
+
+card.lg #[title: "Large"]
+
+; => <div class="card card-lg">
+;   <div class="card-body">
+;     <h2 class="card-title">Large</h2>
+;   </div>
+; </div>
+
+card.xl #[title: "Xlarge"]
+
+; => <div class="card card-xl">
+;   <div class="card-body">
+;     <h2 class="card-title">Xlarge</h2>
+;   </div>
+; </div>
