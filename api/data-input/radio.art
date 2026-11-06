@@ -1,6 +1,6 @@
 ; Radio buttons
 ;
-; radio is the short form of input.radio. String supplies the accessible label;
+; String supplies the accessible label;
 ; .value is the submitted value. Related options explicitly share .name.
 ; Use a distinct name for each independent group; select at most one .checked.
 
@@ -24,6 +24,6 @@ radio.primary.sm.name: "delivery" .value: "standard" .checked "Standard delivery
 
 ; Disabled Radio
 
-input.radio.disabled.name: "delivery" .value: "express" "Express delivery"
+radio.disabled.name: "delivery" .value: "express" "Express delivery"
 
 ; => <input type="radio" class="radio" name="delivery" value="express" aria-label="Express delivery" disabled />

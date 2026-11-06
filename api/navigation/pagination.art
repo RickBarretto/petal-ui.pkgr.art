@@ -6,15 +6,15 @@
 ; No route generation, automatic page windows, or invented click handlers.
 
 pagination [
-    a.as: :button .href: "/?page=1" "1"
-    a.as: :button .active.href: "/?page=2" "2"
-    a.as: :button .href: "/?page=3" "3"
+    button .href: "/?page=1" "1"
+    button .active.href: "/?page=2" "2"
+    button .href: "/?page=3" "3"
 ]
 
 ; => <nav class="join" aria-label="Pagination">
-;   <a role="button" class="btn join-item" href="/?page=1">1</a>
-;   <a role="button" class="btn btn-active join-item" href="/?page=2" aria-current="page">2</a>
-;   <a role="button" class="btn join-item" href="/?page=3">3</a>
+;   <a class="btn join-item" href="/?page=1">1</a>
+;   <a class="btn btn-active join-item" href="/?page=2" aria-current="page">2</a>
+;   <a class="btn join-item" href="/?page=3">3</a>
 ; </nav>
 
 

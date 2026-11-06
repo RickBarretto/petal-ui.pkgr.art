@@ -50,7 +50,7 @@ avatar.rounded.alt: "Rick" "rick.jpg"
 ;
 ; .mask supplies the mask shape instead of rounding.
 
-avatar.mask: :heart .alt: "Ana" "ana.jpg"
+avatar.mask: 'heart .alt: "Ana" "ana.jpg"
 
 ; => <div class="avatar">
 ;   <div class="w-12 mask mask-heart">

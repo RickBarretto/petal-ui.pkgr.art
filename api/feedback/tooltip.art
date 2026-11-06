@@ -1,11 +1,11 @@
 ; Tooltip
 ;
-; Uses the .tooltip attribute on a container, matching the existing FAB API.
-; The string becomes data-tip; the positional argument supplies the trigger.
+; A component wraps its trigger in a div, matching the FAB examples.
+; .text becomes data-tip; the positional argument supplies the trigger.
 ; Placement, alignment, color, and .open flags apply to the tooltip container.
 ; Top placement and centered alignment are the defaults.
 
-div.tooltip: "Save changes" -> button "Save"
+tooltip.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip" data-tip="Save changes">
 ;   <button class="btn">Save</button>
@@ -14,19 +14,19 @@ div.tooltip: "Save changes" -> button "Save"
 
 ; Tooltip placement
 
-div.bottom.tooltip: "Save changes" -> button "Save"
+tooltip.bottom.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-bottom" data-tip="Save changes">
 ;   <button class="btn">Save</button>
 ; </div>
 
-div.left.tooltip: "Save changes" -> button "Save"
+tooltip.left.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-left" data-tip="Save changes">
 ;   <button class="btn">Save</button>
 ; </div>
 
-div.right.tooltip: "Save changes" -> button "Save"
+tooltip.right.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-right" data-tip="Save changes">
 ;   <button class="btn">Save</button>
@@ -35,13 +35,13 @@ div.right.tooltip: "Save changes" -> button "Save"
 
 ; Tooltip alignment
 
-div.top.start.tooltip: "Save changes" -> button "Save"
+tooltip.top.start.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-top tooltip-start" data-tip="Save changes">
 ;   <button class="btn">Save</button>
 ; </div>
 
-div.top.end.tooltip: "Save changes" -> button "Save"
+tooltip.top.end.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-top tooltip-end" data-tip="Save changes">
 ;   <button class="btn">Save</button>
@@ -50,7 +50,7 @@ div.top.end.tooltip: "Save changes" -> button "Save"
 
 ; Always-visible Tooltip
 
-div.open.tooltip: "Save changes" -> button "Save"
+tooltip.open.text: "Save changes" -> button "Save"
 
 ; => <div class="tooltip tooltip-open" data-tip="Save changes">
 ;   <button class="btn">Save</button>
@@ -61,43 +61,43 @@ div.open.tooltip: "Save changes" -> button "Save"
 ;
 ; The trigger's color stays independent of the tooltip's color.
 
-div.primary.tooltip: "Save changes" -> button.primary "Save"
+tooltip.primary.text: "Save changes" -> button.primary "Save"
 
 ; => <div class="tooltip tooltip-primary" data-tip="Save changes">
 ;   <button class="btn btn-primary">Save</button>
 ; </div>
 
-div.secondary.tooltip: "Help" -> button "Help"
+tooltip.secondary.text: "Help" -> button "Help"
 
 ; => <div class="tooltip tooltip-secondary" data-tip="Help">
 ;   <button class="btn">Help</button>
 ; </div>
 
-div.accent.tooltip: "Help" -> button "Help"
+tooltip.accent.text: "Help" -> button "Help"
 
 ; => <div class="tooltip tooltip-accent" data-tip="Help">
 ;   <button class="btn">Help</button>
 ; </div>
 
-div.info.tooltip: "Help" -> button "Help"
+tooltip.info.text: "Help" -> button "Help"
 
 ; => <div class="tooltip tooltip-info" data-tip="Help">
 ;   <button class="btn">Help</button>
 ; </div>
 
-div.success.tooltip: "Saved" -> button "Status"
+tooltip.success.text: "Saved" -> button "Status"
 
 ; => <div class="tooltip tooltip-success" data-tip="Saved">
 ;   <button class="btn">Status</button>
 ; </div>
 
-div.warning.tooltip: "Storage is low" -> button "Status"
+tooltip.warning.text: "Storage is low" -> button "Status"
 
 ; => <div class="tooltip tooltip-warning" data-tip="Storage is low">
 ;   <button class="btn">Status</button>
 ; </div>
 
-div.error.tooltip: "Connection lost" -> button "Status"
+tooltip.error.text: "Connection lost" -> button "Status"
 
 ; => <div class="tooltip tooltip-error" data-tip="Connection lost">
 ;   <button class="btn">Status</button>

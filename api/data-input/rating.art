@@ -18,7 +18,7 @@ rating 3
 
 ; Rating with custom count, mask, size, and submission name
 
-rating.sm.mask: :heart .count: 3 .name: "satisfaction" 2
+rating.sm.mask: 'heart .count: 3 .name: "satisfaction" 2
 
 ; => <div class="rating rating-sm" role="radiogroup" aria-label="Rating">
 ;   <input type="radio" name="satisfaction" value="1" class="mask mask-heart" aria-label="1 out of 3" />

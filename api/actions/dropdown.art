@@ -215,7 +215,7 @@ dropdown.right.end #[
 ; Modifiers
 
 dropdown.hover #[
-    open: button.m: 1 "Click ➡️"
+    open: button.m: 1 "Hover"
     content: menu.bg: 'base100 .rounded .z: 1 .w: 52 .p: 2 .shadow: 'sm [
         li -> a "Item 1"
         li -> a "Item 2"
@@ -239,7 +239,7 @@ dropdown.open #[
 ]
 
 ; => <div class="dropdown dropdown-open">
-;   <div tabindex="0" role="button" class="btn m-1">Hover</div>
+;   <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
 ;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
 ;     <li><a>Item 1</a></li>
 ;     <li><a>Item 2</a></li>
@@ -255,7 +255,7 @@ dropdown.close #[
 ]
 
 ; => <div class="dropdown dropdown-close">
-;   <div tabindex="0" role="button" class="btn m-1">Hover</div>
+;   <div tabindex="0" role="button" class="btn m-1">Click ➡️</div>
 ;   <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
 ;     <li><a>Item 1</a></li>
 ;     <li><a>Item 2</a></li>

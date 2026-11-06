@@ -1,27 +1,27 @@
 ; File Input
 ;
-; Uses the input.file type flag, following input.radio/input.checkbox.
+; upload is a dedicated control, like check, radio, toggle, and range.
 ; Its string supplies aria-label; file inputs never receive a value attribute.
 ; Selection uses native browser behavior. Upload handling belongs to the form/app.
 
-input.file.name: "document" "Upload document"
+upload.name: "document" "Upload document"
 
 ; => <input type="file" class="file-input" name="document" aria-label="Upload document" />
 
 
 ; Multiple files with accept constraint, color, and size
 
-input.file.primary.sm.multiple.accept: "image/*" .name: "photos" "Choose photos"
+upload.primary.sm.multiple.accept: "image/*" .name: "photos" "Choose photos"
 
 ; => <input type="file" class="file-input file-input-primary file-input-sm" accept="image/*" name="photos" aria-label="Choose photos" multiple />
 
 
 ; Ghost and disabled File Inputs
 
-input.file.ghost "Choose a file"
+upload.ghost "Choose a file"
 
 ; => <input type="file" class="file-input file-input-ghost" aria-label="Choose a file" />
 
-input.file.disabled "Upload unavailable"
+upload.disabled "Upload unavailable"
 
 ; => <input type="file" class="file-input" aria-label="Upload unavailable" disabled />

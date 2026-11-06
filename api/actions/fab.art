@@ -1,7 +1,7 @@
 ; Floating Action Button
 
 fab #[
-    trigger: button.lg.circle.primary "F"
+    open: button.lg.circle.primary "F"
     actions: [
         button.lg.circle "A"
         button.lg.circle "B"
@@ -23,9 +23,9 @@ fab #[
 fab #[
     open: button.lg.circle.success "F"
     actions: [
-        div ["Label B", button.lg.circle "A"]
-        div ["Label C", button.lg.circle "B"]
-        div ["Label D", button.lg.circle "C"]
+        div ["Label A", button.lg.circle "A"]
+        div ["Label B", button.lg.circle "B"]
+        div ["Label C", button.lg.circle "C"]
     ]
 ]
 
@@ -127,10 +127,10 @@ fab.flower #[
     open: button.lg.circle.info "F"
     main: button.lg.circle.success "M"
     actions: [
-        div.left.tooltip: "Label A" -> button.lg.circle "A"
-        div.left.tooltip: "Label B" -> button.lg.circle "B"
-        div.tooltip: "Label C" -> button.lg.circle "C"
-        div.tooltip: "Label D" -> button.lg.circle "D"
+        tooltip.left.text: "Label A" -> button.lg.circle "A"
+        tooltip.left.text: "Label B" -> button.lg.circle "B"
+        tooltip.text: "Label C" -> button.lg.circle "C"
+        tooltip.text: "Label D" -> button.lg.circle "D"
     ]
 ]
 

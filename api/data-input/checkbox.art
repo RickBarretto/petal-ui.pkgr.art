@@ -1,6 +1,6 @@
 ; Checkbox
 ;
-; check is the short form of input.checkbox outside the theme context.
+; check creates a checkbox outside the theme context.
 ; Its string is an accessible label, not a form value or visible caption.
 ; Use .value explicitly for submitted data; .checked sets initial selection.
 
@@ -16,11 +16,11 @@ check.primary.sm.checked.name: "terms" .value: "accepted" "Accept terms"
 ; => <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" name="terms" value="accepted" aria-label="Accept terms" checked />
 
 
-; Explicit input.checkbox form
+; Disabled Checkbox
 ;
-; .as: :button still uses the existing button API instead of checkbox styling.
+; check.button uses button styling with the same label/value contract.
 
-input.checkbox.disabled.checked "Unavailable option"
+check.disabled.checked "Unavailable option"
 
 ; => <input type="checkbox" class="checkbox" aria-label="Unavailable option" disabled checked />
 
