@@ -1,0 +1,153 @@
+; Floating Action Button
+
+fab #[
+    trigger: button.lg.circle.primary "F"
+    actions: [
+        button.lg.circle "A"
+        button.lg.circle "B"
+        button.lg.circle "C"
+    ]
+]
+
+; => <div class="fab">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">F</div>
+;   <button class="btn btn-lg btn-circle">A</button>
+;   <button class="btn btn-lg btn-circle">B</button>
+;   <button class="btn btn-lg btn-circle">C</button>
+; </div>
+
+
+; Floating Action Button with labels
+
+
+fab #[
+    open: button.lg.circle.success "F"
+    actions: [
+        div ["Label B", button.lg.circle "A"]
+        div ["Label C", button.lg.circle "B"]
+        div ["Label D", button.lg.circle "C"]
+    ]
+]
+
+; => <div class="fab">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-success">F</div>
+;   <div>Label B <button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label C <button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label D <button class="btn btn-lg btn-circle">C</button></div>
+; </div>
+
+
+; Floating Action Button with close button
+
+fab #[
+    open: button.lg.circle.info "F"
+    close: div ["Close", button.lg.circle.error "✕"]
+    actions: [
+        div ["Label A", button.lg.circle "A"]
+        div ["Label B", button.lg.circle "B"]
+        div ["Label C", button.lg.circle "C"]
+    ]
+]
+
+; => <div class="fab">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-info">F</div>
+;   <div class="fab-close">
+;     Close <span class="btn btn-circle btn-lg btn-error">✕</span>
+;   </div>
+;   <div>Label A <button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label B <button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label C <button class="btn btn-lg btn-circle">C</button></div>
+; </div>
+
+
+; Floating Action Button with main action
+
+fab #[
+    open: button.lg.circle.primary "F"
+    main: div ["Main Action", button.lg.circle.secondary "M"]
+    actions: [
+        div ["Label A", button.lg.circle "A"]
+        div ["Label B", button.lg.circle "B"]
+        div ["Label C", button.lg.circle "C"]
+    ]
+]
+
+; => <div class="fab">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">F</div>
+;   <div class="fab-main-action">
+;     Main Action <button class="btn btn-circle btn-secondary btn-lg">M</button>
+;   </div>
+;   <div>Label A <button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label B <button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label C <button class="btn btn-lg btn-circle">C</button></div>
+; </div>
+
+
+; Floating Action Button Flower
+
+fab.flower #[
+    open: button.lg.circle.primary "F"
+    actions: [
+        button.lg.circle "A"
+        button.lg.circle "B"
+        button.lg.circle "C"
+        button.lg.circle "D"
+    ]
+]
+
+; <div class="fab fab-flower">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">F</div>
+;   <button class="btn btn-lg btn-circle">A</button>
+;   <button class="btn btn-lg btn-circle">B</button>
+;   <button class="btn btn-lg btn-circle">C</button>
+;   <button class="btn btn-lg btn-circle">D</button>
+; </div>
+
+fab.flower #[
+    open: button.lg.circle.success "F"
+    main: button.lg.circle "M"
+    actions: [
+        button.lg.circle "A"
+        button.lg.circle "B"
+        button.lg.circle "C"
+        button.lg.circle "D"
+    ]
+]
+
+; => <div class="fab fab-flower">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-success">F</div>
+;   <button class="fab-main-action btn btn-circle btn-lg">M</button>
+;   <button class="btn btn-lg btn-circle">A</button>
+;   <button class="btn btn-lg btn-circle">B</button>
+;   <button class="btn btn-lg btn-circle">C</button>
+;   <button class="btn btn-lg btn-circle">D</button>
+; </div>
+
+fab.flower #[
+    open: button.lg.circle.info "F"
+    main: button.lg.circle.success "M"
+    actions: [
+        div.left.tooltip: "Label A" -> button.lg.circle "A"
+        div.left.tooltip: "Label B" -> button.lg.circle "B"
+        div.tooltip: "Label C" -> button.lg.circle "C"
+        div.tooltip: "Label D" -> button.lg.circle "D"
+    ]
+]
+
+; => <div class="fab fab-flower">
+;   <div tabindex="0" role="button" class="btn btn-lg btn-info btn-circle">F</div>
+;   <button class="fab-main-action btn btn-circle btn-lg btn-success">M</button>
+;   <div class="tooltip tooltip-left" data-tip="Label A">
+;     <button class="btn btn-lg btn-circle">A</button>
+;   </div>
+;   <div class="tooltip tooltip-left" data-tip="Label B">
+;     <button class="btn btn-lg btn-circle">B</button>
+;   </div>
+;   <div class="tooltip" data-tip="Label C">
+;     <button class="btn btn-lg btn-circle">C</button>
+;   </div>
+;   <div class="tooltip" data-tip="Label D">
+;     <button class="btn btn-lg btn-circle">D</button>
+;   </div>
+; </div>
+

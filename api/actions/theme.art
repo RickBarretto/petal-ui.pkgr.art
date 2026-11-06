@@ -1,0 +1,99 @@
+; Theme Controller
+;
+; Theme names such as :synthwave are DSL tokens, emitted as input values.
+; Checking the control activates that theme through DaisyUI's CSS.
+; Unchecking restores the page's underlying theme.
+; These controls do not persist the selection across page reloads.
+
+
+; Theme checkbox
+
+theme.check :synthwave
+
+; => <input type="checkbox" value="synthwave" class="checkbox theme-controller" />
+
+
+; Theme toggle
+
+theme.toggle :synthwave
+
+; => <input type="checkbox" value="synthwave" class="toggle theme-controller" />
+
+
+; Initially checked theme toggle
+
+theme.toggle.checked :synthwave
+
+; => <input type="checkbox" value="synthwave" class="toggle theme-controller" checked />
+
+
+; Theme checkbox with labels
+;
+; Inside theme, check supplies the target theme and receives theme-controller.
+; Strings become spans; the block is wrapped in a clickable label.
+
+theme [
+    "Current"
+    check :synthwave
+    "Synthwave"
+]
+
+; => <label class="flex items-center gap-2 cursor-pointer">
+;   <span>Current</span>
+;   <input type="checkbox" value="synthwave" class="checkbox theme-controller" />
+;   <span>Synthwave</span>
+; </label>
+
+
+; Theme toggle with labels
+
+theme [
+    "Current"
+    toggle :synthwave
+    "Synthwave"
+]
+
+; => <label class="flex items-center gap-2 cursor-pointer">
+;   <span>Current</span>
+;   <input type="checkbox" value="synthwave" class="toggle theme-controller" />
+;   <span>Synthwave</span>
+; </label>
+
+
+; Theme toggle with sun and moon inside
+;
+; .icons supplies the SVGs and puts toggle on the wrapping label.
+; The sun represents the unchecked state; the moon represents checked.
+; Decorative icons are hidden from assistive technology; the input is named.
+
+theme.toggle.icons :dark
+
+; => <label class="toggle text-base-content">
+;   <input type="checkbox" value="dark" class="theme-controller" aria-label="Enable dark theme" />
+;   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+;     <circle cx="12" cy="12" r="4" />
+;     <path d="M12 1v2 M12 21v2 M1 12h2 M21 12h2 M4 4l1.5 1.5 M18.5 18.5L20 20 M4 20l1.5-1.5 M18.5 5.5L20 4" />
+;   </svg>
+;   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+;     <path d="M20 15A8 8 0 0 1 9 4 8.5 8.5 0 1 0 20 15Z" />
+;   </svg>
+; </label>
+
+
+; Larger icon toggle, initially checked, with a custom target theme
+;
+; .lg sizes the wrapping toggle; .checked applies to its input.
+; The built-in sun and moon icons stay the same for any target theme.
+
+theme.toggle.icons.lg.checked :synthwave
+
+; => <label class="toggle toggle-lg text-base-content">
+;   <input type="checkbox" value="synthwave" class="theme-controller" aria-label="Enable synthwave theme" checked />
+;   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+;     <circle cx="12" cy="12" r="4" />
+;     <path d="M12 1v2 M12 21v2 M1 12h2 M21 12h2 M4 4l1.5 1.5 M18.5 18.5L20 20 M4 20l1.5-1.5 M18.5 5.5L20 4" />
+;   </svg>
+;   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+;     <path d="M20 15A8 8 0 0 1 9 4 8.5 8.5 0 1 0 20 15Z" />
+;   </svg>
+; </label>
