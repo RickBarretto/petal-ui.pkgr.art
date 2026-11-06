@@ -1,0 +1,72 @@
+; Steps
+;
+; Horizontal by default. Strings are wrapped in li.step; explicit step supports
+; color, current state, and a custom icon. Steps display progress without
+; changing application state or navigating automatically.
+
+steps ["Account" "Plan" "Payment"]
+
+; => <ul class="steps">
+;   <li class="step">Account</li>
+;   <li class="step">Plan</li>
+;   <li class="step">Payment</li>
+; </ul>
+
+
+; Steps with progress colors and current step
+;
+; .current supplies aria-current="step" without inferring a color.
+; Colors are explicit and can mark more than one completed/current stage.
+
+steps [
+    step.primary "Account"
+    step.primary.current "Plan"
+    step "Payment"
+]
+
+; => <ul class="steps">
+;   <li class="step step-primary">Account</li>
+;   <li class="step step-primary" aria-current="step">Plan</li>
+;   <li class="step">Payment</li>
+; </ul>
+
+
+; Vertical Steps with custom icons
+;
+; .icon inserts decorative content inside span.step-icon, replacing the default
+; number. The step label remains visible and accessible.
+
+steps.vertical [
+    step.success.icon: "✓" "Account"
+    step.warning.current.icon: "!" "Payment"
+]
+
+; => <ul class="steps steps-vertical">
+;   <li class="step step-success">
+;     <span class="step-icon" aria-hidden="true">✓</span>
+;     Account
+;   </li>
+;   <li class="step step-warning" aria-current="step">
+;     <span class="step-icon" aria-hidden="true">!</span>
+;     Payment
+;   </li>
+; </ul>
+
+
+; Other Step colors
+
+steps [
+    step.neutral "Neutral"
+    step.secondary "Secondary"
+    step.accent "Accent"
+    step.info "Info"
+    step.error "Error"
+]
+
+; => <ul class="steps">
+;   <li class="step step-neutral">Neutral</li>
+;   <li class="step step-secondary">Secondary</li>
+;   <li class="step step-accent">Accent</li>
+;   <li class="step step-info">Info</li>
+;   <li class="step step-error">Error</li>
+; </ul>

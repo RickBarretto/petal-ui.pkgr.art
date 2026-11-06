@@ -1,0 +1,120 @@
+; Tabs with panels
+;
+; Native radio inputs switch panels without JavaScript. Tab takes a label and
+; content block; generates an input immediately followed by its tab-content.
+; The first enabled tab is checked unless another tab is explicitly .active.
+; Mark at most one tab .active. .disabled maps to the native disabled attribute.
+; The radio group name is randomly generated; sample names are illustrative.
+; Radio semantics are retained rather than adding incomplete ARIA tab roles.
+
+tabs [
+    tab "Overview" [p "Welcome to Petal UI."]
+    tab "Details" [p "Explore the components."]
+]
+
+; => <div class="tabs">
+;   <input type="radio" name="tabs-a7f3c9e2" class="tab" aria-label="Overview" checked />
+;   <div class="tab-content">
+;     <p>Welcome to Petal UI.</p>
+;   </div>
+;   <input type="radio" name="tabs-a7f3c9e2" class="tab" aria-label="Details" />
+;   <div class="tab-content">
+;     <p>Explore the components.</p>
+;   </div>
+; </div>
+
+
+; Bordered Tabs with explicit group name and active tab
+;
+; .name overrides the generated radio group name for predictable testing.
+; Independent tab sets must have distinct names.
+
+tabs.border.name: "project-tabs" [
+    tab "Overview" [p "Welcome to Petal UI."]
+    tab.active "Details" [p "Explore the components."]
+]
+
+; => <div class="tabs tabs-border">
+;   <input type="radio" name="project-tabs" class="tab" aria-label="Overview" />
+;   <div class="tab-content">
+;     <p>Welcome to Petal UI.</p>
+;   </div>
+;   <input type="radio" name="project-tabs" class="tab" aria-label="Details" checked />
+;   <div class="tab-content">
+;     <p>Explore the components.</p>
+;   </div>
+; </div>
+
+
+; Boxed Tabs with a disabled tab
+
+tabs.box [
+    tab "Overview" [p "Welcome to Petal UI."]
+    tab.disabled "Upcoming" [p "Coming soon."]
+]
+
+; => <div class="tabs tabs-box">
+;   <input type="radio" name="tabs-b8e4d0f3" class="tab" aria-label="Overview" checked />
+;   <div class="tab-content">
+;     <p>Welcome to Petal UI.</p>
+;   </div>
+;   <input type="radio" name="tabs-b8e4d0f3" class="tab" aria-label="Upcoming" disabled />
+;   <div class="tab-content">
+;     <p>Coming soon.</p>
+;   </div>
+; </div>
+
+
+; Lifted Tabs below the panels
+;
+; .bottom moves the tab controls below their panels using DaisyUI's layout.
+; DOM order remains input then panel for native CSS switching.
+
+tabs.lift.bottom [
+    tab "Overview" [p "Welcome to Petal UI."]
+    tab "Details" [p "Explore the components."]
+]
+
+; => <div class="tabs tabs-lift tabs-bottom">
+;   <input type="radio" name="tabs-c9f5e1a4" class="tab" aria-label="Overview" checked />
+;   <div class="tab-content">
+;     <p>Welcome to Petal UI.</p>
+;   </div>
+;   <input type="radio" name="tabs-c9f5e1a4" class="tab" aria-label="Details" />
+;   <div class="tab-content">
+;     <p>Explore the components.</p>
+;   </div>
+; </div>
+
+
+; Tab sizes
+;
+; Size applies to the group; medium is the default.
+
+tabs.xs [tab "Info" [p "Details"]]
+
+; => <div class="tabs tabs-xs">
+;   <input type="radio" name="tabs-d0a6f2b5" class="tab" aria-label="Info" checked />
+;   <div class="tab-content"><p>Details</p></div>
+; </div>
+
+tabs.sm [tab "Info" [p "Details"]]
+
+; => <div class="tabs tabs-sm">
+;   <input type="radio" name="tabs-e1b7a3c6" class="tab" aria-label="Info" checked />
+;   <div class="tab-content"><p>Details</p></div>
+; </div>
+
+tabs.lg [tab "Info" [p "Details"]]
+
+; => <div class="tabs tabs-lg">
+;   <input type="radio" name="tabs-f2c8b4d7" class="tab" aria-label="Info" checked />
+;   <div class="tab-content"><p>Details</p></div>
+; </div>
+
+tabs.xl [tab "Info" [p "Details"]]
+
+; => <div class="tabs tabs-xl">
+;   <input type="radio" name="tabs-a3d9c5e8" class="tab" aria-label="Info" checked />
+;   <div class="tab-content"><p>Details</p></div>
+; </div>

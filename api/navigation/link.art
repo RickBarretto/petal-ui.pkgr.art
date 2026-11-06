@@ -1,0 +1,49 @@
+; Link
+;
+; Generates an anchor with the link class. Accepts string or block content.
+; .href is optional: omitted href stays omitted, while an explicitly empty
+; href is preserved as href="" (a link to the current document).
+; Never invents href="#" or a destination from the label.
+
+link.href: "/docs" "Documentation"      ; => <a class="link" href="/docs">Documentation</a>
+link "Documentation"                    ; => <a class="link">Documentation</a>
+link.href: "" "Current page"            ; => <a class="link" href="">Current page</a>
+
+
+; Link colors
+
+link.neutral.href: "/docs" "Docs"       ; => <a class="link link-neutral" href="/docs">Docs</a>
+link.primary.href: "/start" "Start"     ; => <a class="link link-primary" href="/start">Start</a>
+link.secondary.href: "/docs" "Docs"     ; => <a class="link link-secondary" href="/docs">Docs</a>
+link.accent.href: "/docs" "Docs"        ; => <a class="link link-accent" href="/docs">Docs</a>
+link.info.href: "/docs" "Docs"          ; => <a class="link link-info" href="/docs">Docs</a>
+link.success.href: "/docs" "Docs"       ; => <a class="link link-success" href="/docs">Docs</a>
+link.warning.href: "/docs" "Docs"       ; => <a class="link link-warning" href="/docs">Docs</a>
+link.error.href: "/docs" "Docs"         ; => <a class="link link-error" href="/docs">Docs</a>
+
+
+; Underline on hover
+
+link.hover.href: "/about" "About"      ; => <a class="link link-hover" href="/about">About</a>
+
+
+; Composed Link content
+
+link.href: "/docs" [
+    span "→"
+    "Documentation"
+]
+
+; => <a class="link" href="/docs">
+;   <span>→</span>
+;   Documentation
+; </a>
+
+
+; Empty visible content with an accessible label
+;
+; An empty block stays empty. .ariaLabel supplies the aria-label attribute.
+
+link.href: "/docs" .ariaLabel: "Documentation" []
+
+; => <a class="link" href="/docs" aria-label="Documentation"></a>
