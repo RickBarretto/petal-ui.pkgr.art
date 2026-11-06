@@ -1,0 +1,42 @@
+; Fieldset
+;
+; Optional named legend, content, and description slots wrap related controls.
+; Legend becomes fieldset-legend; description is a p.label rather than an
+; unassociated label element. Inputs still have their own visible labels.
+
+fieldset #[
+    legend: "Profile"
+    content: [
+        label.for: "profile-name" "Display name"
+        input.id: "profile-name" .name: "displayName" "Rick"
+    ]
+    description: "This name is visible on your public profile."
+]
+
+; => <fieldset class="fieldset">
+;   <legend class="fieldset-legend">Profile</legend>
+;   <label class="label" for="profile-name">Display name</label>
+;   <input type="text" class="input" id="profile-name" name="displayName" value="Rick" />
+;   <p class="label">This name is visible on your public profile.</p>
+; </fieldset>
+
+
+; Disabled Fieldset
+;
+; The native disabled attribute disables the contained form controls.
+; Omitted description generates no corresponding wrapper.
+
+fieldset.disabled #[
+    legend: "Notifications"
+    content: [
+        label [toggle.name: "updates" .checked "" "Receive updates"]
+    ]
+]
+
+; => <fieldset class="fieldset" disabled>
+;   <legend class="fieldset-legend">Notifications</legend>
+;   <label class="label">
+;     <input type="checkbox" class="toggle" name="updates" checked />
+;     Receive updates
+;   </label>
+; </fieldset>

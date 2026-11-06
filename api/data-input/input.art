@@ -1,0 +1,34 @@
+; Text Input
+;
+; A string supplies the initial value, not the placeholder. .placeholder is
+; explicit. Type defaults to text; .name, .id, and native constraints are kept.
+; Empty string is an empty initial value. No automatic form submission wiring.
+
+input.name: "displayName" .ariaLabel: "Display name" "Rick"
+
+; => <input type="text" class="input" name="displayName" aria-label="Display name" value="Rick" />
+
+
+; Input type, color, size, and placeholder
+
+input.email.primary.lg.name: "email" .placeholder: "you@example.com" .ariaLabel: "Email" ""
+
+; => <input type="email" class="input input-primary input-lg" name="email" placeholder="you@example.com" aria-label="Email" value="" />
+
+
+; Disabled and read-only Inputs
+
+input.disabled.ariaLabel: "Account" "Pending"
+
+; => <input type="text" class="input" aria-label="Account" value="Pending" disabled />
+
+input.readOnly.ariaLabel: "Account ID" "acct-123"
+
+; => <input type="text" class="input" aria-label="Account ID" value="acct-123" readonly />
+
+
+; Ghost Input with native number constraints
+
+input.number.ghost.min: 1 .max: 10 .step: 1 .ariaLabel: "Quantity" "3"
+
+; => <input type="number" class="input input-ghost" min="1" max="10" step="1" aria-label="Quantity" value="3" />

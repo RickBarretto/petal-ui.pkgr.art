@@ -1,0 +1,36 @@
+; Toggle
+;
+; A styled checkbox with the same label/value contract as check.
+; Its string provides aria-label; empty string omits aria-label for label wrappers.
+; .checked and .disabled use native input attributes. Medium size is the default.
+
+toggle.name: "notifications" .value: "yes" "Notifications"
+
+; => <input type="checkbox" class="toggle" name="notifications" value="yes" aria-label="Notifications" />
+
+
+; Checked Toggle with color and size
+
+toggle.success.lg.checked "Notifications"
+
+; => <input type="checkbox" class="toggle toggle-success toggle-lg" aria-label="Notifications" checked />
+
+
+; Disabled Toggle
+
+toggle.disabled "Unavailable setting"
+
+; => <input type="checkbox" class="toggle" aria-label="Unavailable setting" disabled />
+
+
+; Toggle with visible text
+
+label [
+    toggle.name: "notifications" .value: "yes" ""
+    "Enable notifications"
+]
+
+; => <label class="label">
+;   <input type="checkbox" class="toggle" name="notifications" value="yes" />
+;   Enable notifications
+; </label>

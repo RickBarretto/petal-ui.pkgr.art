@@ -1,0 +1,53 @@
+; Select
+;
+; A block supplies options. Strings become option text with the browser's
+; default matching value; explicit option supports .value, .selected, .disabled.
+; Selection and submission use native select behavior.
+
+select.name: "color" .ariaLabel: "Color" ["Crimson" "Amber" "Velvet"]
+
+; => <select class="select" name="color" aria-label="Color">
+;   <option>Crimson</option>
+;   <option>Amber</option>
+;   <option>Velvet</option>
+; </select>
+
+
+; Explicit option values and a selected option
+
+select.primary.sm.name: "plan" .ariaLabel: "Plan" [
+    option.value: "free" "Free"
+    option.selected.value: "pro" "Pro"
+]
+
+; => <select class="select select-primary select-sm" name="plan" aria-label="Plan">
+;   <option value="free">Free</option>
+;   <option value="pro" selected>Pro</option>
+; </select>
+
+
+; Required Select with placeholder
+;
+; The placeholder is an explicit disabled option with an empty value.
+
+select.required.name: "plan" .ariaLabel: "Plan" [
+    option.disabled.selected.value: "" "Choose a plan"
+    option.value: "free" "Free"
+    option.value: "pro" "Pro"
+]
+
+; => <select class="select" name="plan" aria-label="Plan" required>
+;   <option value="" disabled selected>Choose a plan</option>
+;   <option value="free">Free</option>
+;   <option value="pro">Pro</option>
+; </select>
+
+
+; Disabled Ghost Select
+
+select.ghost.disabled.ariaLabel: "Plan" ["Free" "Pro"]
+
+; => <select class="select select-ghost" aria-label="Plan" disabled>
+;   <option>Free</option>
+;   <option>Pro</option>
+; </select>

@@ -1,0 +1,44 @@
+; Label
+;
+; A string creates a styled label; .for associates it with an explicit input ID.
+; A block creates a wrapping label. No IDs are needed when a label contains its
+; single control. Do not nest labels or put multiple controls in one label.
+
+div [
+    label.for: "display-name" "Display name"
+    input.id: "display-name" .name: "displayName" "Rick"
+]
+
+; => <div>
+;   <label class="label" for="display-name">Display name</label>
+;   <input type="text" class="input" id="display-name" name="displayName" value="Rick" />
+; </div>
+
+
+; Wrapping Label
+
+label [
+    check.name: "remember" .value: "yes" ""
+    "Remember me"
+]
+
+; => <label class="label">
+;   <input type="checkbox" class="checkbox" name="remember" value="yes" />
+;   Remember me
+; </label>
+
+
+; Floating Label
+;
+; .floating replaces label styling with floating-label. The block contains a
+; caption span and one input, which retains its own input styling.
+
+label.floating [
+    span "Email"
+    input.email.name: "email" .placeholder: "you@example.com" ""
+]
+
+; => <label class="floating-label">
+;   <span>Email</span>
+;   <input type="email" class="input" name="email" placeholder="you@example.com" value="" />
+; </label>
