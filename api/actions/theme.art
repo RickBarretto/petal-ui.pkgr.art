@@ -1,6 +1,6 @@
 ; Theme Controller
 ;
-; Theme names such as :synthwave are DSL tokens, emitted as input values.
+; Theme names such as 'synthwave are DSL tokens, emitted as input values.
 ; Checking the control activates that theme through DaisyUI's CSS.
 ; Unchecking restores the page's underlying theme.
 ; These controls do not persist the selection across page reloads.
@@ -8,21 +8,21 @@
 
 ; Theme checkbox
 
-theme.check :synthwave
+theme.check 'synthwave
 
 ; => <input type="checkbox" value="synthwave" class="checkbox theme-controller" />
 
 
 ; Theme toggle
 
-theme.toggle :synthwave
+theme.toggle 'synthwave
 
 ; => <input type="checkbox" value="synthwave" class="toggle theme-controller" />
 
 
 ; Initially checked theme toggle
 
-theme.toggle.checked :synthwave
+theme.toggle.checked 'synthwave
 
 ; => <input type="checkbox" value="synthwave" class="toggle theme-controller" checked />
 
@@ -34,7 +34,7 @@ theme.toggle.checked :synthwave
 
 theme [
     "Current"
-    check :synthwave
+    check 'synthwave
     "Synthwave"
 ]
 
@@ -49,7 +49,7 @@ theme [
 
 theme [
     "Current"
-    toggle :synthwave
+    toggle 'synthwave
     "Synthwave"
 ]
 
@@ -66,7 +66,7 @@ theme [
 ; The sun represents the unchecked state; the moon represents checked.
 ; Decorative icons are hidden from assistive technology; the input is named.
 
-theme.toggle.icons :dark
+theme.toggle.icons 'dark
 
 ; => <label class="toggle text-base-content">
 ;   <input type="checkbox" value="dark" class="theme-controller" aria-label="Enable dark theme" />
@@ -85,7 +85,7 @@ theme.toggle.icons :dark
 ; .lg sizes the wrapping toggle; .checked applies to its input.
 ; The built-in sun and moon icons stay the same for any target theme.
 
-theme.toggle.icons.lg.checked :synthwave
+theme.toggle.icons.lg.checked 'synthwave
 
 ; => <label class="toggle toggle-lg text-base-content">
 ;   <input type="checkbox" value="synthwave" class="theme-controller" aria-label="Enable synthwave theme" checked />

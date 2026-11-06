@@ -1,0 +1,123 @@
+; Composition proposals: HTML's fragment/html and the future petal scope.
+; These are API designs, not runnable examples of the current template library.
+; petal [...] supplies short component names and returns an HTML markup fragment.
+
+; A native form composed with styled controls. Form submission stays native.
+; Petal component child blocks retain the scope, including named content slots.
+
+fragment [
+    main [
+        h1 "Your profile"
+        form.method: "post" .action: "/profile" [
+            petal [
+                fieldset #[
+                    legend: "Contact"
+                    content: [
+                        label.for: "email" "Email"
+                        input.email.required.id: "email" .name: "email" ""
+                        label [
+                            check.name: "updates" .value: "yes" ""
+                            "Send me updates"
+                        ]
+                    ]
+                ]
+                button.submit.primary "Save profile"
+            ]
+        ]
+    ]
+]
+
+
+; A reusable Arturo component returns Petal markup.
+; Text stays text, so names containing & or < are escaped by the HTML package.
+
+profile: $[name :string role :string] [
+    petal [
+        card #[
+            title: name
+            content: [p role]
+            actions: [button.href: "/team" "Meet the team"]
+        ]
+    ]
+]
+
+fragment [
+    section [
+        h2 "Our team"
+        loop ["Ana" "Rick & friends"] 'person [
+            profile person "Arturo developer"
+        ]
+    ]
+]
+
+
+; Native HTML supplies the document; Petal supplies its component regions.
+; p and headings inside Petal delegate to the HTML DSL.
+; Outside Petal, footer is the HTML package's plain semantic element.
+
+html.lang: "en" [
+    head [title "Petal UI"]
+    body [
+        header [a.href: "/" "Home"]
+        main [
+            petal [
+                hero #[
+                    image: img.alt: "Mountains" "mountains.jpg"
+                    content: [
+                        h1 "Build something simple"
+                        p "HTML for structure. Petal for components."
+                        button.primary.href: "/docs" "Get started"
+                    ]
+                ]
+            ]
+        ]
+        footer [
+            p "Made with Arturo."
+            petal [link.href: "/about" "About"]
+        ]
+    ]
+]
+
+
+; Decorative image: explicit empty alt avoids announcing redundant decoration.
+
+petal [
+    img.alt: "" "flourish.jpg"
+    h2 "Welcome"
+]
+
+
+; A whole form's controls share one Petal scope.
+; Native form owns submission; Petal owns the controls and their styling.
+
+fragment [
+    main [
+        h1 "Create your account"
+        form.method: "post" .action: "/account" .enctype: "multipart/form-data" [
+            petal [
+                fieldset #[
+                    legend: "Profile"
+                    content: [
+                        label.for: "account-name" "Name"
+                        input.id: "account-name" .name: "name" ""
+                        upload.name: "photo" .accept: "image/*" "Profile photo"
+                        label [
+                            check.button.name: "updates" .value: "yes" ""
+                            "Receive updates"
+                        ]
+                    ]
+                ]
+                fieldset #[
+                    legend: "Plan"
+                    content: [
+                        radio.button.name: "plan" .value: "free" .checked "Free"
+                        radio.button.name: "plan" .value: "pro" "Pro"
+                    ]
+                ]
+                button.primary.submit "Create account"
+            ]
+        ]
+        ; Outside Petal, this is the HTML package's native button.
+        button.type: "button" "Native HTML button"
+    ]
+]
