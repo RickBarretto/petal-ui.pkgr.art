@@ -1,0 +1,39 @@
+; Radial Progress
+;
+; A number from 0 to 100 sets --value and aria-valuenow.
+; Generates a progressbar with a visible percentage, min 0, and max 100.
+; .ariaLabel names the task separately from its percentage.
+
+radialProgress.ariaLabel: "Upload" 70
+
+; => <div class="radial-progress" style="--value: 70;" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">70%</div>
+
+
+; Colored Radial Progress
+;
+; Color uses a text utility because the ring follows currentColor.
+
+radialProgress.primary.ariaLabel: "Upload" 70
+
+; => <div class="radial-progress text-primary" style="--value: 70;" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">70%</div>
+
+
+; Custom size and thickness
+;
+; CSS length strings map to --size and --thickness; units are kept explicit.
+; DaisyUI defaults are 5rem size and thickness of 10% of that size.
+
+radialProgress.size: "8rem" .thickness: "6px" .ariaLabel: "Upload" 70
+
+; => <div class="radial-progress" style="--value: 70; --size: 8rem; --thickness: 6px;" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">70%</div>
+
+
+; Zero and completed Radial Progress
+
+radialProgress.ariaLabel: "Upload" 0
+
+; => <div class="radial-progress" style="--value: 0;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">0%</div>
+
+radialProgress.success.ariaLabel: "Upload" 100
+
+; => <div class="radial-progress text-success" style="--value: 100;" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">100%</div>

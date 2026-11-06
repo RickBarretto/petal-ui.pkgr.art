@@ -1,0 +1,48 @@
+; Loading indicator
+;
+; A string provides the accessible label. Generates a span with role="status";
+; the label is not visible text inside the animation.
+; Spinner animation and medium size are the defaults.
+
+loading "Loading"
+
+; => <span class="loading loading-spinner" role="status" aria-label="Loading"></span>
+
+
+; Loading animations
+
+loading.dots "Loading"                  ; => <span class="loading loading-dots" role="status" aria-label="Loading"></span>
+loading.ring "Loading"                  ; => <span class="loading loading-ring" role="status" aria-label="Loading"></span>
+loading.ball "Loading"                  ; => <span class="loading loading-ball" role="status" aria-label="Loading"></span>
+loading.bars "Loading"                  ; => <span class="loading loading-bars" role="status" aria-label="Loading"></span>
+loading.infinity "Loading"              ; => <span class="loading loading-infinity" role="status" aria-label="Loading"></span>
+
+
+; Loading sizes
+
+loading.xs "Loading"                    ; => <span class="loading loading-spinner loading-xs" role="status" aria-label="Loading"></span>
+loading.sm "Loading"                    ; => <span class="loading loading-spinner loading-sm" role="status" aria-label="Loading"></span>
+loading.lg "Loading"                    ; => <span class="loading loading-spinner loading-lg" role="status" aria-label="Loading"></span>
+loading.xl "Loading"                    ; => <span class="loading loading-spinner loading-xl" role="status" aria-label="Loading"></span>
+
+
+; Colored Loading indicator
+;
+; Semantic color flags use text-color utilities, not loading-color classes.
+
+loading.dots.primary.lg "Saving changes"
+
+; => <span class="loading loading-dots text-primary loading-lg" role="status" aria-label="Saving changes"></span>
+
+
+; Loading inside a disabled Button
+
+button.disabled [
+    loading.sm "Saving changes"
+    "Saving..."
+]
+
+; => <button class="btn" disabled>
+;   <span class="loading loading-spinner loading-sm" role="status" aria-label="Saving changes"></span>
+;   Saving...
+; </button>

@@ -1,0 +1,104 @@
+; Tooltip
+;
+; Uses the .tooltip attribute on a container, matching the existing FAB API.
+; The string becomes data-tip; the positional argument supplies the trigger.
+; Placement, alignment, color, and .open flags apply to the tooltip container.
+; Top placement and centered alignment are the defaults.
+
+div.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+
+; Tooltip placement
+
+div.bottom.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-bottom" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+div.left.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-left" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+div.right.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-right" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+
+; Tooltip alignment
+
+div.top.start.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-top tooltip-start" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+div.top.end.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-top tooltip-end" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+
+; Always-visible Tooltip
+
+div.open.tooltip: "Save changes" -> button "Save"
+
+; => <div class="tooltip tooltip-open" data-tip="Save changes">
+;   <button class="btn">Save</button>
+; </div>
+
+
+; Tooltip colors
+;
+; The trigger's color stays independent of the tooltip's color.
+
+div.primary.tooltip: "Save changes" -> button.primary "Save"
+
+; => <div class="tooltip tooltip-primary" data-tip="Save changes">
+;   <button class="btn btn-primary">Save</button>
+; </div>
+
+div.secondary.tooltip: "Help" -> button "Help"
+
+; => <div class="tooltip tooltip-secondary" data-tip="Help">
+;   <button class="btn">Help</button>
+; </div>
+
+div.accent.tooltip: "Help" -> button "Help"
+
+; => <div class="tooltip tooltip-accent" data-tip="Help">
+;   <button class="btn">Help</button>
+; </div>
+
+div.info.tooltip: "Help" -> button "Help"
+
+; => <div class="tooltip tooltip-info" data-tip="Help">
+;   <button class="btn">Help</button>
+; </div>
+
+div.success.tooltip: "Saved" -> button "Status"
+
+; => <div class="tooltip tooltip-success" data-tip="Saved">
+;   <button class="btn">Status</button>
+; </div>
+
+div.warning.tooltip: "Storage is low" -> button "Status"
+
+; => <div class="tooltip tooltip-warning" data-tip="Storage is low">
+;   <button class="btn">Status</button>
+; </div>
+
+div.error.tooltip: "Connection lost" -> button "Status"
+
+; => <div class="tooltip tooltip-error" data-tip="Connection lost">
+;   <button class="btn">Status</button>
+; </div>
