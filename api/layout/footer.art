@@ -16,12 +16,12 @@ footer [
 ; Footer with navigation columns
 
 footer.horizontal.bg: 'base200 .p: 8 [
-    nav.ariaLabel: "Company" [
+    nav.label: "Company" [
         h3.title "Company"
         link.hover.href: "/about" "About"
         link.hover.href: "/contact" "Contact"
     ]
-    nav.ariaLabel: "Legal" [
+    nav.label: "Legal" [
         h3.title "Legal"
         link.hover.href: "/privacy" "Privacy"
         link.hover.href: "/terms" "Terms"

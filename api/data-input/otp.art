@@ -2,11 +2,11 @@
 ;
 ; Integer argument is the digit count. Generates that many decorative spans
 ; and one text input, preserving leading zeroes, paste, and native autofill.
-; maxlength and numeric pattern match the digit count. .name, .ariaLabel,
+; maxlength and numeric pattern match the digit count. .name, .label,
 ; .value, .required, and .disabled apply to the input; visual modifiers to label.
 ; No per-digit inputs, focus-moving scripts, or verification service is added.
 
-otp.required.name: "code" .ariaLabel: "Verification code" 6
+otp.required.name: "code" .label: "Verification code" 6
 
 ; => <label class="otp">
 ;   <span aria-hidden="true"></span>
@@ -23,7 +23,7 @@ otp.required.name: "code" .ariaLabel: "Verification code" 6
 ;
 ; Initial values are strings, so a leading zero is retained.
 
-otp.joined.primary.sm.name: "code" .ariaLabel: "Verification code" .value: "0123" 4
+otp.joined.primary.sm.name: "code" .label: "Verification code" .value: "0123" 4
 
 ; => <label class="otp otp-joined otp-primary otp-sm">
 ;   <span aria-hidden="true"></span>
@@ -36,7 +36,7 @@ otp.joined.primary.sm.name: "code" .ariaLabel: "Verification code" .value: "0123
 
 ; Disabled OTP input
 
-otp.disabled.ariaLabel: "Verification code" 4
+otp.disabled.label: "Verification code" 4
 
 ; => <label class="otp">
 ;   <span aria-hidden="true"></span>

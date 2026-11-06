@@ -42,8 +42,8 @@ link.href: "/docs" [
 
 ; Empty visible content with an accessible label
 ;
-; An empty block stays empty. .ariaLabel supplies the aria-label attribute.
+; An empty block stays empty. .label supplies the aria-label attribute.
 
-link.href: "/docs" .ariaLabel: "Documentation" []
+link.href: "/docs" .label: "Documentation" []
 
 ; => <a class="link" href="/docs" aria-label="Documentation"></a>

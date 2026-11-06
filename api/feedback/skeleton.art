@@ -22,7 +22,7 @@ skeleton.circle.w: 16 .h: 16 []
 ; The enclosing region can expose aria-busy while its content loads.
 ; Shape placeholders remain decorative rather than individual announcements.
 
-div.ariaBusy: true [
+div.busy: true [
     skeleton.circle.w: 16 .h: 16 []
     div [
         skeleton.w: 32 .h: 4 []
