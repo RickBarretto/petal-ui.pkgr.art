@@ -1,0 +1,87 @@
+; Drawer sidebar
+;
+; Named open/content/sidebar/close slots follow the Modal convention.
+; Generates the checkbox, main content and sidebar wrappers, overlay, and wiring.
+; Open and close are buttons; clicking the overlay also unchecks the toggle.
+; This is a sidebar layout, without modal focus trapping or automatic Escape handling.
+; IDs are generated; sample values below illustrate. .id sets the root ID,
+; with -toggle and -side suffixes used for internal references.
+
+drawer #[
+    open: button "Open sidebar"
+    content: [p "Main page content"]
+    sidebar: menu.w: 64 .bg: 'base100 [
+        li -> a.href: "/" "Home"
+        li -> a.href: "/projects" "Projects"
+    ]
+    close: button "Close sidebar"
+]
+
+; => <div class="drawer" id="drawer-a7f3c9e2">
+;   <input type="checkbox" class="drawer-toggle" id="drawer-a7f3c9e2-toggle" aria-hidden="true" tabindex="-1" />
+;   <div class="drawer-content">
+;     <button type="button" class="btn drawer-button" aria-controls="drawer-a7f3c9e2-side" onclick="document.getElementById('drawer-a7f3c9e2-toggle').checked = true">Open sidebar</button>
+;     <p>Main page content</p>
+;   </div>
+;   <div class="drawer-side" id="drawer-a7f3c9e2-side">
+;     <label class="drawer-overlay" for="drawer-a7f3c9e2-toggle" aria-label="Close sidebar"></label>
+;     <div class="bg-base-100 min-h-full">
+;       <button type="button" class="btn" aria-controls="drawer-a7f3c9e2-side" onclick="document.getElementById('drawer-a7f3c9e2-toggle').checked = false">Close sidebar</button>
+;       <ul class="menu w-64 bg-base-100">
+;         <li><a href="/">Home</a></li>
+;         <li><a href="/projects">Projects</a></li>
+;       </ul>
+;     </div>
+;   </div>
+; </div>
+
+
+; End-side Drawer with explicit ID and initial checked state
+;
+; .checked starts open but remains closable. Background clicks and the close
+; button both update the generated checkbox. Slot wrappers are only emitted
+; for supplied content, while the standard drawer/side structure is preserved.
+
+drawer.end.checked.id: "settings-drawer" #[
+    open: button "Settings"
+    content: [p "Your workspace"]
+    sidebar: div.w: 64 [h2 "Settings"]
+    close: button "Close settings"
+]
+
+; => <div class="drawer drawer-end" id="settings-drawer">
+;   <input type="checkbox" class="drawer-toggle" id="settings-drawer-toggle" aria-hidden="true" tabindex="-1" checked />
+;   <div class="drawer-content">
+;     <button type="button" class="btn drawer-button" aria-controls="settings-drawer-side" onclick="document.getElementById('settings-drawer-toggle').checked = true">Settings</button>
+;     <p>Your workspace</p>
+;   </div>
+;   <div class="drawer-side" id="settings-drawer-side">
+;     <label class="drawer-overlay" for="settings-drawer-toggle" aria-label="Close sidebar"></label>
+;     <div class="bg-base-100 min-h-full">
+;       <button type="button" class="btn" aria-controls="settings-drawer-side" onclick="document.getElementById('settings-drawer-toggle').checked = false">Close settings</button>
+;       <div class="w-64"><h2>Settings</h2></div>
+;     </div>
+;   </div>
+; </div>
+
+
+; Permanently open Drawer
+;
+; .open maps to drawer-open and forces the sidebar visible independently of
+; checkbox state. Omit open/close controls for this fixed layout.
+
+drawer.open.id: "workspace-drawer" #[
+    content: [p "Your workspace"]
+    sidebar: menu.w: 64 [li -> a.href: "/" "Home"]
+]
+
+; => <div class="drawer drawer-open" id="workspace-drawer">
+;   <input type="checkbox" class="drawer-toggle" id="workspace-drawer-toggle" aria-hidden="true" tabindex="-1" />
+;   <div class="drawer-content"><p>Your workspace</p></div>
+;   <div class="drawer-side" id="workspace-drawer-side">
+;     <label class="drawer-overlay" for="workspace-drawer-toggle" aria-label="Close sidebar"></label>
+;     <div class="bg-base-100 min-h-full">
+;       <ul class="menu w-64"><li><a href="/">Home</a></li></ul>
+;     </div>
+;   </div>
+; </div>

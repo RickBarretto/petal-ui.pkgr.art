@@ -1,0 +1,66 @@
+; Join
+;
+; Horizontal by default. Adds join-item directly to each emitted child element,
+; without introducing wrappers. Existing classes and attributes are preserved.
+
+join [
+    button "One"
+    button "Two"
+    button "Three"
+]
+
+; => <div class="join">
+;   <button class="btn join-item">One</button>
+;   <button class="btn join-item">Two</button>
+;   <button class="btn join-item">Three</button>
+; </div>
+
+
+; Vertical Join
+
+join.vertical [
+    button "One"
+    button "Two"
+]
+
+; => <div class="join join-vertical">
+;   <button class="btn join-item">One</button>
+;   <button class="btn join-item">Two</button>
+; </div>
+
+
+; Join with different controls
+
+join [
+    input.search.name: "query" .placeholder: "Search" .ariaLabel: "Search query" ""
+    button.primary "Search"
+]
+
+; => <div class="join">
+;   <input type="search" class="input join-item" name="query" placeholder="Search" aria-label="Search query" value="" />
+;   <button class="btn btn-primary join-item">Search</button>
+; </div>
+
+
+; Join with Accordion
+;
+; Preserves the previously agreed Accordion example: every emitted details
+; element receives join-item and stays a direct child of the Join container.
+
+join.vertical [
+    accordion.arrow.name: "layout-faq" [
+        item.open "Account" [p "Create your account here."]
+        item "Password" [p "Reset your password here."]
+    ]
+]
+
+; => <div class="join join-vertical">
+;   <details name="layout-faq" class="collapse collapse-arrow join-item" open>
+;     <summary class="collapse-title">Account</summary>
+;     <div class="collapse-content"><p>Create your account here.</p></div>
+;   </details>
+;   <details name="layout-faq" class="collapse collapse-arrow join-item">
+;     <summary class="collapse-title">Password</summary>
+;     <div class="collapse-content"><p>Reset your password here.</p></div>
+;   </details>
+; </div>

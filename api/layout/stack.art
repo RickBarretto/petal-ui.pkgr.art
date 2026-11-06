@@ -1,0 +1,59 @@
+; Stack
+;
+; Visual layering wrapper; supplied elements remain direct children.
+; The first child is in front. Default alignment is bottom.
+; Size utilities apply to the container. All child content stays in the DOM;
+; this is not a carousel, selection control, or automatic slideshow.
+
+stack.w: 48 .h: 32 [
+    div.bg: 'primary [p "One"]
+    div.bg: 'accent [p "Two"]
+    div.bg: 'secondary [p "Three"]
+]
+
+; => <div class="stack w-48 h-32">
+;   <div class="bg-primary"><p>One</p></div>
+;   <div class="bg-accent"><p>Two</p></div>
+;   <div class="bg-secondary"><p>Three</p></div>
+; </div>
+
+
+; Stack aligned to top
+
+stack.top.w: 48 [
+    img.alt: "Mountains" "mountains.jpg"
+    img.alt: "Forest" "forest.jpg"
+    img.alt: "Coast" "coast.jpg"
+]
+
+; => <div class="stack stack-top w-48">
+;   <img src="mountains.jpg" alt="Mountains" />
+;   <img src="forest.jpg" alt="Forest" />
+;   <img src="coast.jpg" alt="Coast" />
+; </div>
+
+
+; Stack aligned to start
+
+stack.start.w: 48 [
+    img.alt: "Mountains" "mountains.jpg"
+    img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="stack stack-start w-48">
+;   <img src="mountains.jpg" alt="Mountains" />
+;   <img src="forest.jpg" alt="Forest" />
+; </div>
+
+
+; Stack aligned to end
+
+stack.end.w: 48 [
+    img.alt: "Mountains" "mountains.jpg"
+    img.alt: "Forest" "forest.jpg"
+]
+
+; => <div class="stack stack-end w-48">
+;   <img src="mountains.jpg" alt="Mountains" />
+;   <img src="forest.jpg" alt="Forest" />
+; </div>

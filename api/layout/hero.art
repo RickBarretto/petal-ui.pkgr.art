@@ -1,0 +1,47 @@
+; Hero
+;
+; A block is shorthand for the content slot. Generates hero and hero-content
+; wrappers, with the supplied content grouped in an inner div.
+; .center applies text-center to hero-content. Background/spacing are explicit.
+
+hero.center.bg: 'base200 .p: 12 [
+    h1 "Build with Petal UI"
+    p "Readable interfaces, written in Arturo."
+    button.primary "Get started"
+]
+
+; => <div class="hero bg-base-200 p-12">
+;   <div class="hero-content text-center">
+;     <div>
+;       <h1>Build with Petal UI</h1>
+;       <p>Readable interfaces, written in Arturo.</p>
+;       <button class="btn btn-primary">Get started</button>
+;     </div>
+;   </div>
+; </div>
+
+
+; Hero with image and content
+;
+; A dictionary supplies image and content. The image is beside the text on
+; large screens and above it on smaller screens. Its alt and sizing are kept.
+
+hero #[
+    image: img.w: 64 .alt: "Mountain landscape" "mountains.jpg"
+    content: [
+        h1 "Your next adventure"
+        p "Discover something new."
+        button.primary "Explore"
+    ]
+]
+
+; => <div class="hero">
+;   <div class="hero-content flex-col lg:flex-row">
+;     <img class="w-64" src="mountains.jpg" alt="Mountain landscape" />
+;     <div>
+;       <h1>Your next adventure</h1>
+;       <p>Discover something new.</p>
+;       <button class="btn btn-primary">Explore</button>
+;     </div>
+;   </div>
+; </div>

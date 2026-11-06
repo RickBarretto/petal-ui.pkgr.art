@@ -1,0 +1,45 @@
+; Indicator
+;
+; Named item and content slots. Adds indicator-item directly to the marker
+; element, preserving its classes; the content element stays its sibling.
+; Default position is top/end. Position flags affect the marker, not the wrapper.
+
+indicator #[
+    item: badge.secondary "3"
+    content: button "Inbox"
+]
+
+; => <div class="indicator">
+;   <span class="indicator-item badge badge-secondary">3</span>
+;   <button class="btn">Inbox</button>
+; </div>
+
+
+; Indicator at bottom/start
+
+indicator.bottom.start #[
+    item: status.success "Online"
+    content: avatar.circle.alt: "Ana" "ana.jpg"
+]
+
+; => <div class="indicator">
+;   <span class="indicator-item indicator-bottom indicator-start status status-success" role="img" aria-label="Online"></span>
+;   <div class="avatar">
+;     <div class="w-12 rounded-full">
+;       <img src="ana.jpg" alt="Ana" />
+;     </div>
+;   </div>
+; </div>
+
+
+; Centered Indicator
+
+indicator.middle.center #[
+    item: badge.primary "New"
+    content: div.w: 32 .h: 16 [p "Content"]
+]
+
+; => <div class="indicator">
+;   <span class="indicator-item indicator-middle indicator-center badge badge-primary">New</span>
+;   <div class="w-32 h-16"><p>Content</p></div>
+; </div>
