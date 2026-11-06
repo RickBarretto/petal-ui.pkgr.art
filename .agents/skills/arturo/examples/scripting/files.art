@@ -1,0 +1,41 @@
+; Run in a disposable working directory; refuse existing fixtures.
+runFileWorkflow: $[forceFailure? :logical][
+    fixture: "scripting-files-fixture.txt"
+    emptyFixture: "scripting-empty-fixture.txt"
+    missingFixture: "scripting-missing-fixture.txt"
+    ensure -> not? exists? fixture
+    ensure -> not? exists? emptyFixture
+    ensure -> not? exists? missingFixture
+    failure: try [
+        "first" >> fixture
+        ensure -> file? fixture
+        ensure -> "first" = << fixture
+        write.append " second" fixture
+        ensure -> "first second" = read.file fixture
+        write "" emptyFixture
+        ensure -> "" = read.file emptyFixture
+        contents: "unchanged"
+        failed: try -> contents: read.file missingFixture
+        ensure -> error? failed
+        ensure -> contents = "unchanged"
+        ensure -> not? exists? missingFixture
+        ensure -> "first second" = read.file fixture
+        ; Let this operational error escape the action on the failure run.
+        if forceFailure? -> write "blocked" fixture ++ "/child.txt"
+    ]
+    if exists? fixture -> delete fixture
+    if exists? emptyFixture -> delete emptyFixture
+    if error? failure -> throw to :string failure
+]
+
+runFileWorkflow false
+ensure -> not? exists? "scripting-files-fixture.txt"
+ensure -> not? exists? "scripting-empty-fixture.txt"
+failure: try -> runFileWorkflow true
+ensure -> error? failure
+; These assertions run after the workflow has propagated its failure.
+ensure -> not? exists? "scripting-files-fixture.txt"
+ensure -> not? exists? "scripting-empty-fixture.txt"
+ensure -> not? exists? "scripting-missing-fixture.txt"
+ensure -> throws? -> read.file "scripting-files-fixture.txt"
+print "files ok"

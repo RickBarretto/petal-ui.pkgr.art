@@ -1,0 +1,8 @@
+ensure -> throws? -> to :integer "invalid"
+captured: try -> throw "expected failure"
+ensure -> error? captured
+value: 0
+success: try -> value: 42
+ensure -> null? success
+ensure -> 42 = value
+print "debugging ok"

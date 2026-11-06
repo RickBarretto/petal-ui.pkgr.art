@@ -1,0 +1,46 @@
+;  MIT licensed.
+
+doubleValue: $[value :integer :floating] -> value * 2
+labelFor: $[count :integer] -> ((count = 1) ? -> "item" -> "items")
+squares: map [1 2 3] 'value -> value ^ 2
+
+; Keep a multi-step body explicit, with one intended result.
+changedFirst: $[items :block value][
+    ensure -> not? empty? items
+    result: new items
+    set result 0 value
+    result
+]
+
+ensure -> @[doubleValue 4] = [8]
+ensure -> @[doubleValue 2.5] = [5.0]
+ensure -> throws? -> doubleValue "4"
+ensure -> (labelFor 1) = "item"
+ensure -> (labelFor 0) = "items"
+ensure -> squares = [1 4 9]
+ensure -> and? (not? empty? squares) (or? 2 > 1 false)
+ensure -> 2 ∈ [1 2 3]
+ensure -> ([1 2 3] ∩ [2 3 4]) = [2 3]
+ensure -> (null ?? "default") = "default"
+ensure -> 10 = (2 * 3) + 4
+ensure -> 14 = 2 * 3 + 4
+
+original: [1 2]
+ensure -> @[changedFirst original 9] = [[9 2]]
+ensure -> original = [1 2]
+ensure -> throws? -> changedFirst [] 9
+
+; Only one terminal is wrapped; the next value remains outside the block.
+remaining: @[body: -> 1 2]
+ensure -> body = [1]
+ensure -> remaining = [2]
+
+; A multi-step branch needs brackets so neither effect escapes it.
+effects: []
+if false [
+    append 'effects "first"
+    append 'effects "second"
+]
+ensure -> effects = []
+
+print "formatting ok"

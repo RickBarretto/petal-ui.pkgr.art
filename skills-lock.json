@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "arturo": {
+      "source": "arturo-lang/skills",
+      "sourceType": "github",
+      "skillPath": "skills/arturo/SKILL.md",
+      "computedHash": "e02a4ecb48f94170141373ae14b717ee317fea9f61cbf54aa7c56a35f00087e6"
+    }
+  }
+}

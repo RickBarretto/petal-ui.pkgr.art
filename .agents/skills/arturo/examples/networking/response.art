@@ -1,0 +1,57 @@
+; scratchPath must be an unused file inside a private, caller-owned directory.
+; Staging avoids read interpreting untrusted body text as a URL or local path.
+decodeProfile: $[response :dictionary scratchPath :string][
+    ensure.that: "missing HTTP status" -> key? response 'status
+    ensure.that: "unexpected HTTP status" -> 200 = response\status
+    ensure.that: "missing HTTP body" -> key? response 'body
+    ensure.that: "HTTP body must be text" -> string? response\body
+    ensure.that: "scratch file already exists" -> not? exists? scratchPath
+
+    profile: null
+    failure: try [
+        write response\body scratchPath
+        profile: read.file.json scratchPath
+        ensure.that: "profile must be an object" -> dictionary? profile
+        ensure.that: "missing name" -> key? profile 'name
+        ensure.that: "name must be text" -> string? profile\name
+        ensure.that: "missing active" -> key? profile 'active
+        ensure.that: "active must be logical" -> logical? profile\active
+        ensure.that: "missing tags" -> key? profile 'tags
+        ensure.that: "tags must be an array" -> block? profile\tags
+    ]
+    if exists? scratchPath -> delete scratchPath
+    if error? failure -> throw "invalid profile or staging failure"
+    return profile
+]
+
+scratchPath: "response-fixture.json"
+body: {{"name":"Ada","active":false,"tags":[],"note":null}}
+response: #[status: 200 body: body]
+profile: decodeProfile response scratchPath
+ensure -> false = profile\active
+ensure -> empty? profile\tags
+ensure -> null? profile\note
+ensure -> not? key? profile 'omitted
+ensure -> not? exists? scratchPath
+; No normalization or mutation of the response dictionary.
+ensure -> body = response\body
+ensure -> profile = read.json write.json profile null
+
+ensure -> throws? -> decodeProfile null scratchPath
+ensure -> throws? [decodeProfile #[status: 503 body: "unavailable"] scratchPath]
+ensure -> throws? [decodeProfile #[status: 200 body: "{broken"] scratchPath]
+ensure -> not? exists? scratchPath
+ensure -> throws? [decodeProfile #[status: 200 body: ""] scratchPath]
+ensure -> throws? [decodeProfile #[status: 200 body: "[]"] scratchPath]
+ensure -> throws? [decodeProfile #[status: 200 body: {{"name":"Ada"}}] scratchPath]
+ensure -> throws? [decodeProfile #[status: 200 body: {{"name":"Ada","active":"false","tags":[]}}] scratchPath]
+ensure -> not? exists? scratchPath
+; Refuse a caller's existing file without deleting or overwriting it.
+write "keep this" scratchPath
+ensure -> throws? -> decodeProfile response scratchPath
+ensure -> "keep this" = read.file scratchPath
+delete scratchPath
+; A nonexistent parent directory produces an operational write failure.
+ensure -> throws? -> decodeProfile response "missing-response-directory/body.json"
+ensure -> not? exists? "missing-response-directory/body.json"
+print "response workflow ok"

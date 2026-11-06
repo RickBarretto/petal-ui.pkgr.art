@@ -1,0 +1,8 @@
+; Inspect signatures only: no windows or dialogs open; clipboard is untouched.
+ensure -> dictionary? info.get 'alert
+ensure -> dictionary? info.get 'dialog
+ensure -> dictionary? info.get 'popup
+ensure -> dictionary? info.get 'clip
+ensure -> dictionary? info.get 'unclip
+ensure -> dictionary? info.get 'webview
+print "ui metadata ok"

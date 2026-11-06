@@ -1,0 +1,1 @@
+loop arg 'value -> print value

@@ -1,0 +1,16 @@
+ensure -> length? 3`m
+ensure -> not? mass? 3`m
+ensure -> 300 = scalar in `cm 3`m
+ensure -> 3 = scalar 3`m
+ensure -> unit? units 3`m
+distance: 3`m
+centimeters: convert distance `cm
+ensure -> centimeters = in `cm distance
+ensure -> 300 = scalar centimeters
+ensure -> distance = 3`m
+ensure -> conforms? distance `cm
+ensure -> not? conforms? distance `s
+ensure -> 0 = scalar convert 0`m `cm
+ensure -> error? try -> convert distance `s
+ensure -> distance = 3`m
+print "quantities ok"

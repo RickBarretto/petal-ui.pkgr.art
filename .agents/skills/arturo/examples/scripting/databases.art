@@ -1,0 +1,27 @@
+runDatabaseWorkflow: $[forceFailure? :logical lifecycle :dictionary][
+    db: open.sqlite ":memory:"
+    failure: try [
+        ensure -> database? db
+        query db "CREATE TABLE people (name TEXT UNIQUE)"
+        query.with: ["Ada"] db "INSERT INTO people VALUES (?)"
+        rows: query db "SELECT name FROM people"
+        ensure -> [["Ada"]] = rows
+        ensure -> throws? -> query.with: ["Ada"] db "INSERT INTO people VALUES (?)"
+        ensure -> throws? -> query db "SELECT FROM people"
+        ensure -> [["Ada"]] = query db "SELECT name FROM people"
+        ; This duplicate escapes the action instead of being caught by throws?.
+        if forceFailure? -> query.with: ["Ada"] db "INSERT INTO people VALUES (?)"
+    ]
+    close db
+    ; Record only a completed close, before propagating any action failure.
+    lifecycle\closed: lifecycle\closed + 1
+    if error? failure -> throw to :string failure
+]
+
+lifecycle: #[closed: 0]
+runDatabaseWorkflow false lifecycle
+ensure -> 1 = lifecycle\closed
+failure: try -> runDatabaseWorkflow true lifecycle
+ensure -> error? failure
+ensure -> 2 = lifecycle\closed
+print "databases ok"

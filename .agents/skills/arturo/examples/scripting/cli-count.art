@@ -1,0 +1,19 @@
+; arturo cli-count.art 003 prints 3; missing/invalid/negative inputs fail.
+parseCount: $[inputs :block][
+    ensure -> 1 = size inputs
+    count: to :integer first inputs
+    ensure -> count >= 0
+    return count
+]
+
+; Validation runs before any application effects.
+ensure -> 3 = parseCount ["003"]
+ensure -> 0 = parseCount ["0"]
+ensure -> throws? -> parseCount []
+ensure -> throws? -> parseCount ["1" "2"]
+ensure -> throws? -> parseCount ["invalid"]
+ensure -> throws? -> parseCount ["-1"]
+count: 0
+failure: try -> count: parseCount arg
+if error? failure -> panic.unstyled "usage: cli-count.art NONNEGATIVE_INTEGER"
+print count

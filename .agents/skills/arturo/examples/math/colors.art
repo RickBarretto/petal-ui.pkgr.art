@@ -1,0 +1,19 @@
+ensure -> #800080 = blend #red #blue
+ensure -> #red = blend.balance: 0.0 #red #blue
+ensure -> #blue = blend.balance: 1.0 #red #blue
+ensure -> color? darken #red 0.2
+baseColor: #red
+ensure -> #CC0000 = darken baseColor 0.2
+ensure -> baseColor = #red
+ensure -> baseColor = darken baseColor 0.0
+ensure -> #000000 = darken baseColor 1.0
+darken 'baseColor 0.2
+ensure -> baseColor = #CC0000
+ensure -> color? grayscale #red
+ensure -> #123456 = spin #123456 360
+ensure -> 3 = size palette.triad #red
+ensure -> color? #aliceBlue
+ensure -> #F0F8FF = #aliceBlue
+ensure -> #663399 = #rebeccaPurple
+ensure -> dictionary? #[foreground: #rebeccaPurple]
+print "colors ok"

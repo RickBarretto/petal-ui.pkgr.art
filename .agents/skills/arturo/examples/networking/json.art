@@ -1,0 +1,8 @@
+data: read.json {{"name":"Ada","active":false,"scores":[2,4]}}
+ensure -> "Ada" = data\name
+ensure -> false = data\active
+ensure -> [2 4] = data\scores
+encoded: write.json data null
+decoded: read.json encoded
+ensure -> data = decoded
+print "json ok"
