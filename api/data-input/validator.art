@@ -1,0 +1,47 @@
+; Native validation styling
+;
+; .validator adds DaisyUI's validator class to input/select/textarea.
+; Native HTML types and constraints determine validity; no custom validation
+; engine, messages, or submit handler is generated.
+
+input.email.required.validator.ariaLabel: "Email" ""
+
+; => <input type="email" class="input validator" aria-label="Email" value="" required />
+
+
+; Validation hint
+;
+; validatorHint emits validator-hint. Keep control and hint in an isolated
+; wrapper so another invalid control cannot trigger this hint's CSS visibility.
+; Explicit ID and aria-describedby associate the message with its control.
+
+fieldset #[
+    legend: "Contact"
+    content: [
+        label.for: "contact-email" "Email"
+        input.email.required.validator.id: "contact-email" .name: "email" .ariaDescribedBy: "email-hint" ""
+        validatorHint.id: "email-hint" "Enter a valid email address."
+    ]
+]
+
+; => <fieldset class="fieldset">
+;   <legend class="fieldset-legend">Contact</legend>
+;   <label class="label" for="contact-email">Email</label>
+;   <input type="email" class="input validator" id="contact-email" name="email" aria-describedby="email-hint" value="" required />
+;   <p class="validator-hint" id="email-hint">Enter a valid email address.</p>
+; </fieldset>
+
+
+; Validator on a required Select
+
+select.required.validator.ariaLabel: "Plan" [
+    option.disabled.selected.value: "" "Choose a plan"
+    option.value: "free" "Free"
+    option.value: "pro" "Pro"
+]
+
+; => <select class="select validator" aria-label="Plan" required>
+;   <option value="" disabled selected>Choose a plan</option>
+;   <option value="free">Free</option>
+;   <option value="pro">Pro</option>
+; </select>

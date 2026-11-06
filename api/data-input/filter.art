@@ -1,0 +1,32 @@
+; Filter choices
+;
+; A block of strings generates button-style radios. A div container and reset
+; radio avoid nested HTML forms. The reset choice is "All", with empty value.
+; Radio names are generated unless .name is supplied; sample names illustrate.
+; This selects/hides choices only; filtering application data is separate.
+
+filter ["Arturo" "Nim" "Rust"]
+
+; => <div class="filter">
+;   <input type="radio" class="btn filter-reset" name="filter-a7f3c9e2" value="" aria-label="All" checked />
+;   <input type="radio" class="btn" name="filter-a7f3c9e2" value="Arturo" aria-label="Arturo" />
+;   <input type="radio" class="btn" name="filter-a7f3c9e2" value="Nim" aria-label="Nim" />
+;   <input type="radio" class="btn" name="filter-a7f3c9e2" value="Rust" aria-label="Rust" />
+; </div>
+
+
+; Filter with explicit values and initial selection
+;
+; Option .selected becomes checked on its radio. At most one option is selected;
+; otherwise the reset choice is checked. Empty value is reserved for reset.
+
+filter.name: "language" [
+    option.selected.value: "arturo" "Arturo"
+    option.value: "rust" "Rust"
+]
+
+; => <div class="filter">
+;   <input type="radio" class="btn filter-reset" name="language" value="" aria-label="All" />
+;   <input type="radio" class="btn" name="language" value="arturo" aria-label="Arturo" checked />
+;   <input type="radio" class="btn" name="language" value="rust" aria-label="Rust" />
+; </div>

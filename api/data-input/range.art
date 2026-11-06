@@ -1,0 +1,29 @@
+; Range slider
+;
+; Numeric argument supplies value; min/max default to 0/100, step to 1.
+; Native constraints apply; values must fall within the range and step grid.
+
+range.name: "volume" .ariaLabel: "Volume" 40
+
+; => <input type="range" class="range" name="volume" min="0" max="100" step="1" value="40" aria-label="Volume" />
+
+
+; Custom bounds, steps, color, and size
+
+range.primary.sm.min: 1 .max: 5 .step: 1 .ariaLabel: "Priority" 3
+
+; => <input type="range" class="range range-primary range-sm" min="1" max="5" step="1" value="3" aria-label="Priority" />
+
+
+; Vertical Range
+
+range.vertical.ariaLabel: "Volume" 40
+
+; => <input type="range" class="range range-vertical" min="0" max="100" step="1" value="40" aria-label="Volume" />
+
+
+; Disabled Range
+
+range.disabled.ariaLabel: "Volume" 40
+
+; => <input type="range" class="range" min="0" max="100" step="1" value="40" aria-label="Volume" disabled />

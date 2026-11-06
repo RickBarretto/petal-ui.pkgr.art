@@ -1,0 +1,26 @@
+; Textarea
+;
+; String content becomes the initial textarea text, not a value attribute.
+; Placeholder, rows, name, and native constraints remain explicit attributes.
+
+textarea.name: "bio" .ariaLabel: "Biography" "Arturo developer."
+
+; => <textarea class="textarea" name="bio" aria-label="Biography">Arturo developer.</textarea>
+
+
+; Empty Textarea with placeholder, color, and size
+
+textarea.primary.lg.rows: 4 .placeholder: "Tell us about yourself" .ariaLabel: "Biography" ""
+
+; => <textarea class="textarea textarea-primary textarea-lg" rows="4" placeholder="Tell us about yourself" aria-label="Biography"></textarea>
+
+
+; Native constraints and disabled state
+
+textarea.required.maxLength: 280 .ariaLabel: "Message" ""
+
+; => <textarea class="textarea" maxlength="280" aria-label="Message" required></textarea>
+
+textarea.ghost.disabled.ariaLabel: "Notes" "Unavailable"
+
+; => <textarea class="textarea textarea-ghost" aria-label="Notes" disabled>Unavailable</textarea>

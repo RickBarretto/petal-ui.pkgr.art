@@ -1,0 +1,36 @@
+; Calendar using Cally
+;
+; Uses the Cally web components selected for this DSL. The host page must load
+; Cally once (for example, import "cally" in its JavaScript). These examples
+; describe component markup; no script loader or dependency installation is
+; performed by the DSL. DaisyUI supplies the cally styling.
+; Initial scope is a single-date calendar with generated navigation icons and
+; calendar-month. A date string is ISO YYYY-MM-DD; null omits the initial value.
+; Source: https://daisyui.com/components/calendar/
+
+calendar null
+
+; => <calendar-date class="cally">
+;   <svg slot="previous" aria-label="Previous month" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2">
+;     <path d="M15 5 8 12l7 7" />
+;   </svg>
+;   <svg slot="next" aria-label="Next month" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2">
+;     <path d="m9 5 7 7-7 7" />
+;   </svg>
+;   <calendar-month></calendar-month>
+; </calendar-date>
+
+
+; Calendar with selected date and explicit ID
+
+calendar.id: "release-date" "2026-11-06"
+
+; => <calendar-date class="cally" id="release-date" value="2026-11-06">
+;   <svg slot="previous" aria-label="Previous month" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2">
+;     <path d="M15 5 8 12l7 7" />
+;   </svg>
+;   <svg slot="next" aria-label="Next month" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2">
+;     <path d="m9 5 7 7-7 7" />
+;   </svg>
+;   <calendar-month></calendar-month>
+; </calendar-date>
