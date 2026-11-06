@@ -1,0 +1,60 @@
+; Basic Collapse
+;
+; Title and content use the same positional shape as an accordion item.
+; Emits a native details element with summary and collapse-content wrappers.
+; Closed initially; each collapse operates independently, without a group name.
+
+collapse "Details" [
+    p "More information here."
+]
+
+; => <details class="collapse">
+;   <summary class="collapse-title">Details</summary>
+;   <div class="collapse-content">
+;     <p>More information here.</p>
+;   </div>
+; </details>
+
+
+; Initially open Collapse
+;
+; .open sets the native open attribute; users can still close it.
+
+collapse.open "Details" [
+    p "More information here."
+]
+
+; => <details class="collapse" open>
+;   <summary class="collapse-title">Details</summary>
+;   <div class="collapse-content">
+;     <p>More information here.</p>
+;   </div>
+; </details>
+
+
+; Collapse with an arrow, initially open
+
+collapse.arrow.open "Shipping" [
+    p "Delivery takes three days."
+]
+
+; => <details class="collapse collapse-arrow" open>
+;   <summary class="collapse-title">Shipping</summary>
+;   <div class="collapse-content">
+;     <p>Delivery takes three days.</p>
+;   </div>
+; </details>
+
+
+; Collapse with a plus/minus indicator
+
+collapse.plus "Returns" [
+    p "Return items within thirty days."
+]
+
+; => <details class="collapse collapse-plus">
+;   <summary class="collapse-title">Returns</summary>
+;   <div class="collapse-content">
+;     <p>Return items within thirty days.</p>
+;   </div>
+; </details>

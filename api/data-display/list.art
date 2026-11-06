@@ -1,0 +1,87 @@
+; List with named row slots
+;
+; List wraps items in ul.list; each item becomes li.list-row.
+; Rows have optional start, end, and details slots around a growing content
+; column. Omitted slots generate no wrapper.
+; Start and end are wrapped in divs to keep each slot in one grid column.
+
+list [
+    item #[
+        start: avatar.circle.alt: "Ana" "ana.jpg"
+        content: [
+            h3 "Ana"
+            p "Designer"
+        ]
+        end: button.ghost "Follow"
+    ]
+]
+
+; => <ul class="list">
+;   <li class="list-row">
+;     <div>
+;       <div class="avatar">
+;         <div class="w-12 rounded-full">
+;           <img src="ana.jpg" alt="Ana" />
+;         </div>
+;       </div>
+;     </div>
+;     <div class="list-col-grow">
+;       <h3>Ana</h3>
+;       <p>Designer</p>
+;     </div>
+;     <div>
+;       <button class="btn btn-ghost">Follow</button>
+;     </div>
+;   </li>
+; </ul>
+
+
+; List with content-only rows
+;
+; The content column grows even when the start slot is absent.
+
+list [
+    item #[content: [p "First item"]]
+    item #[content: [p "Second item"]]
+]
+
+; => <ul class="list">
+;   <li class="list-row">
+;     <div class="list-col-grow">
+;       <p>First item</p>
+;     </div>
+;   </li>
+;   <li class="list-row">
+;     <div class="list-col-grow">
+;       <p>Second item</p>
+;     </div>
+;   </li>
+; </ul>
+
+
+; List with full-width details below the row
+;
+; Details gets list-col-wrap to move to the second row and col-span-full
+; to span every column, independently of the optional start and end slots.
+
+list [
+    item #[
+        content: [h3 "Ana"]
+        end: button.ghost "Follow"
+        details: [p "Designing thoughtful interfaces for everyday work."]
+    ]
+]
+
+; => <ul class="list">
+;   <li class="list-row">
+;     <div class="list-col-grow">
+;       <h3>Ana</h3>
+;     </div>
+;     <div>
+;       <button class="btn btn-ghost">Follow</button>
+;     </div>
+;     <div class="list-col-wrap col-span-full">
+;       <p>Designing thoughtful interfaces for everyday work.</p>
+;     </div>
+;   </li>
+; </ul>

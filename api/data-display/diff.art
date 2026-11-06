@@ -1,0 +1,59 @@
+; Positional Diff
+;
+; Takes exactly two content items, in before, after order.
+; Generates the comparison panels and resizer. The outer figure and first panel
+; are focusable for keyboard interaction. Each image keeps its alt text.
+; Width and height can be supplied explicitly using ordinary utility attributes.
+
+diff [
+    img.alt: "Before restoration" "before.jpg"
+    img.alt: "After restoration" "after.jpg"
+]
+
+; => <figure class="diff" tabindex="0">
+;   <div class="diff-item-1" tabindex="0">
+;     <img src="before.jpg" alt="Before restoration" />
+;   </div>
+;   <div class="diff-item-2">
+;     <img src="after.jpg" alt="After restoration" />
+;   </div>
+;   <div class="diff-resizer"></div>
+; </figure>
+
+
+; Named Diff
+;
+; Named slots produce the same panels as the positional form.
+
+diff #[
+    before: img.alt: "Before restoration" "before.jpg"
+    after: img.alt: "After restoration" "after.jpg"
+]
+
+; => <figure class="diff" tabindex="0">
+;   <div class="diff-item-1" tabindex="0">
+;     <img src="before.jpg" alt="Before restoration" />
+;   </div>
+;   <div class="diff-item-2">
+;     <img src="after.jpg" alt="After restoration" />
+;   </div>
+;   <div class="diff-resizer"></div>
+; </figure>
+
+
+; Diff with custom content and explicit dimensions
+
+diff.w: 96 .h: 64 #[
+    before: div.bg: 'primary "Original"
+    after: div.bg: 'base200 "Updated"
+]
+
+; => <figure class="diff w-96 h-64" tabindex="0">
+;   <div class="diff-item-1" tabindex="0">
+;     <div class="bg-primary">Original</div>
+;   </div>
+;   <div class="diff-item-2">
+;     <div class="bg-base-200">Updated</div>
+;   </div>
+;   <div class="diff-resizer"></div>
+; </figure>

@@ -1,0 +1,117 @@
+; Basic Accordion
+;
+; Each item becomes a native details element with a summary and content.
+; Items share a generated random name, so at most one can be open.
+; Generated names below are illustrative. Separate accordions get distinct names.
+; All items start closed unless one uses .open; the open item can be closed again.
+; Accordion emits sibling items without an extra wrapper.
+
+accordion [
+    item "Account" [
+        p "Create your account here."
+    ]
+    item "Password" [
+        p "Reset your password here."
+    ]
+]
+
+; => <details name="accordion-a7f3c9e2" class="collapse">
+;   <summary class="collapse-title">Account</summary>
+;   <div class="collapse-content">
+;     <p>Create your account here.</p>
+;   </div>
+; </details>
+; <details name="accordion-a7f3c9e2" class="collapse">
+;   <summary class="collapse-title">Password</summary>
+;   <div class="collapse-content">
+;     <p>Reset your password here.</p>
+;   </div>
+; </details>
+
+
+; Accordion with arrows and an initially open item
+;
+; .arrow applies to every item. .open sets the native open attribute.
+; Mark at most one item .open in each accordion.
+
+accordion.arrow [
+    item.open "Account" [
+        p "Create your account here."
+    ]
+    item "Password" [
+        p "Reset your password here."
+    ]
+]
+
+; => <details name="accordion-b8e4d0f3" class="collapse collapse-arrow" open>
+;   <summary class="collapse-title">Account</summary>
+;   <div class="collapse-content">
+;     <p>Create your account here.</p>
+;   </div>
+; </details>
+; <details name="accordion-b8e4d0f3" class="collapse collapse-arrow">
+;   <summary class="collapse-title">Password</summary>
+;   <div class="collapse-content">
+;     <p>Reset your password here.</p>
+;   </div>
+; </details>
+
+
+; Accordion with plus/minus indicators and a custom group name
+;
+; .name overrides the generated name on every item, for predictable tests.
+; Use distinct names for independent accordion groups.
+
+accordion.plus.name: "faq" [
+    item "Account" [
+        p "Create your account here."
+    ]
+    item.open "Password" [
+        p "Reset your password here."
+    ]
+]
+
+; => <details name="faq" class="collapse collapse-plus">
+;   <summary class="collapse-title">Account</summary>
+;   <div class="collapse-content">
+;     <p>Create your account here.</p>
+;   </div>
+; </details>
+; <details name="faq" class="collapse collapse-plus" open>
+;   <summary class="collapse-title">Password</summary>
+;   <div class="collapse-content">
+;     <p>Reset your password here.</p>
+;   </div>
+; </details>
+
+
+; Accordion and Join together
+;
+; Join adds join-item to each emitted details element, keeping them direct
+; children of the vertical join container so their corners join correctly.
+
+join.vertical.bg: 'base100 [
+    accordion.arrow.name: "joined-faq" [
+        item.open "Account" [
+            p "Create your account here."
+        ]
+        item "Password" [
+            p "Reset your password here."
+        ]
+    ]
+]
+
+; => <div class="join join-vertical bg-base-100">
+;   <details name="joined-faq" class="collapse collapse-arrow join-item" open>
+;     <summary class="collapse-title">Account</summary>
+;     <div class="collapse-content">
+;       <p>Create your account here.</p>
+;     </div>
+;   </details>
+;   <details name="joined-faq" class="collapse collapse-arrow join-item">
+;     <summary class="collapse-title">Password</summary>
+;     <div class="collapse-content">
+;       <p>Reset your password here.</p>
+;     </div>
+;   </details>
+; </div>

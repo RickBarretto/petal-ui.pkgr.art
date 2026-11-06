@@ -1,0 +1,32 @@
+; Countdown display
+;
+; Accepts an integer from 0 to 999. Generates --value and accessible text.
+; This is a value display with CSS transitions, not an automatically ticking timer.
+; Updating a value later requires updating its CSS variable, text, and aria-label.
+
+countdown 59
+
+; => <span class="countdown">
+;   <span style="--value: 59;" aria-live="polite" aria-label="59">59</span>
+; </span>
+
+
+; Minimum two digits
+;
+; .digits accepts 2 or 3 and sets the minimum display width via --digits.
+; CSS supplies visual leading zeroes; accessible text keeps the numeric value.
+
+countdown.digits: 2 7
+
+; => <span class="countdown">
+;   <span style="--value: 7; --digits: 2;" aria-live="polite" aria-label="7">7</span>
+; </span>
+
+
+; Minimum three digits
+
+countdown.digits: 3 42
+
+; => <span class="countdown">
+;   <span style="--value: 42; --digits: 3;" aria-live="polite" aria-label="42">42</span>
+; </span>

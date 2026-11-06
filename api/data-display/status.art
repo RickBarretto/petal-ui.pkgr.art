@@ -1,0 +1,42 @@
+; Status indicator
+;
+; A string supplies the accessible label, not visible text inside the dot.
+; Generates an empty span with role="img" and aria-label.
+; Medium is the default size.
+
+status "Available"                     ; => <span class="status" role="img" aria-label="Available"></span>
+
+
+; Status colors
+
+status.neutral "Offline"                ; => <span class="status status-neutral" role="img" aria-label="Offline"></span>
+status.primary "Selected"               ; => <span class="status status-primary" role="img" aria-label="Selected"></span>
+status.secondary "Review"               ; => <span class="status status-secondary" role="img" aria-label="Review"></span>
+status.accent "Featured"                ; => <span class="status status-accent" role="img" aria-label="Featured"></span>
+status.info "Updating"                  ; => <span class="status status-info" role="img" aria-label="Updating"></span>
+status.success "Online"                 ; => <span class="status status-success" role="img" aria-label="Online"></span>
+status.warning "Busy"                   ; => <span class="status status-warning" role="img" aria-label="Busy"></span>
+status.error "Disconnected"             ; => <span class="status status-error" role="img" aria-label="Disconnected"></span>
+
+
+; Status sizes
+
+status.success.xs "Online"              ; => <span class="status status-success status-xs" role="img" aria-label="Online"></span>
+status.warning.sm "Busy"                ; => <span class="status status-warning status-sm" role="img" aria-label="Busy"></span>
+status.success.lg "Online"              ; => <span class="status status-success status-lg" role="img" aria-label="Online"></span>
+status.success.xl "Online"              ; => <span class="status status-success status-xl" role="img" aria-label="Online"></span>
+
+
+; Status with visible text
+;
+; Compose a label outside the status dot when visible text is wanted.
+
+div [
+    status.success "Online"
+    "Available"
+]
+
+; => <div>
+;   <span class="status status-success" role="img" aria-label="Online"></span>
+;   Available
+; </div>

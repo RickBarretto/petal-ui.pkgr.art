@@ -1,0 +1,33 @@
+; Keyboard key
+;
+; A string renders a single kbd element. Medium is the default size.
+; These examples display shortcuts; they do not register keyboard handlers.
+
+kbd "Enter"                            ; => <kbd class="kbd">Enter</kbd>
+
+
+; Key sizes
+
+kbd.xs "Esc"                           ; => <kbd class="kbd kbd-xs">Esc</kbd>
+kbd.sm "Esc"                           ; => <kbd class="kbd kbd-sm">Esc</kbd>
+kbd.lg "Enter"                         ; => <kbd class="kbd kbd-lg">Enter</kbd>
+kbd.xl "Enter"                         ; => <kbd class="kbd kbd-xl">Enter</kbd>
+
+
+; Keyboard shortcut
+;
+; A block of key strings renders separate kbd elements joined by " + ".
+; No extra wrapper is generated.
+
+kbd ["Ctrl" "K"]
+
+; => <kbd class="kbd">Ctrl</kbd> + <kbd class="kbd">K</kbd>
+
+
+; Shortcut with size modifier
+;
+; The size applies to every key in the block.
+
+kbd.lg ["Ctrl" "Shift" "P"]
+
+; => <kbd class="kbd kbd-lg">Ctrl</kbd> + <kbd class="kbd kbd-lg">Shift</kbd> + <kbd class="kbd kbd-lg">P</kbd>

@@ -1,0 +1,109 @@
+; Basic Aura
+;
+; Aura wraps its content in a div with the aura class.
+; The default effect is a rotating border, with medium size.
+; Modifiers apply to the wrapper; content keeps its own attributes.
+
+aura -> button "Subscribe"
+
+; => <div class="aura">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+
+; Aura colors
+
+aura.rainbow -> button.primary "Subscribe"
+
+; => <div class="aura aura-rainbow">
+;   <button class="btn btn-primary">Subscribe</button>
+; </div>
+
+aura.holo -> button "Explore"
+
+; => <div class="aura aura-holo">
+;   <button class="btn">Explore</button>
+; </div>
+
+aura.gold -> button "Upgrade"
+
+; => <div class="aura aura-gold">
+;   <button class="btn">Upgrade</button>
+; </div>
+
+aura.silver -> button "Discover"
+
+; => <div class="aura aura-silver">
+;   <button class="btn">Discover</button>
+; </div>
+
+
+; Dual Aura
+;
+; .dual adds a second light effect.
+
+aura.dual -> button "Subscribe"
+
+; => <div class="aura aura-dual">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+
+; Glow Aura
+;
+; .glow uses a glow instead of the rotating border.
+
+aura.glow -> button "Subscribe"
+
+; => <div class="aura aura-glow">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+
+; Aura sizes
+;
+; Size changes the aura effect, independently of the content's size.
+
+aura.xs -> button "Subscribe"
+
+; => <div class="aura aura-xs">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+aura.sm -> button "Subscribe"
+
+; => <div class="aura aura-sm">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+aura.lg -> button "Subscribe"
+
+; => <div class="aura aura-lg">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+aura.xl -> button "Subscribe"
+
+; => <div class="aura aura-xl">
+;   <button class="btn">Subscribe</button>
+; </div>
+
+
+; Aura around composed content
+;
+; A block supports composed content, just like the single-expression -> form.
+; Color, effect, and size modifiers can be combined.
+
+aura.gold.glow.lg [
+    div.bg: 'base100 .p: 6 [
+        h3 "Premium"
+        p "Your next adventure starts here."
+    ]
+]
+
+; => <div class="aura aura-gold aura-glow aura-lg">
+;   <div class="bg-base-100 p-6">
+;     <h3>Premium</h3>
+;     <p>Your next adventure starts here.</p>
+;   </div>
+; </div>

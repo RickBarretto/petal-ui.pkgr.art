@@ -1,0 +1,32 @@
+; Hover Gallery
+;
+; Accepts a block of 1 to 10 images, emitted as direct children of a figure.
+; The first image is visible initially; hovering across the gallery reveals
+; the other images. No item wrappers are generated.
+
+hoverGallery [
+    img.alt: "Front view" "front.jpg"
+    img.alt: "Side view" "side.jpg"
+    img.alt: "Back view" "back.jpg"
+]
+
+; => <figure class="hover-gallery">
+;   <img src="front.jpg" alt="Front view" />
+;   <img src="side.jpg" alt="Side view" />
+;   <img src="back.jpg" alt="Back view" />
+; </figure>
+
+
+; Hover Gallery with explicit width
+;
+; Utility attributes apply to the gallery container.
+
+hoverGallery.w: 64 [
+    img.alt: "Front view" "front.jpg"
+    img.alt: "Side view" "side.jpg"
+]
+
+; => <figure class="hover-gallery w-64">
+;   <img src="front.jpg" alt="Front view" />
+;   <img src="side.jpg" alt="Side view" />
+; </figure>
