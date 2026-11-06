@@ -1,0 +1,162 @@
+; Read API examples without confusing semicolons in strings with comments.
+; Each top-level _exampleSource expression is retained, including setup assignments.
+exampleEntries: $[_exampleSource :string] [
+    entries: []
+    pending: ""
+    depth: 0
+    braces: 0
+    quoted: false
+    escaped: false
+    capturing: false
+    startLine: 1
+    ignored: @[
+        loop.with: 'lineIndex (split.by: "\n" _exampleSource) 'lineText [
+            codeText: ""
+            commentText: null
+            inComment: false
+            loop lineText 'character [
+                token: to :string character
+                switch inComment [
+                    commentText: commentText ++ token
+                ] [
+                    switch quoted [
+                        codeText: codeText ++ token
+                        switch escaped [escaped: false] [
+                            switch token = "\\" [escaped: true] [if token = {"} [quoted: false]]
+                        ]
+                    ] [
+                        switch braces > 0 [
+                            codeText: codeText ++ token
+                            if token = "{" [braces: braces + 1]
+                            if token = "}" [braces: braces - 1]
+                        ] [
+                            switch token = ";" [inComment: true commentText: ""] [
+                                codeText: codeText ++ token
+                                if token = {"} [quoted: true]
+                                if token = "{" [braces: 1]
+                                if in? token ["[" "("] [depth: depth + 1]
+                                if in? token ["]" ")"] [depth: depth - 1]
+                                ensure.that: "Unbalanced API snippet" -> depth >= 0
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+            unless empty? strip codeText [
+                capturing: false
+                if empty? pending [startLine: lineIndex + 1]
+                pending: pending ++ codeText ++ "\n"
+                if and? (depth = 0) (and? (braces = 0) (not? quoted)) [
+                    append 'entries #[_exampleSource: pending expected: null line: startLine]
+                    pending: ""
+                ]
+            ]
+            if and? (not? capturing) (not? null? commentText) [
+                ensure.that: "HTML output comments must start with ; =>" -> not? match? (strip commentText) {^<}
+            ]
+            switch (null? commentText)? [false] [match? (strip commentText) {^=>}] [
+                ensure.that: "Output marker has no complete snippet" -> and? (not? empty? entries) (empty? pending)
+                entry: last entries
+                ensure.that: "Duplicate output marker" -> null? entry\expected
+                entry\expected: strip remove.prefix (strip commentText) "=>"
+                capturing: true
+            ] [
+                switch and? capturing (not? null? commentText) [
+                    ; A continuation may be text, an opening tag, or a closing tag.
+                    entry: last entries
+                    entry\expected: entry\expected ++ "\n" ++ remove.prefix commentText " "
+                ] [if empty? strip lineText [capturing: false]]
+            ]
+        ]
+    ]
+    ensure.that: "Unterminated API snippet" -> and? (empty? pending) (and? (depth = 0) (and? (braces = 0) (not? quoted)))
+    entries
+]
+
+; Tokenize HTML independently of Petal. This is a test comparator, not a renderer.
+exampleHtml: $[_exampleSource] [
+    tokens: match _exampleSource to :regex {(?s)<(?:[^>"']|"[^"]*"|'[^']*')*>|[^<]+}
+    result: []
+    _elementStack: []
+    voids: ["area" "base" "br" "col" "embed" "hr" "img" "input" "link" "meta" "source" "track" "wbr"]
+    ignored: @[
+        loop tokens 'token [
+            switch match? token {^<} [
+                switch match? token {^</} [
+                    tagName: first match token to :regex {[a-zA-Z][a-zA-Z0-9-]*}
+                    ensure.that: "Mismatched closing tag in example HTML" -> not? empty? _elementStack
+                    ensure.that: "Mismatched closing tag in example HTML" -> tagName = last _elementStack
+                    remove.index '_elementStack _pSubtract (size _elementStack) 1
+                    append 'result "/" ++ tagName
+                ] [
+                    if not? match? token {^<!} [
+                        tagName: first match token to :regex {[a-zA-Z][a-zA-Z0-9-]*}
+                        attrTokens: match token to :regex {[a-zA-Z_:][a-zA-Z0-9_.:-]*(?:\s*=\s*(?:"[^"]*"|'[^']*'))?}
+                        properties: #[]
+                        loop (slice attrTokens 1 _pSubtract (size attrTokens) 1) 'attrToken [
+                            pair: split.by: "=" attrToken
+                            keyName: strip first pair
+                            valueText: (keyName = "popover")? [""] ["true"]
+                            if (size pair) > 1 [
+                                ; Split only the name; attribute values may contain '='.
+                                valueText: strip remove.prefix attrToken keyName
+                                valueText: strip remove.prefix valueText "="
+                                valueText: slice valueText 1 _pSubtract (size valueText) 2
+                            ]
+                            if keyName = "class" [valueText: sort unique match valueText to :regex {\S+}]
+                            properties\[keyName]: valueText
+                        ]
+                        append 'result #[tag: tagName attributes: properties]
+                        unless in? tagName voids [
+                            switch match? token {[/]\s*>$} [append 'result "/" ++ tagName] [append '_elementStack tagName]
+                        ]
+                    ]
+                ]
+            ] [
+                sensitive: false
+                unless empty? _elementStack [sensitive: in? last _elementStack ["pre" "textarea" "script" "style"]]
+                valueText: (or? sensitive (not? in? "\n" token))? [token] [strip token]
+                unless empty? valueText [append 'result #[text: valueText]]
+            ]
+        ]
+    ]
+    ensure.that: "Unclosed tag in example HTML" -> empty? _elementStack
+    result
+]
+
+exampleState: #[assertions: 0 snippets: 0 cases: []]
+
+exampleCheck: $[fileName lineNumber expected _exampleSource actual] [
+    exampleState\snippets: exampleState\snippets + 1
+    unless null? expected [
+        exampleState\cases: exampleState\cases ++ @[#[file: fileName line: lineNumber expected: expected snippet: _exampleSource actual: to :string actual]]
+    ]
+    null
+]
+
+exampleAssert: $[exampleCase] [
+    exampleState\assertions: exampleState\assertions + 1
+    matches: (exampleHtml exampleCase\expected) = exampleHtml exampleCase\actual
+    unless matches [
+        print @[exampleCase\file ":" exampleCase\line "\n" exampleCase\snippet "Expected:\n" exampleCase\expected "\nActual:\n" exampleCase\actual]
+    ]
+    expects.be: 'equal? @[true matches]
+]
+
+exampleProgram: $[fileName entries] [
+    program: []
+    ignored: @[
+        loop entries 'entry [
+            append 'program to :word "exampleCheck"
+            append 'program fileName
+            append 'program entry\line
+            append 'program @[entry\expected]
+            append 'program entry\_exampleSource
+            append 'program to :word "_pFragment"
+            ; Inline evaluation keeps setup bindings in the file's Petal scope.
+            append 'program to :word "array"
+            append 'program @[to :block entry\_exampleSource]
+        ]
+    ]
+    program
+]

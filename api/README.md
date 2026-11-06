@@ -1,8 +1,8 @@
 # Petal UI DSL proposals
 
-These files describe the API and expected HTML. They are design examples, not
-runnable demos: `src/lib.art` is still the package template. The renderer and
-`petal [...]` scope described here remain to be implemented.
+These files describe the implemented API and expected HTML. The test suite executes
+every snippet and compares every `; =>` output, including multiline comments.
+Import Petal and evaluate component snippets inside `petal [...]`.
 
 Petal ports component intent to Arturo on top of DaisyUI and the HTML DSL.
 A card owns its body, title, image, and action wrappers; callers supply content.
@@ -63,8 +63,7 @@ one from a reusable Arturo function. Within the region, names such as `button`,
 it, the HTML DSL's native helpers retain their meanings. For example, native
 `link` is metadata, while Petal's `link` is a styled anchor.
 
-Scope evaluation runs once and restores the caller's bindings afterward. A
-nested native HTML block establishes its own HTML helpers; enter `petal [...]`
+Scope evaluation runs once and restores the caller's bindings afterward. An explicit native `fragment`, `html`, or `body` block establishes its own HTML helpers; enter `petal [...]`
 inside it when needed. Preserve markup values across these boundaries; do not
 stringify and reinsert them or use `raw` to compose.
 
@@ -73,7 +72,11 @@ loops, and reusable Arturo functions with Petal regions. They assume the HTML
 package has been loaded and the future `petal` entry point is available.
 
 Expected HTML comments describe structure, attributes, and behavior; formatting,
-attribute order, and generated ID values are illustrative. Runtime and browser
+attribute order are illustrative. Examples supply deterministic IDs or native group names; generated identities are tested separately. Runtime and browser
 verification must accompany the renderer implementation.
 
 [Review decisions](REVIEW.md) record the inconsistencies found in this pass.
+
+Accordion has no wrapper element: `.id` identifies its shared details group and
+becomes the HTML `name`. Form groups use `.name`; `.id` sets an actual root ID.
+When `.name` is omitted, a supplied root ID also provides deterministic grouping.

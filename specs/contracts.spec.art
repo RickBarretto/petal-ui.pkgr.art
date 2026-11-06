@@ -1,0 +1,139 @@
+import {unitt}!
+import {src/lib.art}!
+
+; Keep assertions outside Petal: component names intentionally shadow built-ins.
+renderPetal: $[program] -> to :string petal program
+
+describe "Scope and markup contracts" [
+    it "evaluates content and slot side effects exactly once" [
+        calls: #[total: 0]
+        node: petal [
+            card #[
+                title: "Title"
+                content: [calls\total: calls\total + 1 p "Body"]
+                actions: [calls\total: calls\total + 1 button "Save"]
+            ]
+        ]
+        firstRender: to :string node
+        expects.be: 'equal? @[2 calls\total]
+        expects.be: 'equal? @[firstRender to :string node]
+        expects.be: 'equal? @[2 calls\total]
+    ]
+    it "restores caller bindings after successful evaluation" [
+        button: "caller button"
+        item: "caller item"
+        value: petal [button "Petal" carousel [item "Slide"]]
+        expects.be: 'equal? @["caller button" button]
+        expects.be: 'equal? @["caller item" item]
+        expects.be: 'equal? @[true match? (to :string value) {carousel-item}]
+    ]
+    it "restores caller bindings after an exception" [
+        button: "caller"
+        failure: try [petal [button "Before" img "missing-alt.jpg"]]
+        expects.be: 'equal? @[true error? failure]
+        expects.be: 'equal? @["caller" button]
+        expects.be: 'equal? @[{<button class="btn">After</button>} renderPetal [button "After"]]
+    ]
+    it "does not leak contextual helpers" [
+        before: symbols
+        value: petal [tabs.name: "scope-tabs" [tab "One" "Content"]]
+        after: symbols
+        loop [item tab step stat] 'helperName [
+            expects.be: 'equal? @[(key? before helperName) (key? after helperName)]
+        ]
+    ]
+    it "does not modify the shared HTML DSL" [
+        nativeBefore: to :string fragment [button "Native" footer "Footer"]
+        value: petal [button.primary "Petal" footer "Petal footer"]
+        expects.be: 'equal? @[nativeBefore to :string fragment [button "Native" footer "Footer"]]
+    ]
+    it "preserves native HTML scope boundaries" [
+        value: petal [fragment [section [button "Native" petal [button "Petal"]]]]
+        expects.be: 'equal? @[{<section><button>Native</button><button class="btn">Petal</button></section>} to :string value]
+    ]
+    it "accepts existing native markup without double escaping" [
+        existing: markup\p "A & B"
+        value: petal [card #[content: existing]]
+        expects.be: 'equal? @[{<div class="card"><div class="card-body"><p>A &amp; B</p></div></div>} to :string value]
+    ]
+    it "escapes text and attributes through HTML" [
+        value: renderPetal [button.label: {A "quote" & <tag>} {A "quote" & <tag>}]
+        expects.be: 'equal? @[{<button aria-label="A &quot;quote&quot; &amp; &lt;tag&gt;" class="btn">A &quot;quote&quot; &amp; &lt;tag&gt;</button>} value]
+    ]
+    it "preserves raw and whitespace-sensitive native content" [
+        value: renderPetal [pre "  A\n B  " script [raw "console.log('ok')"]]
+        expects.be: 'equal? @["<pre>  A\n B  </pre><script>console.log('ok')</script>" value]
+    ]
+    it "keeps native attribute dictionaries and call precedence" [
+        value: renderPetal [div.id: "new" #[id: "old" data_state: "ready" hidden: false]]
+        expects.be: 'equal? @[{<div data-state="ready" id="new"></div>} value]
+    ]
+    it "preserves classes when adapting children and multi-root fragments" [
+        value: renderPetal [join [accordion.arrow.name: "joined" [item.open "Title" "Body"] button.class: "custom" "Save"]]
+        expects.be: 'equal? @[true match? value {class="collapse collapse-arrow join-item"}]
+        expects.be: 'equal? @[true match? value {class="custom btn join-item"}]
+        expects.be: 'equal? @[false match? value {<div class="join"><div>}]
+    ]
+    it "rejects opaque markup when structural adaptation is required" [
+        existing: markup\button "Native"
+        failure: try [petal [join [existing]]]
+        expects.be: 'equal? @[true error? failure]
+    ]
+]
+
+describe "Accessibility and validation" [
+    it "requires explicit image alternatives, allowing decorative images" [
+        expects.be: 'equal? @[true error? try [petal [img "photo.jpg"]]]
+        expects.be: 'equal? @[true error? try [petal [avatar "photo.jpg"]]]
+        expects.be: 'equal? @[{<img alt="" src="photo.jpg">} renderPetal [img.alt: "" "photo.jpg"]]
+        expects.be: 'equal? @[true match? (renderPetal [avatar.placeholder "AB"]) {<span>AB</span>}]
+    ]
+    it "rejects invalid cardinalities and values" [
+        loop [
+            [swap ["Only one"]]
+            [diff ["Only one"]]
+            [rotate ["Only one"]]
+            [gallery []]
+            [hover3d []]
+            [otp 0]
+            [otp "6"]
+            [rating 0]
+            [rating.count: 3 4]
+            [radial 101]
+            [countdown 1000]
+            [countdown.digits: 4 1]
+            [calendar "yesterday"]
+        ] 'program [expects.be: 'equal? @[true error? try [petal program]]]
+    ]
+    it "rejects conflicting initial selections" [
+        loop [
+            [accordion.name: "bad" [item.open "A" "One" item.open "B" "Two"]]
+            [tabs.name: "bad" [tab.active "A" "One" tab.active "B" "Two"]]
+            [tabs.name: "bad" [tab.active.disabled "A" "One"]]
+            [filter.name: "bad" [option.selected "A" option.selected "B"]]
+            [filter.name: "bad" [option.value: "" "Reserved"]]
+        ] 'program [expects.be: 'equal? @[true error? try [petal program]]]
+    ]
+    it "chooses the first enabled tab and handles all-disabled groups" [
+        node: petal [tabs.name: "enabled" [tab.disabled "A" "One" tab "B" "Two"]]
+        radioNodes: node\children\0\children
+        expects.be: 'equal? @[false _pGet radioNodes\0\properties 'checked false]
+        expects.be: 'equal? @[true _pGet radioNodes\2\properties 'checked false]
+        value: renderPetal [tabs.name: "disabled" [tab.disabled "A" "One"]]
+        expects.be: 'equal? @[false match? value { checked}]
+    ]
+    it "preserves OTP leading zeroes and native form attributes" [
+        value: renderPetal [otp.name: "code" .label: "Code" .value: "0123" .required 4]
+        expects.be: 'equal? @[true match? value {value="0123"}]
+        expects.be: 'equal? @[true match? value {autocomplete="one-time-code"}]
+        expects.be: 'equal? @[true match? value {maxlength="4"}]
+        expects.be: 'equal? @[true match? value { required}]
+    ]
+    it "preserves explicit native roles and accessibility aliases" [
+        value: renderPetal [div.busy: false .description: "hint" .label: "Region" "Content"]
+        expects.be: 'equal? @[{<div aria-busy="false" aria-describedby="hint" aria-label="Region">Content</div>} value]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'minimal

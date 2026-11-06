@@ -1,0 +1,29 @@
+apiRoot: relative "../api/"
+import {unitt}!
+import {src/lib.art}!
+import {specs/support/examples.art}!
+
+; One test per proposal file, with an assertion for every output marker.
+describe "Executable API proposals" [
+    loop ["actions" "data-display" "data-input" "feedback" "layout" "navigation"] 'category [
+        directory: apiRoot ++ category
+        loop sort list directory 'fileName [
+            if match? fileName {\.art$} [
+                pathName: fileName
+                entries: exampleEntries read pathName
+                program: exampleProgram pathName entries
+                it pathName [
+                    exampleState\cases: []
+                    petal program
+                    loop exampleState\cases 'exampleCase [exampleAssert exampleCase]
+                ]
+            ]
+        ]
+    ]
+    it "accounts for every output marker" [
+        expects.be: 'equal? @[417 exampleState\assertions]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'minimal

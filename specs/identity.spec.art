@@ -1,0 +1,88 @@
+import {unitt}!
+import {src/lib.art}!
+
+identityValues: $[markupValue attributeName] [
+    match.capture (to :string markupValue) to :regex attributeName ++ {="([^"]*)"}
+]
+
+describe "Generated component identities" [
+    it "generates distinct modal IDs with correct opening targets" [
+        node: petal [modal #[open: button "Open" content: "Body"] modal #[open: button "Open" content: "Body"]]
+        firstId: node\children\1\properties\id
+        secondId: node\children\3\properties\id
+        expects.be: 'equal? @[false firstId = secondId]
+        expects.be: 'equal? @[true match? firstId {^modal-}]
+        expects.be: 'equal? @["document.getElementById('" ++ firstId ++ "').showModal()" node\children\0\properties\onclick]
+        expects.be: 'equal? @["document.getElementById('" ++ secondId ++ "').showModal()" node\children\2\properties\onclick]
+        expects.be: 'equal? @[to :string node to :string node]
+    ]
+    it "wires generated drawer IDs consistently" [
+        node: petal [drawer #[open: button "Open" content: "Body" sidebar: "Side" close: button "Close"]]
+        root: first node\children
+        rootId: root\properties\id
+        expects.be: 'equal? @[rootId ++ "-toggle" root\children\0\properties\id]
+        expects.be: 'equal? @[rootId ++ "-side" root\children\2\properties\id]
+        value: to :string node
+        expects.be: 'equal? @[true in? ("document.getElementById('" ++ rootId ++ "-toggle').checked = true") value]
+        expects.be: 'equal? @[true in? ("document.getElementById('" ++ rootId ++ "-toggle').checked = false") value]
+        expects.be: 'equal? @[true in? ("for=\"" ++ rootId ++ "-toggle\"") value]
+    ]
+    it "generates independent group names and shares each name within its group" [
+        loop [
+            [accordion [item "A" "One" item "B" "Two"]]
+            [tabs [tab "A" "One" tab "B" "Two"]]
+            [rating 3]
+            [filter ["A" "B"]]
+        ] 'program [
+            firstNode: petal program
+            secondNode: petal program
+            firstNames: unique identityValues firstNode "name"
+            secondNames: unique identityValues secondNode "name"
+            expects.be: 'equal? @[1 size firstNames]
+            expects.be: 'equal? @[1 size secondNames]
+            expects.be: 'equal? @[false firstNames = secondNames]
+            expects.be: 'equal? @[to :string firstNode to :string firstNode]
+        ]
+    ]
+    it "generates unique megamenu and panel IDs with matching targets" [
+        node: petal [megamenu [item "A" "One" item "B" "Two"]]
+        ids: identityValues node "id"
+        targets: identityValues node "popovertarget"
+        expects.be: 'equal? @[3 size ids]
+        expects.be: 'equal? @[3 size unique ids]
+        expects.be: 'equal? @[ids targets]
+    ]
+    it "uses .id for deterministic groups while retaining HTML name" [
+        loop [
+            [accordion.id: "fixed" [item "A" "One" item "B" "Two"]]
+            [tabs.id: "fixed" [tab "A" "One" tab "B" "Two"]]
+            [rating.id: "fixed" 3]
+            [filter.id: "fixed" ["A" "B"]]
+        ] 'program [
+            node: petal program
+            expects.be: 'equal? @[["fixed"] unique identityValues node "name"]
+            expects.be: 'equal? @[to :string node to :string petal program]
+        ]
+    ]
+    it "preserves separate native submission names" [
+        node: petal [rating.id: "score-control" .name: "score" 3 filter.id: "language-control" .name: "language" ["Arturo"]]
+        expects.be: 'equal? @[["score-control" "language-control"] identityValues node "id"]
+        expects.be: 'equal? @[["score" "language"] unique identityValues node "name"]
+    ]
+    it "escapes supplied IDs separately for JavaScript and HTML" [
+        node: petal [modal.id: "a'b\"&<" #[open: button "Open" content: "Body"]]
+        expects.be: 'equal? @["a'b\"&<" node\children\1\properties\id]
+        expects.be: 'equal? @["document.getElementById('a\\'b\"&<').showModal()" node\children\0\properties\onclick]
+        expects.be: 'equal? @[true match? (to :string node) {&quot;&amp;&lt;}]
+    ]
+    it "rejects invalid explicit identities" [
+        loop [
+            [modal.id: 42 #[open: button "Open"]]
+            [drawer.id: "" #[]]
+            [tabs.id: "" [tab "A" "One"]]
+        ] 'program [expects.be: 'equal? @[true error? try [petal program]]]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'minimal

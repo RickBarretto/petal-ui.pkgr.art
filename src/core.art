@@ -1,0 +1,206 @@
+; A separate HTML instance prevents any change to the public markup object.
+_pSubtract: var 'sub
+_pSequence: var 'range
+_pHtml: to :htmlDsl []!
+_pIds: #[next: 0 salt: to :string random 10000000 99999999]
+
+_pGet: $[options key fallback] [
+    if key? options key [
+        value: options\[key]
+        unless null? value [return value]
+    ]
+    fallback
+]
+
+_pTake: $[options key fallback] [
+    value: _pGet options key fallback
+    options\[key]: null
+    value
+]
+
+_pClass: $[options value] [
+    if not? empty? value [
+        old: _pGet options 'class ""
+        options\class: (empty? old)? [value] [old ++ " " ++ value]
+    ]
+]
+
+_pId: $[prefix] [
+    _pIds\next: _pIds\next + 1
+    prefix ++ "-" ++ _pIds\salt ++ "-" ++ to :string _pIds\next
+]
+
+_pFlatten: $[values] [
+    result: []
+    ignored: @[
+        loop values 'value [
+            unless null? value [
+                switch ((:petalNode = type value))? [value\tag = ""] [false] [
+                    loop value\children 'child [append 'result child]
+                ] [append 'result @[value]]
+            ]
+        ]
+    ]
+    result
+]
+
+define :petalNode is :htmlMarkup [
+    init: method [tag properties children rendered] [
+        this\tag: tag
+        this\properties: new properties
+        this\children: new children
+        this\value: rendered
+    ]
+]
+
+_pFragment: $[values] [
+    children: _pFlatten values
+    rendered: to :string fragment children
+    to :petalNode @["" #[] children rendered]
+]
+
+_pNode: $[tag properties children] [
+    children: _pFlatten children
+    ; Construct a call with value tokens, never interpolated Arturo source.
+    expression: [_pHtml\element]
+    ignored: @[
+        loop properties [key value] [
+            unless null? value [
+                append 'expression to :attributelabel key
+                append 'expression @[value]
+            ]
+        ]
+    ]
+    append 'expression tag
+    append 'expression @[children]
+    rendered: to :string do expression
+    to :petalNode @[tag properties children rendered]
+]
+
+_pChange: $[node additions tag] [
+    ensure.that: "This slot requires an element constructed inside petal" -> and? ((:petalNode = type node)) (node\tag <> "")
+    properties: new node\properties
+    ignored: @[
+        loop additions [key value] [
+            switch (to :string key) = "class" [_pClass properties value] [properties\[key]: value]
+        ]
+    ]
+    _pNode ((null? tag)? [node\tag] [tag]) properties node\children
+]
+
+_pContent: $[content context] [
+    if null? content [return []]
+    if block? content [return _pScope content context]
+    @[content]
+]
+
+_pSlot: $[slots key context] [
+    _pContent (_pGet slots key null) context
+]
+
+_pWrap: $[tag classes children] [
+    options: #[]
+    _pClass options classes
+    _pNode tag options children
+]
+
+_pScope: $[_program context] [
+    names: new markup\tags
+    ignored: @[
+        loop [avatar badge card carousel chat collapse countdown diff gallery hover3d rotate stats list status timeline accordion aura check radio upload range rating toggle calendar otp filter hint alert loading radial skeleton toast tooltip divider drawer hero indicator join mask stack breadcrumbs dock megamenu navbar pagination steps tabs dropdown fab modal swap theme] 'name [
+            unless in? name names [append 'names name]
+        ]
+        loop names '_name [
+            helper: [_pRender attrs x context]
+            insert 'helper 1 to :string _name
+            let to :literal _name function.import: [context] [x] helper
+        ]
+        raw: $[value :string] [_pHtml\raw value]
+        element: function.import: [context] [tag content] [
+            options: new attrs
+            _pUtilities options
+            _pNode tag options _pContent content context
+        ]
+        ; Two-argument helpers have distinct arity, known before parsing children.
+        collapse: function.import: [context] [heading content] [_pRender "collapse" attrs #[title: heading content: content] context]
+        loop [item tab step stat] '_name [
+            tag: to :string _name
+            params: (tag = "tab")? [[heading content]] [[x]]
+            helper: (tag = "tab")? [[_pRender "tab" attrs #[title: heading content: content] context]] [[_pRender attrs x context]]
+            if tag <> "tab" [insert 'helper 1 tag]
+            if and? (tag = "item") (in? (_pGet context 'owner "") ["accordion" "megamenu"]) [
+                params: [heading content]
+                helper: [_pRender "item" attrs #[title: heading content: content] context]
+            ]
+            if or? (tag = "item") (in? tag ["tab" "step" "stat"]) [
+                ; Bind contextual names only where they are meaningful.
+                owners: #[item: ["accordion" "carousel" "list" "timeline" "dock" "megamenu"] tab: ["tabs"] step: ["steps"] stat: ["stats"]]
+                if in? (_pGet context 'owner "") owners\[to :literal tag] [
+                    let to :literal tag function.import: [tag context] params helper
+                ]
+            ]
+        ]
+    ]
+    _pFlatten @_program
+]
+
+_pUtilities: $[options] [
+    ignored: @[
+        loop [label busy description] [name] [
+            value: _pTake options name null
+            unless null? value [
+                target: #[label: "aria_label" busy: "aria_busy" description: "aria_describedby"]
+                options\[target\[name]]: value
+            ]
+        ]
+        loop [w h p m z gap duration] 'name [
+            value: _pTake options name null
+            unless null? value [_pClass options (to :string name) ++ "-" ++ to :string value]
+        ]
+        loop [bg shadow mask] 'name [
+            value: _pTake options name null
+            unless null? value [
+                token: to :string value
+                if in? token ["base100" "base200" "base300"] [token: replace token "base" "base-"]
+                if (to :string name) = "mask" [_pClass options "mask"]
+                _pClass options (to :string name) ++ "-" ++ token
+            ]
+        ]
+        if _pTake options 'rounded false [_pClass options "rounded-box"]
+        if _pTake options 'flex false [_pClass options "flex"]
+        if _pTake options 'validator false [_pClass options "validator"]
+    ]
+]
+
+_pVariants: $[options _classBase variants] [
+    _pClass options _classBase
+    ignored: @[
+        loop variants 'variant [
+            if _pTake options variant false [
+                _pClass options _classBase ++ "-" ++ to :string variant
+            ]
+        ]
+    ]
+]
+
+_pColors: [neutral primary secondary accent info success warning error]
+_pSizes: [xs sm md lg xl]
+_pCommon: [xs sm md lg xl neutral primary secondary accent info success warning error]
+
+; .id supplies deterministic component identity; .name remains a native override.
+_pGroupName: $[options prefix] [
+    groupName: _pTake options 'name null
+    if null? groupName [groupName: _pGet options 'id null]
+    if null? groupName [groupName: _pId prefix]
+    ensure.that: "Group identity must be a nonempty string" -> string? groupName
+    ensure.that: "Group identity must be a nonempty string" -> not? empty? groupName
+    groupName
+]
+
+_pIdentity: $[options prefix] [
+    identity: _pTake options 'id null
+    if null? identity [identity: _pId prefix]
+    ensure.that: "Component .id must be a nonempty string" -> string? identity
+    ensure.that: "Component .id must be a nonempty string" -> not? empty? identity
+    identity
+]

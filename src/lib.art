@@ -1,0 +1,15 @@
+; Petal extends HTML with scoped DaisyUI helpers. HTML owns serialization.
+import {html}!
+import ./{core.art}!
+import ./{components/simple.art}!
+import ./{components/composite.art}!
+import ./{components/collections.art}!
+import ./{components/special.art}!
+
+_pRender: $[kind options content context] [
+    last @[_pDispatch kind (new options) content context]
+]
+
+petal: $[content :block] [
+    _pFragment _pScope content #[]
+]

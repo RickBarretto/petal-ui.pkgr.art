@@ -1,0 +1,15 @@
+; Unitt 3.1.1 can print an uncaught error and exit zero on Arturo 0.10.0.
+; Keep the native runner, then independently validate its completed report.
+logText: read ".unitt-ci.log"
+ensure.that: "Unitt reported an uncaught error" -> not? match? logText {Uncaught error|Package Error|Name Error|Type Error|Assertion Error}
+totals: match.capture logText to :regex {TOTAL: ([0-9]+)}
+passes: match.capture logText to :regex {PASSED: ([0-9]+)}
+failures: match.capture logText to :regex {FAILED: ([0-9]+)}
+skips: match.capture logText to :regex {SKIPPED: ([0-9]+)}
+ensure.that: "Unitt did not complete exactly one report" -> and? (1 = size totals) (and? (1 = size passes) (and? (1 = size failures) (1 = size skips)))
+ensure.that: "Incomplete or failed test run" -> and? ((first totals) = first passes) (and? ((first failures) = "0") ((first skips) = "0"))
+ensure.that: "Test discovery is incomplete" -> (to :integer first totals) >= 566
+loop [api composition contracts examples identity lib] 'specName [
+    ensure.that: "A required spec did not complete" -> in? ("specs/" ++ (to :string specName) ++ ".spec.art ========") logText
+]
+print "Verified complete Unitt run: " ++ (first totals) ++ " passing assertions."

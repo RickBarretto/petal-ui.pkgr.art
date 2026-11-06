@@ -2,11 +2,11 @@
 ;
 ; Each item becomes a native details element with a summary and content.
 ; Items share a generated random name, so at most one can be open.
-; Generated names below are illustrative. Separate accordions get distinct names.
+; Examples supply .id for deterministic grouping. Omission generates a unique name.
 ; All items start closed unless one uses .open; the open item can be closed again.
 ; Accordion emits sibling items without an extra wrapper.
 
-accordion [
+accordion.id: "accordion-a7f3c9e2" [
     item "Account" [
         p "Create your account here."
     ]
@@ -34,7 +34,7 @@ accordion [
 ; .arrow applies to every item. .open sets the native open attribute.
 ; Mark at most one item .open in each accordion.
 
-accordion.arrow [
+accordion.arrow.id: "accordion-b8e4d0f3" [
     item.open "Account" [
         p "Create your account here."
     ]
@@ -59,10 +59,10 @@ accordion.arrow [
 
 ; Accordion with plus/minus indicators and a custom group name
 ;
-; .name overrides the generated name on every item, for predictable tests.
+; .id sets the shared HTML name on every item, for predictable grouping.
 ; Use distinct names for independent accordion groups.
 
-accordion.plus.name: "faq" [
+accordion.plus.id: "faq" [
     item "Account" [
         p "Create your account here."
     ]
@@ -91,7 +91,7 @@ accordion.plus.name: "faq" [
 ; children of the vertical join container so their corners join correctly.
 
 join.vertical.bg: 'base100 [
-    accordion.arrow.name: "joined-faq" [
+    accordion.arrow.id: "joined-faq" [
         item.open "Account" [
             p "Create your account here."
         ]

@@ -1,22 +1,13 @@
 import {unitt}!
 import {src/lib.art}!
 
-describe "double" [
-    it "doubles :integer correctly" [
-        expects.be: 'equal? [4, double 2]
-        expects.be: 'equal? [8, double 4]
-        expects.be: 'equal? [6, double 3]
-    ]
-
-    it "always returns even?" [
-        expects.be: 'even? [double 2]
-        expects.be: 'even? [double 4]
-        expects.be: 'even? [double 3]
-    ]
-
-    it "is the same as summing x + x" [
-        expects.be: 'equal? [2 + 2, double 2]
-        expects.be: 'equal? [4 + 4, double 4]
-        expects.be: 'equal? [3 + 3, double 3]
+describe "Petal entry point" [
+    it "returns HTML markup and delegates escaping" [
+        value: petal [button.primary "Save & continue"]
+        expects.be: 'equal? @[true is? :htmlMarkup value]
+        expects.be: 'equal? @[to :string value {<button class="btn btn-primary">Save &amp; continue</button>}]
     ]
 ]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'full

@@ -2,10 +2,10 @@
 ;
 ; A block of strings generates button-style radios. A div container and reset
 ; radio avoid nested HTML forms. The reset choice is "All", with empty value.
-; Radio names are generated unless .name is supplied; sample names illustrate.
+; Radio names are generated unless .name is supplied; examples specify .name.
 ; This selects/hides choices only; filtering application data is separate.
 
-filter ["Arturo" "Nim" "Rust"]
+filter.name: "filter-a7f3c9e2" ["Arturo" "Nim" "Rust"]
 
 ; => <div class="filter">
 ;   <input type="radio" class="btn filter-reset" name="filter-a7f3c9e2" value="" aria-label="All" checked />
