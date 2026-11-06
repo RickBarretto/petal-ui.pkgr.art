@@ -1,0 +1,38 @@
+; Mask
+;
+; .mask applies shape classes directly to an element, without a new wrapper.
+; Uses the same shape-token convention already established for Avatar/Rating.
+; Sizing stays explicit; image URLs and alt text keep their existing meaning.
+
+img.mask: :heart .w: 32 .alt: "Mountain landscape" "mountains.jpg"
+
+; => <img class="mask mask-heart w-32" src="mountains.jpg" alt="Mountain landscape" />
+
+
+; Circular Mask
+
+img.mask: :circle .w: 32 .alt: "Forest landscape" "forest.jpg"
+
+; => <img class="mask mask-circle w-32" src="forest.jpg" alt="Forest landscape" />
+
+
+; Mask on other content
+
+div.mask: :squircle .w: 24 .h: 24 .bg: 'primary [span "Petal"]
+
+; => <div class="mask mask-squircle w-24 h-24 bg-primary">
+;   <span>Petal</span>
+; </div>
+
+
+; Mask inside Avatar
+;
+; Avatar keeps the mask on its inner container, as previously agreed.
+
+avatar.mask: :squircle .alt: "Ana" "ana.jpg"
+
+; => <div class="avatar">
+;   <div class="w-12 mask mask-squircle">
+;     <img src="ana.jpg" alt="Ana" />
+;   </div>
+; </div>

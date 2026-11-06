@@ -1,0 +1,47 @@
+; Divider
+;
+; String content labels the separator; [] produces an unlabeled line.
+; DaisyUI's direction names describe the surrounding items: default/vertical
+; separates stacked items with a horizontal line; .horizontal separates
+; side-by-side items with a vertical line. ARIA describes the line itself.
+
+divider "OR"
+
+; => <div class="divider" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+
+divider []
+
+; => <div class="divider" role="separator" aria-orientation="horizontal"></div>
+
+
+; Divider between side-by-side items
+
+div.flex [
+    button "Sign in"
+    divider.horizontal "OR"
+    button "Register"
+]
+
+; => <div class="flex">
+;   <button class="btn">Sign in</button>
+;   <div class="divider divider-horizontal" role="separator" aria-orientation="vertical" aria-label="OR">OR</div>
+;   <button class="btn">Register</button>
+; </div>
+
+
+; Divider label placement
+
+divider.start "Details"                 ; => <div class="divider divider-start" role="separator" aria-orientation="horizontal" aria-label="Details">Details</div>
+divider.end "Details"                   ; => <div class="divider divider-end" role="separator" aria-orientation="horizontal" aria-label="Details">Details</div>
+
+
+; Divider colors
+
+divider.neutral "OR"                    ; => <div class="divider divider-neutral" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.primary "OR"                    ; => <div class="divider divider-primary" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.secondary "OR"                  ; => <div class="divider divider-secondary" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.accent "OR"                     ; => <div class="divider divider-accent" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.info "OR"                       ; => <div class="divider divider-info" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.success "OR"                    ; => <div class="divider divider-success" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.warning "OR"                    ; => <div class="divider divider-warning" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>
+divider.error "OR"                      ; => <div class="divider divider-error" role="separator" aria-orientation="horizontal" aria-label="OR">OR</div>

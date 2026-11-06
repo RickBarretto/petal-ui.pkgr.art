@@ -1,0 +1,57 @@
+; Footer
+;
+; A block supplies content inside the semantic footer element.
+; Columns stack vertically by default; .horizontal places them side by side.
+; Within Footer, a heading's .title flag adds footer-title.
+
+footer [
+    p "Made with Arturo and Petal UI."
+]
+
+; => <footer class="footer">
+;   <p>Made with Arturo and Petal UI.</p>
+; </footer>
+
+
+; Footer with navigation columns
+
+footer.horizontal.bg: 'base200 .p: 8 [
+    nav.ariaLabel: "Company" [
+        h3.title "Company"
+        link.hover.href: "/about" "About"
+        link.hover.href: "/contact" "Contact"
+    ]
+    nav.ariaLabel: "Legal" [
+        h3.title "Legal"
+        link.hover.href: "/privacy" "Privacy"
+        link.hover.href: "/terms" "Terms"
+    ]
+]
+
+; => <footer class="footer footer-horizontal bg-base-200 p-8">
+;   <nav aria-label="Company">
+;     <h3 class="footer-title">Company</h3>
+;     <a class="link link-hover" href="/about">About</a>
+;     <a class="link link-hover" href="/contact">Contact</a>
+;   </nav>
+;   <nav aria-label="Legal">
+;     <h3 class="footer-title">Legal</h3>
+;     <a class="link link-hover" href="/privacy">Privacy</a>
+;     <a class="link link-hover" href="/terms">Terms</a>
+;   </nav>
+; </footer>
+
+
+; Centered Footer
+
+footer.center [
+    p "Petal UI"
+    link.hover.href: "/docs" "Documentation"
+    p "Built for the Arturo community."
+]
+
+; => <footer class="footer footer-center">
+;   <p>Petal UI</p>
+;   <a class="link link-hover" href="/docs">Documentation</a>
+;   <p>Built for the Arturo community.</p>
+; </footer>
