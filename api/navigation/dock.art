@@ -1,0 +1,70 @@
+; Dock navigation
+;
+; Generates a bottom navigation landmark with anchors as direct children.
+; Each item has icon and label slots; the icon is decorative and the label
+; gets dock-label. .href supplies the destination without inferring a route.
+; .active adds dock-active and aria-current="page" to the item.
+; Medium is the default size.
+
+dock [
+    item.active.href: "/" #[
+        icon: span "⌂"
+        label: "Home"
+    ]
+    item.href: "/settings" #[
+        icon: span "⚙"
+        label: "Settings"
+    ]
+]
+
+; => <nav class="dock" aria-label="Bottom navigation">
+;   <a href="/" class="dock-active" aria-current="page">
+;     <span aria-hidden="true">⌂</span>
+;     <span class="dock-label">Home</span>
+;   </a>
+;   <a href="/settings">
+;     <span aria-hidden="true">⚙</span>
+;     <span class="dock-label">Settings</span>
+;   </a>
+; </nav>
+
+
+; Dock sizes
+;
+; Size applies to the navigation container, preserving the item structure.
+
+dock.xs [item.href: "/" #[icon: span "⌂" label: "Home"]]
+
+; => <nav class="dock dock-xs" aria-label="Bottom navigation">
+;   <a href="/">
+;     <span aria-hidden="true">⌂</span>
+;     <span class="dock-label">Home</span>
+;   </a>
+; </nav>
+
+dock.sm [item.href: "/" #[icon: span "⌂" label: "Home"]]
+
+; => <nav class="dock dock-sm" aria-label="Bottom navigation">
+;   <a href="/">
+;     <span aria-hidden="true">⌂</span>
+;     <span class="dock-label">Home</span>
+;   </a>
+; </nav>
+
+dock.lg [item.href: "/" #[icon: span "⌂" label: "Home"]]
+
+; => <nav class="dock dock-lg" aria-label="Bottom navigation">
+;   <a href="/">
+;     <span aria-hidden="true">⌂</span>
+;     <span class="dock-label">Home</span>
+;   </a>
+; </nav>
+
+dock.xl [item.href: "/" #[icon: span "⌂" label: "Home"]]
+
+; => <nav class="dock dock-xl" aria-label="Bottom navigation">
+;   <a href="/">
+;     <span aria-hidden="true">⌂</span>
+;     <span class="dock-label">Home</span>
+;   </a>
+; </nav>

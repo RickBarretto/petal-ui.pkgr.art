@@ -1,0 +1,56 @@
+; Navbar
+;
+; Named start, center, and end slots generate corresponding navbar wrappers.
+; All slots are optional; only supplied slots produce wrappers.
+; Width, background, and shadow use ordinary utility attributes.
+
+navbar.bg: 'base100 .shadow: 'sm #[
+    start: a.href: "/" "Petal UI"
+    center: menu.horizontal [
+        li -> a.href: "/docs" "Docs"
+        li -> a.href: "/components" "Components"
+    ]
+    end: button.primary "Sign in"
+]
+
+; => <nav class="navbar bg-base-100 shadow-sm" aria-label="Main navigation">
+;   <div class="navbar-start">
+;     <a href="/">Petal UI</a>
+;   </div>
+;   <div class="navbar-center">
+;     <ul class="menu menu-horizontal">
+;       <li><a href="/docs">Docs</a></li>
+;       <li><a href="/components">Components</a></li>
+;     </ul>
+;   </div>
+;   <div class="navbar-end">
+;     <button class="btn btn-primary">Sign in</button>
+;   </div>
+; </nav>
+
+
+; Navbar without center content
+;
+; Slot content may be an element or a composed block.
+
+navbar #[
+    start: a.href: "/" "Petal UI"
+    end: [
+        link.href: "/help" "Help"
+        avatar.circle.alt: "Ana" "ana.jpg"
+    ]
+]
+
+; => <nav class="navbar" aria-label="Main navigation">
+;   <div class="navbar-start">
+;     <a href="/">Petal UI</a>
+;   </div>
+;   <div class="navbar-end">
+;     <a class="link" href="/help">Help</a>
+;     <div class="avatar">
+;       <div class="w-12 rounded-full">
+;         <img src="ana.jpg" alt="Ana" />
+;       </div>
+;     </div>
+;   </div>
+; </nav>

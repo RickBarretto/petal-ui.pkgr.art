@@ -1,0 +1,85 @@
+; Menu
+;
+; Keeps the li/a composition already used by Dropdown and FAB examples.
+; Vertical and medium-sized by default. No link destinations are invented.
+
+menu [
+    li -> a.href: "/" "Home"
+    li -> a.href: "/projects" "Projects"
+]
+
+; => <ul class="menu">
+;   <li><a href="/">Home</a></li>
+;   <li><a href="/projects">Projects</a></li>
+; </ul>
+
+
+; Horizontal Menu
+
+menu.horizontal [
+    li -> a.href: "/" "Home"
+    li -> a.href: "/projects" "Projects"
+]
+
+; => <ul class="menu menu-horizontal">
+;   <li><a href="/">Home</a></li>
+;   <li><a href="/projects">Projects</a></li>
+; </ul>
+
+
+; Menu title, active item, and disabled placeholder
+;
+; Inside Menu, li.title becomes menu-title. .active on an item's anchor adds
+; menu-active and aria-current="page"; .disabled adds menu-disabled,
+; aria-disabled, and removes the item from keyboard focus.
+; A disabled placeholder has no href or click action.
+
+menu [
+    li.title "Workspace"
+    li -> a.active.href: "/projects" "Projects"
+    li -> a.disabled "Coming soon"
+]
+
+; => <ul class="menu">
+;   <li class="menu-title">Workspace</li>
+;   <li><a class="menu-active" href="/projects" aria-current="page">Projects</a></li>
+;   <li><a class="menu-disabled" aria-disabled="true" tabindex="-1">Coming soon</a></li>
+; </ul>
+
+
+; Collapsible submenu
+;
+; Native details/summary composition; .open sets the initial state.
+; The nested ul does not need a second menu class.
+
+menu [
+    li -> a.href: "/" "Home"
+    li -> details.open [
+        summary "Projects"
+        ul [
+            li -> a.href: "/projects/petal-ui" "Petal UI"
+            li -> a.href: "/projects/arturo" "Arturo"
+        ]
+    ]
+]
+
+; => <ul class="menu">
+;   <li><a href="/">Home</a></li>
+;   <li>
+;     <details open>
+;       <summary>Projects</summary>
+;       <ul>
+;         <li><a href="/projects/petal-ui">Petal UI</a></li>
+;         <li><a href="/projects/arturo">Arturo</a></li>
+;       </ul>
+;     </details>
+;   </li>
+; </ul>
+
+
+; Menu sizes
+
+menu.xs [li -> a "Item"]                ; => <ul class="menu menu-xs"><li><a>Item</a></li></ul>
+menu.sm [li -> a "Item"]                ; => <ul class="menu menu-sm"><li><a>Item</a></li></ul>
+menu.lg [li -> a "Item"]                ; => <ul class="menu menu-lg"><li><a>Item</a></li></ul>
+menu.xl [li -> a "Item"]                ; => <ul class="menu menu-xl"><li><a>Item</a></li></ul>

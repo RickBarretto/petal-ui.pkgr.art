@@ -1,0 +1,42 @@
+; Breadcrumbs
+;
+; Generates a named navigation landmark containing ul/li elements.
+; Each expression becomes a list item; strings stay text and links stay links.
+; The final item receives aria-current="page"; no destination is inferred.
+
+breadcrumbs [
+    a.href: "/" "Home"
+    a.href: "/projects" "Projects"
+    "Petal UI"
+]
+
+; => <nav class="breadcrumbs" aria-label="Breadcrumb">
+;   <ul>
+;     <li><a href="/">Home</a></li>
+;     <li><a href="/projects">Projects</a></li>
+;     <li aria-current="page">Petal UI</li>
+;   </ul>
+; </nav>
+
+
+; Breadcrumbs with composed link content
+;
+; Supplied links preserve their content and href, including on the current item.
+; aria-current is placed on the final li for both text and element content.
+
+breadcrumbs [
+    a.href: "/" [span "⌂" "Home"]
+    a.href: "/projects/petal-ui" "Petal UI"
+]
+
+; => <nav class="breadcrumbs" aria-label="Breadcrumb">
+;   <ul>
+;     <li>
+;       <a href="/">
+;         <span>⌂</span>
+;         Home
+;       </a>
+;     </li>
+;     <li aria-current="page"><a href="/projects/petal-ui">Petal UI</a></li>
+;   </ul>
+; </nav>
