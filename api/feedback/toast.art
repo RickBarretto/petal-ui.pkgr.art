@@ -1,0 +1,44 @@
+; Toast container
+;
+; A wrapper for one or more alerts or other elements. Bottom/end is the default.
+; Content is inserted directly without changing its roles or styling.
+; Toast does not generate timeouts, dismiss buttons, or notification state.
+
+toast [
+    alert.info "Uploading your files."
+    alert.success "Profile saved."
+]
+
+; => <div class="toast">
+;   <div class="alert alert-info" role="alert"><span>Uploading your files.</span></div>
+;   <div class="alert alert-success" role="alert"><span>Profile saved.</span></div>
+; </div>
+
+
+; Toast at top/start
+;
+; Choose one vertical and one horizontal placement.
+
+toast.top.start -> alert.info "A new version is available."
+
+; => <div class="toast toast-top toast-start">
+;   <div class="alert alert-info" role="alert"><span>A new version is available.</span></div>
+; </div>
+
+
+; Toast at middle/center
+
+toast.middle.center -> alert.warning "Reconnecting..."
+
+; => <div class="toast toast-middle toast-center">
+;   <div class="alert alert-warning" role="alert"><span>Reconnecting...</span></div>
+; </div>
+
+
+; Explicit default placement
+
+toast.bottom.end -> alert.success "Changes saved."
+
+; => <div class="toast toast-bottom toast-end">
+;   <div class="alert alert-success" role="alert"><span>Changes saved.</span></div>
+; </div>

@@ -1,0 +1,66 @@
+; Alert
+;
+; A string becomes a span inside div.alert with role="alert".
+; A block inserts composed content directly. A dictionary supplies optional
+; icon, content, and actions slots, with wrappers only for supplied parts.
+; No dismissal behavior or click handlers are generated.
+
+alert "You have a new message."
+
+; => <div class="alert" role="alert">
+;   <span>You have a new message.</span>
+; </div>
+
+
+; Alert colors
+
+alert.info "An update is available."     ; => <div class="alert alert-info" role="alert"><span>An update is available.</span></div>
+alert.success "Changes saved."          ; => <div class="alert alert-success" role="alert"><span>Changes saved.</span></div>
+alert.warning "Check your connection."   ; => <div class="alert alert-warning" role="alert"><span>Check your connection.</span></div>
+alert.error "Upload failed."            ; => <div class="alert alert-error" role="alert"><span>Upload failed.</span></div>
+
+
+; Alert styles
+
+alert.soft.success "Changes saved."     ; => <div class="alert alert-soft alert-success" role="alert"><span>Changes saved.</span></div>
+alert.outline.warning "Storage is low."  ; => <div class="alert alert-outline alert-warning" role="alert"><span>Storage is low.</span></div>
+alert.dash.error "Upload failed."        ; => <div class="alert alert-dash alert-error" role="alert"><span>Upload failed.</span></div>
+
+
+; Alert with named slots and horizontal layout
+;
+; The supplied icon is decorative. Content and actions each get a div.
+; Application code can wire the action button separately.
+
+alert.horizontal.error #[
+    icon: span "!"
+    content: [
+        h3 "Upload failed"
+        p "Check your connection and try again."
+    ]
+    actions: [button "Retry"]
+]
+
+; => <div class="alert alert-horizontal alert-error" role="alert">
+;   <span aria-hidden="true">!</span>
+;   <div>
+;     <h3>Upload failed</h3>
+;     <p>Check your connection and try again.</p>
+;   </div>
+;   <div>
+;     <button class="btn">Retry</button>
+;   </div>
+; </div>
+
+
+; Vertical Alert with composed content
+
+alert.vertical.info [
+    span "A new version is available."
+    link.href: "/releases" "Read the release notes"
+]
+
+; => <div class="alert alert-vertical alert-info" role="alert">
+;   <span>A new version is available.</span>
+;   <a class="link" href="/releases">Read the release notes</a>
+; </div>

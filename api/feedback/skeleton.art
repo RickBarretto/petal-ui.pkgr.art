@@ -1,0 +1,49 @@
+; Skeleton placeholder
+;
+; Empty shapes take [] and generate decorative divs hidden from assistive
+; technology. Set dimensions explicitly with ordinary width/height utilities.
+
+skeleton.w: 32 .h: 4 []
+
+; => <div class="skeleton w-32 h-4" aria-hidden="true"></div>
+
+
+; Circular Skeleton
+;
+; .circle maps to rounded-full; equal width and height make a circle.
+
+skeleton.circle.w: 16 .h: 16 []
+
+; => <div class="skeleton rounded-full w-16 h-16" aria-hidden="true"></div>
+
+
+; Composed Skeleton layout
+;
+; The enclosing region can expose aria-busy while its content loads.
+; Shape placeholders remain decorative rather than individual announcements.
+
+div.ariaBusy: true [
+    skeleton.circle.w: 16 .h: 16 []
+    div [
+        skeleton.w: 32 .h: 4 []
+        skeleton.w: 48 .h: 4 []
+    ]
+]
+
+; => <div aria-busy="true">
+;   <div class="skeleton rounded-full w-16 h-16" aria-hidden="true"></div>
+;   <div>
+;     <div class="skeleton w-32 h-4" aria-hidden="true"></div>
+;     <div class="skeleton w-48 h-4" aria-hidden="true"></div>
+;   </div>
+; </div>
+
+
+; Skeleton text
+;
+; .text produces a span with skeleton-text, animating its text color.
+; Unlike empty shapes, supplied text remains accessible.
+
+skeleton.text "Loading your profile..."
+
+; => <span class="skeleton skeleton-text">Loading your profile...</span>
