@@ -1,0 +1,302 @@
+_pSlotWrap: $[slots key tag classes context] [
+    if null? _pGet slots key null [return null]
+    _pWrap tag classes _pSlot slots key context
+]
+
+_pDecorate: $[content classes context] [
+    children: _pContent content context
+    ensure.that: "This slot requires exactly one element or string" -> 1 = size children
+    value: first children
+    if string? value [return _pWrap "div" classes @[value]]
+    _pChange value #[class: classes] null
+]
+
+_pComposite: $[kind options content context] [
+    if kind = "card" [
+        ensure.that: "card takes a dictionary of named slots" -> dictionary? content
+        children: []
+        image: _pSlotWrap content 'image "figure" "" context
+        unless null? image [append 'children image]
+        parts: @[
+            _pSlotWrap content 'title "h2" "card-title" context
+            _pFragment _pSlot content 'content context
+            _pSlotWrap content 'actions "div" "card-actions justify-end" context
+        ]
+        if or? (key? content 'title) (or? (key? content 'content) (key? content 'actions)) [
+            append 'children _pWrap "div" "card-body" parts
+        ]
+        _pVariants options "card" [xs sm md lg xl border dash side]
+        if _pTake options 'cover false [_pClass options "image-full"]
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if kind = "avatar" [
+        if _pTake options 'group false [
+            _pClass options "avatar-group -space-x-6"
+            _pUtilities options
+            return _pNode "div" options _pContent content context
+        ]
+        placeholder: _pTake options 'placeholder false
+        width: _pTake options 'w 12
+        circle: _pTake options 'circle false
+        rounded: _pTake options 'rounded false
+        shape: _pTake options 'mask null
+        alt: _pTake options 'alt null
+        inner: #[class: "w-" ++ to :string width]
+        if placeholder [_pClass inner "aspect-square"]
+        if circle [_pClass inner "rounded-full"]
+        if rounded [_pClass inner "rounded"]
+        unless null? shape [_pClass inner "mask mask-" ++ to :string shape]
+        switch placeholder [
+            _pClass inner "bg-neutral text-neutral-content"
+            image: _pWrap "span" "" @[content]
+        ] [
+            ensure.that: "avatar requires an explicit .alt string" -> string? alt
+            image: _pNode "img" #[src: content alt: alt] []
+        ]
+        _pVariants options "avatar" [online offline]
+        if placeholder [_pClass options "avatar-placeholder"]
+        _pUtilities options
+        return _pNode "div" options @[_pNode "div" inner @[image]]
+    ]
+    if kind = "fieldset" [
+        ensure.that: "fieldset takes named slots" -> dictionary? content
+        children: @[
+            _pSlotWrap content 'legend "legend" "fieldset-legend" context
+            _pFragment _pSlot content 'content context
+            _pSlotWrap content 'description "p" "label" context
+        ]
+        _pClass options "fieldset"
+        _pUtilities options
+        return _pNode "fieldset" options children
+    ]
+    if kind = "chat" [
+        unless dictionary? content [content: #[content: content]]
+        bubble: #[]
+        _pVariants bubble "chat-bubble" []
+        ignored: @[
+            loop _pColors '_color [if _pTake options _color false [_pClass bubble "chat-bubble-" ++ to :string _color]]
+        ]
+        end: _pTake options 'end false
+        children: @[
+            (key? content 'image)? [_pDecorate content\image "chat-image" context] [null]
+            _pSlotWrap content 'header "div" "chat-header" context
+            _pNode "div" bubble _pSlot content 'content context
+            _pSlotWrap content 'footer "div" "chat-footer" context
+        ]
+        _pClass options (end)? ["chat chat-end"] ["chat chat-start"]
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if kind = "alert" [
+        children: []
+        switch dictionary? content [
+            children: @[
+                (key? content 'icon)? [_pControl content\icon #[aria_hidden: true] null context] [null]
+                _pWrap "div" "" _pSlot content 'content context
+                _pSlotWrap content 'actions "div" "" context
+            ]
+        ] [
+            children: _pContent content context
+            if string? content [children: @[_pWrap "span" "" children]]
+        ]
+        options\role: "alert"
+        _pVariants options "alert" [neutral primary secondary accent info success warning error soft outline dash horizontal vertical]
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if kind = "hero" [
+        unless dictionary? content [content: #[content: content]]
+        classes: "hero-content"
+        if _pTake options 'center false [classes: classes ++ " text-center"]
+        image: _pSlot content 'image context
+        unless empty? image [classes: classes ++ " flex-col lg:flex-row"]
+        children: @[_pFragment image _pWrap "div" "" _pSlot content 'content context]
+        _pClass options "hero"
+        _pUtilities options
+        return _pNode "div" options @[_pWrap "div" classes children]
+    ]
+    if kind = "navbar" [
+        children: []
+        ignored: @[
+            loop [start center end] '_slot [
+                value: _pSlotWrap content _slot "div" ("navbar-" ++ to :string _slot) context
+                unless null? value [append 'children value]
+            ]
+        ]
+        _pClass options "navbar"
+        _pUtilities options
+        options\aria_label: _pGet options 'aria_label "Main navigation"
+        return _pNode "nav" options children
+    ]
+    if kind = "indicator" [
+        decoration: #[]
+        _pVariants decoration "indicator-item" [top middle bottom start center end]
+        ignored: @[
+            loop [top middle bottom start center end] 'position [
+                if _pTake options position false [_pClass decoration "indicator-" ++ to :string position]
+            ]
+        ]
+        children: @[
+            _pDecorate (_pGet content 'item null) (_pGet decoration 'class "") context
+            _pFragment _pSlot content 'content context
+        ]
+        _pClass options "indicator"
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if kind = "collapse" [
+        children: @[
+            _pWrap "summary" "collapse-title" _pSlot content 'title context
+            _pWrap "div" "collapse-content" _pSlot content 'content context
+        ]
+        _pVariants options "collapse" [arrow plus]
+        _pUtilities options
+        return _pNode "details" options children
+    ]
+    if in? kind ["swap" "diff"] [
+        switch dictionary? content [
+            _slotKeys: (kind = "swap")? [[on off]] [[before after]]
+            _slotValues: @[_pFragment _pSlot content _slotKeys\0 context _pFragment _pSlot content _slotKeys\1 context]
+        ] [_slotValues: _pContent content context]
+        ensure.that: "swap and diff require exactly two items" -> 2 = size _slotValues
+        switch kind = "swap" [
+            children: []
+            active: _pGet options 'active false
+            checked: _pTake options 'checked false
+            unless active [append 'children _pNode "input" #[type: "checkbox" checked: checked] []]
+            ; A single _slot fragment exposes its element rather than adding a wrapper.
+            ignored: @[
+                loop.with:'_index _slotValues 'value [
+                    parts: _pFlatten @[value]
+                    ensure.that: "Each swap slot requires one item" -> 1 = size parts
+                    class: (_index = 0)? ["swap-on"] ["swap-off"]
+                    append 'children _pDecorate (first parts) class context
+                ]
+            ]
+            _pVariants options "swap" [rotate flip active]
+            tag: "label"
+        ] [
+            children: @[
+                _pNode "div" #[class: "diff-item-1" tabindex: 0] _pContent _slotValues\0 context
+                _pWrap "div" "diff-item-2" _pContent _slotValues\1 context
+                _pWrap "div" "diff-resizer" []
+            ]
+            options\tabindex: 0
+            _pClass options "diff"
+            tag: "figure"
+        ]
+        _pUtilities options
+        return _pNode tag options children
+    ]
+    if in? kind ["gallery" "hover3d" "rotate"] [
+        children: _pContent content context
+        if kind = "hover3d" [
+            ensure.that: "hover3d requires one content element" -> 1 = size children
+            loop _pSequence 1 8 'zone [append 'children _pNode "div" #[] []]
+            _pClass options "hover-3d"
+            tag: "div"
+        ]
+        if kind = "gallery" [
+            ensure.that: "gallery accepts one to ten images" -> and? ((size children) > 0) ((size children) =< 10)
+            _pClass options "hover-gallery"
+            tag: "figure"
+        ]
+        if kind = "rotate" [
+            ensure.that: "rotate accepts two to six lines" -> and? ((size children) >= 2) ((size children) =< 6)
+            lines: []
+            ignored: @[
+                loop children 'child [append 'lines (string? child)? [_pWrap "span" "" @[child]] [child]]
+            ]
+            children: @[_pWrap "span" "" lines]
+            _pClass options "text-rotate"
+            tag: "span"
+        ]
+        _pUtilities options
+        return _pNode tag options children
+    ]
+    if in? kind ["dropdown" "fab" "modal" "drawer"] [return _pWired kind options content context]
+    if in? kind ["theme" "calendar"] [return _pSpecial kind options content context]
+    _pSimple kind options content context
+]
+
+_pControl: $[content additions tag context] [
+    children: _pContent content context
+    ensure.that: "Control slots require one Petal element" -> 1 = size children
+    _pChange first children additions tag
+]
+
+_pWired: $[kind options slots context] [
+    ensure.that: "This component takes named slots" -> dictionary? slots
+    if in? kind ["dropdown" "fab"] [
+        _openControl: _pControl (_pGet slots 'open null) #[tabindex: 0 role: "button" type: null] "div" context
+        children: @[_openControl]
+        if kind = "dropdown" [
+            append 'children _pControl (_pGet slots 'content null) #[class: "dropdown-content" tabindex: (neg 1)] null context
+            _pVariants options "dropdown" [start center end top bottom left right hover open close]
+        ]
+        if kind = "fab" [
+            if key? slots 'close [
+                _closeControl: _pControl slots\close #[class: "fab-close"] null context
+                _closeControl: _pSpanButtons _closeControl
+                append 'children _closeControl
+            ]
+            if key? slots 'main [append 'children _pControl slots\main #[class: "fab-main-action"] null context]
+            append 'children _pFragment _pSlot slots 'actions context
+            _pVariants options "fab" [flower]
+        ]
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    id: _pIdentity options kind
+    ; Encode the JavaScript string separately from HTML attribute escaping.
+    jsId: replace (replace (replace id "\\" "\\\\") "'" "\\'") "\n" "\\n"
+    if kind = "modal" [
+        action: "document.getElementById('" ++ jsId ++ "').showModal()"
+        _openControl: _pControl (_pGet slots 'open null) #[onclick: action] null context
+        children: _pSlot slots 'content context
+        if key? slots 'close [
+            _closeControl: _pNode "form" #[method: "dialog"] _pSlot slots 'close context
+            append 'children _pWrap "div" "modal-action" @[_closeControl]
+        ]
+        options\id: id
+        _pVariants options "modal" [open top middle bottom start end]
+        _pUtilities options
+        _dialogNode: _pNode "dialog" options @[_pWrap "div" "modal-box" children]
+        return _pFragment @[_openControl _dialogNode]
+    ]
+    toggle: id ++ "-toggle"
+    side: id ++ "-side"
+    checked: _pTake options 'checked false
+    children: @[_pNode "input" #[type: "checkbox" class: "drawer-toggle" id: toggle aria_hidden: true tabindex: (neg 1) checked: checked] []]
+    _mainNodes: []
+    if key? slots 'open [
+        action: "document.getElementById('" ++ jsId ++ "-toggle').checked = true"
+        append '_mainNodes _pControl slots\open #[class: "drawer-button" type: "button" aria_controls: side onclick: action] null context
+    ]
+    append '_mainNodes _pFragment _pSlot slots 'content context
+    append 'children _pWrap "div" "drawer-content" _mainNodes
+    sidebar: []
+    if key? slots 'close [
+        action: "document.getElementById('" ++ jsId ++ "-toggle').checked = false"
+        append 'sidebar _pControl slots\close #[type: "button" aria_controls: side onclick: action] null context
+    ]
+    append 'sidebar _pFragment _pSlot slots 'sidebar context
+    panel: @[
+        _pNode "label" #[class: "drawer-overlay" for: toggle aria_label: "Close sidebar"] []
+        _pWrap "div" "bg-base-100 min-h-full" sidebar
+    ]
+    append 'children _pNode "div" #[id: side class: "drawer-side"] panel
+    options\id: id
+    _pVariants options "drawer" [end open]
+    _pUtilities options
+    _pNode "div" options children
+]
+
+_pSpanButtons: $[node] [
+    unless (:petalNode = type node) [return node]
+    children: []
+    ignored: @[loop node\children 'child [append 'children _pSpanButtons child]]
+    tag: (node\tag = "button")? ["span"] [node\tag]
+    _pNode tag node\properties children
+]

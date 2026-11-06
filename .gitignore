@@ -3,3 +3,4 @@ _tmpart
 bin
 *.exe
 *.bin
+.unitt-ci.log

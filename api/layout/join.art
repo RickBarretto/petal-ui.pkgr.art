@@ -48,7 +48,7 @@ join [
 ; element receives join-item and stays a direct child of the Join container.
 
 join.vertical [
-    accordion.arrow.name: "layout-faq" [
+    accordion.arrow.id: "layout-faq" [
         item.open "Account" [p "Create your account here."]
         item "Password" [p "Reset your password here."]
     ]

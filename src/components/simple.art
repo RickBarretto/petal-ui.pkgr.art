@@ -1,0 +1,205 @@
+; Native elements and components with a single primary element.
+_pSimple: $[kind options content context] [
+    if and? (kind = "kbd") (block? content) [
+        parts: _pContent content context
+        result: []
+        ignored: @[
+            loop.with: '_keyIndex parts 'part [
+                if _keyIndex > 0 [append 'result " + "]
+                append 'result _pSimple "kbd" (new options) part context
+            ]
+        ]
+        return _pFragment result
+    ]
+    if kind = "img" [
+        ensure.that: "img requires an explicit .alt string" -> string? _pGet options 'alt null
+        options\src: content
+        _pUtilities options
+        return _pNode "img" options []
+    ]
+    if kind = "button" [
+        tag: "button"
+        if _pTake options 'submit false [options\type: "submit"]
+        if _pTake options 'reset false [options\type: "reset"]
+        unless null? _pGet options 'href null [tag: "a"]
+        _pVariants options "btn" [xs sm md lg xl neutral primary secondary accent info success warning error soft outline dash active ghost link wide circle square block]
+        if _pTake options 'responsive false [_pClass options "btn-xs sm:btn-sm md:btn-md lg:btn-lg xl:btn-xl"]
+        _pUtilities options
+        return _pNode tag options _pContent content context
+    ]
+    if in? kind ["input" "check" "radio" "toggle" "upload" "range" "textarea"] [
+        tag: "input"
+        _classBase: kind
+        if kind = "input" [
+            options\type: "text"
+            ignored: @[
+                loop [email password search number tel url date] 'variant [
+                    if _pTake options variant false [options\type: to :string variant]
+                ]
+            ]
+            options\value: content
+        ]
+        if in? kind ["check" "radio" "toggle"] [
+            options\type: (kind = "radio")? ["radio"] ["checkbox"]
+            if kind = "check" [_classBase: "checkbox"]
+            if _pTake options 'button false [_classBase: "btn"]
+            ensure.that: "Choice controls take an accessible label string" -> string? content
+            if content <> "" [options\aria_label: content]
+        ]
+        if kind = "upload" [
+            options\type: "file"
+            _classBase: "file-input"
+            if content <> "" [options\aria_label: content]
+        ]
+        if kind = "range" [
+            options\type: "range"
+            options\value: content
+            options\min: _pGet options 'min 0
+            options\max: _pGet options 'max 100
+            options\step: _pGet options 'step 1
+        ]
+        if _pTake options 'frozen false [options\readonly: true]
+        _pVariants options _classBase [xs sm md lg xl neutral primary secondary accent info success warning error ghost vertical]
+        _pUtilities options
+        if kind = "textarea" [tag: "textarea"]
+        return _pNode tag options ((tag = "textarea")? [_pContent content context] [[]])
+    ]
+    if kind = "link" [
+        _pVariants options "link" [neutral primary secondary accent info success warning error hover]
+        _pUtilities options
+        return _pNode "a" options _pContent content context
+    ]
+    if kind = "label" [
+        _classBase: (_pTake options 'floating false)? ["floating-label"] ["label"]
+        _pClass options _classBase
+        _pUtilities options
+        return _pNode "label" options _pContent content context
+    ]
+    if kind = "hint" [
+        _pClass options "validator-hint"
+        _pUtilities options
+        return _pNode "p" options _pContent content context
+    ]
+    if in? kind ["loading" "status"] [
+        options\aria_label: content
+        options\role: (kind = "loading")? ["status"] ["img"]
+        if kind = "loading" [
+            shapes: [spinner dots ring ball bars infinity]
+            found: false
+            ignored: @[
+                loop shapes 'shape [if _pGet options shape false [found: true]]
+            ]
+            unless found [options\spinner: true]
+            _pVariants options "loading" shapes
+        ]
+        if kind = "status" [_pClass options "status"]
+        ignored: @[
+            loop _pCommon 'variant [
+                if _pTake options variant false [
+                    prefix: (in? variant _pColors)? ["text"] [kind]
+                    if kind = "status" [prefix: "status"]
+                    _pClass options prefix ++ "-" ++ to :string variant
+                ]
+            ]
+        ]
+        _pUtilities options
+        return _pNode "span" options []
+    ]
+    if kind = "progress" [
+        options\max: _pTake options 'max 100
+        options\value: content
+        _pVariants options "progress" _pColors
+        _pUtilities options
+        return _pNode "progress" options []
+    ]
+    if kind = "radial" [
+        ensure.that: "radial value must be between 0 and 100" -> and? (in? type content [:integer :floating]) (and? content >= 0 content =< 100)
+        css: "--value: " ++ (to :string content) ++ ";"
+        ignored: @[
+            loop [size thickness] 'key [
+                value: _pTake options key null
+                unless null? value [css: css ++ " --" ++ (to :string key) ++ ": " ++ (to :string value) ++ ";"]
+            ]
+        ]
+        options\style: css
+        options\role: "progressbar"
+        options\aria_valuenow: content
+        options\aria_valuemin: 0
+        options\aria_valuemax: 100
+        _pClass options "radial-progress"
+        ignored: @[
+            loop _pColors '_color [if _pTake options _color false [_pClass options "text-" ++ to :string _color]]
+        ]
+        _pUtilities options
+        return _pNode "div" options @[(to :string content) ++ "%"]
+    ]
+    if kind = "countdown" [
+        ensure.that: "countdown requires an integer from 0 to 999" -> and? integer? content (and? content >= 0 content =< 999)
+        css: "--value: " ++ (to :string content) ++ ";"
+        _digits: _pTake options 'digits null
+        unless null? _digits [
+            ensure.that: "countdown .digits must be 2 or 3" -> in? _digits [2 3]
+            css: css ++ " --digits: " ++ (to :string _digits) ++ ";"
+        ]
+        child: _pNode "span" #[style: css aria_live: "polite" aria_label: content] @[to :string content]
+        _pClass options "countdown"
+        _pUtilities options
+        return _pNode "span" options @[child]
+    ]
+    if kind = "skeleton" [
+        tag: "div"
+        _pClass options "skeleton"
+        switch _pTake options 'text false [tag: "span" _pClass options "skeleton-text"] [options\aria_hidden: true]
+        if _pTake options 'circle false [_pClass options "rounded-full"]
+        _pUtilities options
+        return _pNode tag options _pContent content context
+    ]
+    if kind = "divider" [
+        options\role: "separator"
+        options\aria_orientation: (_pGet options 'horizontal false)? ["vertical"] ["horizontal"]
+        if string? content [unless empty? content [options\aria_label: content]]
+        _pVariants options "divider" [horizontal vertical start end neutral primary secondary accent info success warning error]
+        _pUtilities options
+        return _pNode "div" options _pContent content context
+    ]
+    if kind = "tooltip" [
+        options\data_tip: _pTake options 'text null
+        _pVariants options "tooltip" [top bottom left right start end open neutral primary secondary accent info success warning error]
+        _pUtilities options
+        return _pNode "div" options _pContent content context
+    ]
+    simple: #[badge: ["span" "badge"] kbd: ["kbd" "kbd"] aura: ["div" "aura"] stack: ["div" "stack"] toast: ["div" "toast"] menu: ["ul" "menu"] footer: ["footer" "footer"]]
+    if key? simple kind [
+        spec: simple\[kind]
+        if kind = "footer" [context: #[owner: "footer"]]
+        if kind = "menu" [context: #[owner: "menu"]]
+        _pVariants options spec\1 [xs sm md lg xl neutral primary secondary accent info success warning error soft outline dash ghost rainbow holo gold silver dual glow top start end horizontal vertical center middle bottom]
+        _pUtilities options
+        return _pNode spec\0 options _pContent content context
+    ]
+    ; Native HTML helpers retain HTML's argument and escaping contracts.
+    if and? (kind = "li") ((_pGet context 'owner "") = "menu") [
+        if _pTake options 'title false [_pClass options "menu-title"]
+    ]
+    if and? (kind = "a") ((_pGet context 'owner "") = "menu") [
+        if _pTake options 'active false [_pClass options "menu-active" options\aria_current: "page"]
+        if _pTake options 'disabled false [
+            _pClass options "menu-disabled"
+            options\aria_disabled: true
+            options\tabindex: (neg 1)
+            options\href: null
+            options\onclick: null
+        ]
+    ]
+    if and? (kind = "h3") ((_pGet context 'owner "") = "footer") [
+        if _pTake options 'title false [_pClass options "footer-title"]
+    ]
+    if dictionary? content [
+        merged: new content
+        ignored: @[loop options [key value] [merged\[key]: value]]
+        options: merged
+        content: []
+    ]
+    _pUtilities options
+    _pNode kind options _pContent content context
+]

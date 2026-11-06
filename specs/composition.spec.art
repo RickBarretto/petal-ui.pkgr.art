@@ -1,0 +1,37 @@
+compositionSource: read relative "../api/composition.art"
+import {unitt}!
+import {src/lib.art}!
+
+compositionPages: array to :block compositionSource
+
+describe "Native HTML and Petal composition examples" [
+    it "executes every documented composition" [
+        expects.be: 'equal? @[5 size compositionPages]
+        loop compositionPages 'page [expects.be: 'equal? @[true is? :htmlMarkup page]]
+    ]
+    it "preserves native forms and nested Petal controls" [
+        firstPage: to :string first compositionPages
+        expects.be: 'equal? @[true match? firstPage {<form action="/profile" method="post">}]
+        expects.be: 'equal? @[true match? firstPage {class="btn btn-primary" type="submit"}]
+        expects.be: 'equal? @[false match? firstPage {aria-describedby}]
+    ]
+    it "escapes reusable component text once" [
+        teamPage: to :string compositionPages\1
+        expects.be: 'equal? @[true match? teamPage {Rick &amp; friends}]
+        expects.be: 'equal? @[false match? teamPage {&amp;amp;}]
+    ]
+    it "keeps the native footer outside Petal" [
+        documentPage: to :string compositionPages\2
+        expects.be: 'equal? @[true match? documentPage {^<!DOCTYPE html>}]
+        expects.be: 'equal? @[true match? documentPage {<footer><p>Made with Arturo.}]
+        expects.be: 'equal? @[true match? documentPage {<a class="link" href="/about">}]
+    ]
+    it "retains native form submission and native buttons" [
+        accountPage: to :string last compositionPages
+        expects.be: 'equal? @[true match? accountPage {enctype="multipart/form-data"}]
+        expects.be: 'equal? @[true match? accountPage {<button type="button">Native HTML button</button>}]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'minimal

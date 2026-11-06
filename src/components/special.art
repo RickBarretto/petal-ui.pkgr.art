@@ -1,0 +1,48 @@
+; Static SVG assets are trusted source constants, never caller-supplied markup.
+_pSun: read relative "../assets/sun.svg"
+_pMoon: read relative "../assets/moon.svg"
+_pPrevious: read relative "../assets/previous.svg"
+_pNext: read relative "../assets/next.svg"
+
+_pSpecial: $[kind options content context] [
+    if kind = "calendar" [
+        ensure.that: "calendar takes an ISO date string or null" -> or? null? content string? content
+        unless null? content [
+            ensure.that: "calendar date must use YYYY-MM-DD" -> match? content {^\d{4}-\d{2}-\d{2}$}
+            options\value: content
+        ]
+        _pClass options "cally"
+        _pUtilities options
+        return _pNode "calendar-date" options @[_pHtml\raw _pPrevious _pHtml\raw _pNext _pNode "calendar-month" #[] []]
+    ]
+    if block? content [
+        children: _pContent content #[owner: "theme"]
+        parts: []
+        ignored: @[
+            loop children 'child [append 'parts (string? child)? [_pWrap "span" "" @[child]] [child]]
+        ]
+        _pClass options "flex items-center gap-2 cursor-pointer"
+        _pUtilities options
+        return _pNode "label" options parts
+    ]
+    ensure.that: "theme requires a theme token or block" -> or? literal? content string? content
+    target: to :string content
+    control: (_pTake options 'toggle false)? ["toggle"] ["checkbox"]
+    ignored: _pTake options 'check false
+    icons: _pTake options 'icons false
+    checked: _pTake options 'checked false
+    if icons [
+        inputOptions: #[type: "checkbox" value: target class: "theme-controller" aria_label: "Enable " ++ target ++ " theme" checked: checked]
+        _pVariants options "toggle" _pSizes
+        _pClass options "text-base-content"
+        _pUtilities options
+        return _pNode "label" options @[_pNode "input" inputOptions [] _pHtml\raw _pSun _pHtml\raw _pMoon]
+    ]
+    options\type: "checkbox"
+    options\value: target
+    options\checked: checked
+    _pVariants options control _pCommon
+    _pClass options "theme-controller"
+    _pUtilities options
+    _pNode "input" options []
+]

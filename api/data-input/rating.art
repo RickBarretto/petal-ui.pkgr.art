@@ -5,7 +5,7 @@
 ; The default mask is star and size is medium. Labels describe the numeric score
 ; rather than assuming that every custom shape is a star. No half ratings yet.
 
-rating 3
+rating.name: "rating-a7f3c9e2" 3
 
 ; => <div class="rating" role="radiogroup" aria-label="Rating">
 ;   <input type="radio" name="rating-a7f3c9e2" value="1" class="mask mask-star" aria-label="1 out of 5" />

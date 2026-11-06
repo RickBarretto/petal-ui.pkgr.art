@@ -1,0 +1,80 @@
+import {unitt}!
+import {src/lib.art}!
+import {specs/support/examples.art}!
+
+describe "Executable example extraction" [
+    it "keeps semicolons in strings and reads inline expectations" [
+        entries: exampleEntries {button "A; B" ; => <button>A; B</button>}
+        expects.be: 'equal? @[1 size entries]
+        expects.be: 'equal? @[{<button>A; B</button>} entries\0\expected]
+        expects.be: 'equal? @[true in? {"A; B"} entries\0\_exampleSource]
+        expects.be: 'equal? @[1 entries\0\line]
+    ]
+    it "collects multiline snippets and multiple output roots" [
+        entries: exampleEntries "join [\n button \"One\"\n]\n\n; => <div>\n;   <button>One</button>\n; </div>\n; <p>Another root</p>\n"
+        expects.be: 'equal? @[1 size entries]
+        expects.be: 'equal? @["<div>\n  <button>One</button>\n</div>\n<p>Another root</p>" entries\0\expected]
+    ]
+    it "retains setup assignments and unannotated smoke snippets" [
+        entries: exampleEntries "rows: [\n [\"A\" 1]\n]\n\ntable rows\n; => <table></table>\n\nbutton \"Smoke\"\n"
+        expects.be: 'equal? @[3 size entries]
+        expects.be: 'equal? @[null entries\0\expected]
+        expects.be: 'equal? @["<table></table>" entries\1\expected]
+        expects.be: 'equal? @[null entries\2\expected]
+    ]
+    it "handles brace strings and escaped quotes" [
+        entries: exampleEntries "p {A; {nested} B}\np \"A\\\"; B\" ; => <p>A&quot;; B</p>\n"
+        expects.be: 'equal? @[2 size entries]
+        expects.be: 'equal? @["<p>A&quot;; B</p>" entries\1\expected]
+    ]
+    it "rejects malformed and unattached expectations" [
+        loop ["; <p>Missing marker</p>" "; => <p>Nothing</p>" "button [" "button \"Unclosed" "button \"Hi\" ; => One\n; => Two"] 'sourceText [
+            expects.be: 'equal? @[true error? try [exampleEntries sourceText]]
+        ]
+    ]
+    it "preserves setup bindings when evaluating instrumented snippets" [
+        entries: exampleEntries "greeting: \"Hello\"\nbutton greeting ; => <button class=\"btn\">Hello</button>"
+        program: exampleProgram "fixture" entries
+        exampleState\cases: []
+        petal program
+        expects.be: 'equal? @[1 size exampleState\cases]
+        expects.be: 'equal? @[{<button class="btn">Hello</button>} exampleState\cases\0\actual]
+    ]
+]
+
+describe "HTML expectation comparison" [
+    it "ignores formatting, attribute order, class order, and void slashes" [
+        leftHtml: {<div id="x" class="a b"><input disabled /></div>}
+        rightHtml: "<div class=\"b a\" id=\"x\">\n  <input disabled>\n</div>"
+        expects.be: 'equal? @[exampleHtml leftHtml exampleHtml rightHtml]
+    ]
+    it "compares text, child order, attributes, and exact identifiers" [
+        loop [
+            [{<p>Hello</p>} {<p>Goodbye</p>}]
+            [{<p>A B</p>} {<p>A  B</p>}]
+            [{<p> A</p>} {<p>A</p>}]
+            [{<div><p>A</p><p>B</p></div>} {<div><p>B</p><p>A</p></div>}]
+            [{<p id="one">A</p>} {<p id="two">A</p>}]
+            [{<button disabled>Save</button>} {<button>Save</button>}]
+        ] 'pair [expects.be: 'equal? @[false (exampleHtml pair\0) = exampleHtml pair\1]]
+    ]
+    it "preserves whitespace-sensitive text" [
+        expects.be: 'equal? @[false (exampleHtml "<pre> A </pre>") = exampleHtml "<pre>A</pre>"]
+        expects.be: 'equal? @[false (exampleHtml "<textarea> A\n</textarea>") = exampleHtml "<textarea>A</textarea>"]
+    ]
+    it "handles SVG, quoted greater-than signs, and popover empty syntax" [
+        expects.be: 'equal? @[
+            exampleHtml {<div popover><svg><path d="M1 2" /></svg><p title="A > B">Text</p></div>}
+            exampleHtml {<div popover=""><svg><path d="M1 2"></path></svg><p title="A > B">Text</p></div>}
+        ]
+    ]
+    it "rejects broken HTML structure" [
+        loop ["<div></span>" "<div>" "</div>"] 'htmlText [
+            failure: try [exampleHtml htmlText]
+            expects.be: 'equal? @[true error? failure]
+        ]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'minimal

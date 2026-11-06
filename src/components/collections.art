@@ -1,0 +1,373 @@
+_pDispatch: $[kind options content context] [
+    if in? kind ["item" "tab" "step" "stat"] [return _pItem kind options content context]
+    if in? kind ["join" "pagination" "select" "filter" "table" "accordion" "carousel" "list" "timeline" "stats" "dock" "megamenu" "steps" "tabs" "breadcrumbs" "rating" "otp"] [
+        return _pCollection kind options content context
+    ]
+    if and? (in? kind ["check" "toggle"]) ((_pGet context 'owner "") = "theme") [
+        options\value: to :string content
+        _pClass options "theme-controller"
+        return _pSimple kind options "" #[]
+    ]
+    _pComposite kind options content context
+]
+
+_pItem: $[kind options content context] [
+    owner: _pGet context 'owner ""
+    if kind = "item" [
+        ensure.that: "item is only available inside its owning component" -> in? owner ["accordion" "carousel" "list" "timeline" "dock" "megamenu"]
+        if owner = "accordion" [
+            options\name: context\name
+            if _pGet context 'arrow false [options\arrow: true]
+            if _pGet context 'plus false [options\plus: true]
+            return _pComposite "collapse" options content context
+        ]
+        if owner = "carousel" [
+            _pClass options "carousel-item"
+            _pUtilities options
+            return _pNode "div" options _pContent content context
+        ]
+        if owner = "list" [
+            children: @[
+                _pSlotWrap content 'start "div" "" context
+                _pSlotWrap content 'content "div" "list-col-grow" context
+                _pSlotWrap content 'end "div" "" context
+                _pSlotWrap content 'details "div" "list-col-wrap col-span-full" context
+            ]
+            _pClass options "list-row"
+            _pUtilities options
+            return _pNode "li" options children
+        ]
+        if owner = "timeline" [
+            icon: _pSlot content 'icon context
+            if empty? icon [icon: @[_pNode "span" #[class: "inline-block size-3 rounded-full bg-current" aria_hidden: true] []]]
+            endClass: "timeline-end"
+            if _pGet context 'box false [endClass: endClass ++ " timeline-box"]
+            children: @[
+                _pSlotWrap content 'start "div" "timeline-start" context
+                _pWrap "div" "timeline-middle" icon
+                _pSlotWrap content 'end "div" endClass context
+            ]
+            _pUtilities options
+            return _pNode "li" options children
+        ]
+        if owner = "dock" [
+            active: _pTake options 'active false
+            children: @[
+                (key? content 'icon)? [_pControl content\icon #[aria_hidden: true] null context] [null]
+                _pSlotWrap content 'label "span" "dock-label" context
+            ]
+            if active [_pClass options "dock-active" options\aria_current: "page"]
+            _pUtilities options
+            tag: (null? _pGet options 'href null)? ["button"] ["a"]
+            if tag = "button" [options\type: "button"]
+            return _pNode tag options children
+        ]
+        if owner = "megamenu" [
+            id: _pIdentity options "megamenu-panel"
+            trigger: _pNode "button" #[type: "button" popovertarget: id] _pSlot content 'title context
+            options\id: id
+            options\popover: ""
+            return _pFragment @[trigger _pNode "div" options _pSlot content 'content context]
+        ]
+    ]
+    if kind = "stat" [
+        ensure.that: "stat is only available inside stats" -> owner = "stats"
+        children: []
+        ignored: @[
+            loop [figure title value description actions] '_slot [
+                if key? content _slot [
+                    value: content\[_slot]
+                    if and? ((to :string _slot) = "value") (not? is? :htmlMarkup value) [value: to :string value]
+                    class: "stat-" ++ ((to :string _slot) = "description")? ["desc"] [to :string _slot]
+                    append 'children _pWrap "div" class _pContent value context
+                ]
+            ]
+        ]
+        _pClass options "stat"
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if kind = "step" [
+        ensure.that: "step is only available inside steps" -> owner = "steps"
+        if _pTake options 'current false [options\aria_current: "step"]
+        icon: _pTake options 'icon null
+        children: []
+        unless null? icon [append 'children _pNode "span" #[class: "step-icon" aria_hidden: true] _pContent icon context]
+        append 'children _pFragment _pContent content context
+        _pVariants options "step" _pColors
+        _pUtilities options
+        return _pNode "li" options children
+    ]
+    if kind = "tab" [
+        ensure.that: "tab is only available inside tabs" -> owner = "tabs"
+        options\aria_label: _pGet content 'title ""
+        return _pNode "petal-tab" options _pSlot content 'content context
+    ]
+]
+
+_pCollection: $[kind options content context] [
+    if kind = "table" [return _pTable options content context]
+    if kind = "rating" [return _pRating options content context]
+    if kind = "otp" [
+        ensure.that: "otp digit count must be a positive integer" -> integer? content
+        ensure.that: "otp digit count must be positive" -> content > 0
+        inputOptions: #[type: "text" autocomplete: "one-time-code" inputmode: "numeric" maxlength: content pattern: "[0-9]{" ++ (to :string content) ++ "}"]
+        ignored: @[
+            loop [name label value required disabled id description] 'key [
+                value: _pTake options key null
+                unless null? value [inputOptions\[key]: value]
+            ]
+        ]
+        _pUtilities inputOptions
+        children: []
+        loop _pSequence 1 content 'digit [append 'children _pNode "span" #[aria_hidden: true] []]
+        append 'children _pNode "input" inputOptions []
+        _pVariants options "otp" [joined xs sm md lg xl neutral primary secondary accent info success warning error]
+        _pUtilities options
+        return _pNode "label" options children
+    ]
+    if in? kind ["select" "filter"] [
+        children: _pContent content context
+        choices: []
+        ignored: @[
+            loop children 'child [
+                append 'choices (string? child)? [_pNode "option" #[] @[child]] [child]
+            ]
+        ]
+        if kind = "select" [
+            _pVariants options "select" [xs sm md lg xl neutral primary secondary accent info success warning error ghost]
+            _pUtilities options
+            return _pNode "select" options choices
+        ]
+        name: _pGroupName options "filter"
+        selected: 0
+        radios: []
+        ignored: @[
+            loop choices 'choice [
+                ensure.that: "filter expects strings or option elements" -> (:petalNode = type choice)
+                ensure.that: "filter expects option elements" -> choice\tag = "option"
+                text: ""
+                loop choice\children 'part [text: text ++ to :string part]
+                props: new choice\properties
+                value: _pTake props 'value text
+                ensure.that: "filter reserves empty values for reset" -> value <> ""
+                checked: _pTake props 'selected false
+                if checked [selected: selected + 1]
+                props\type: "radio"
+                props\name: name
+                props\value: value
+                props\aria_label: text
+                props\checked: checked
+                _pClass props "btn"
+                append 'radios _pNode "input" props []
+            ]
+        ]
+        ensure.that: "filter permits at most one selected option" -> selected =< 1
+        reset: _pNode "input" #[type: "radio" class: "btn filter-reset" name: name value: "" aria_label: "All" checked: selected = 0] []
+        children: @[reset _pFragment radios]
+        _pClass options "filter"
+        _pUtilities options
+        return _pNode "div" options children
+    ]
+    if in? kind ["join" "pagination"] [
+        children: _pContent content context
+        joined: []
+        ignored: @[
+            loop children 'child [
+                additions: #[class: "join-item"]
+                if kind = "pagination" [
+                    ensure.that: "pagination expects Petal controls" -> (:petalNode = type child)
+                    if in? "btn-active" split.words (_pGet child\properties 'class "") [additions\aria_current: "page"]
+                    loop _pSizes '_size [if _pGet options _size false [_pClass additions "btn-" ++ to :string _size]]
+                ]
+                append 'joined _pChange child additions null
+            ]
+        ]
+        tag: "div"
+        if kind = "pagination" [
+            tag: "nav"
+            options\aria_label: "Pagination"
+            loop _pSizes '_size [ignored: _pTake options _size false]
+        ]
+        _pVariants options "join" [vertical horizontal]
+        _pUtilities options
+        return _pNode tag options joined
+    ]
+    if kind = "breadcrumbs" [
+        children: []
+        ignored: @[
+            loop _pContent content context 'child [append 'children _pWrap "li" "" @[child]]
+        ]
+        unless empty? children [
+            lastIndex: _pSubtract (size children) 1
+            children\[lastIndex]: _pChange (last children) #[aria_current: "page"] null
+        ]
+        _pClass options "breadcrumbs"
+        _pUtilities options
+        options\aria_label: _pGet options 'aria_label "Breadcrumb"
+        return _pNode "nav" options @[_pWrap "ul" "" children]
+    ]
+    ctx: #[owner: kind]
+    if kind = "accordion" [
+        ctx\name: _pGroupName options "accordion"
+        ignored: _pTake options 'id null
+        ctx\arrow: _pTake options 'arrow false
+        ctx\plus: _pTake options 'plus false
+    ]
+    if kind = "timeline" [ctx\box: _pTake options 'box false]
+    children: _pContent content ctx
+    if kind = "accordion" [
+        opened: 0
+        loop children 'child [if _pGet child\properties 'open false [opened: opened + 1]]
+        ensure.that: "accordion permits at most one open item" -> opened =< 1
+        return _pFragment children
+    ]
+    if kind = "carousel" [
+        slides: []
+        ignored: @[
+            loop children 'child [
+                explicit: false
+                if (:petalNode = type child) [explicit: in? "carousel-item" split.words (_pGet child\properties 'class "")]
+                append 'slides (explicit)? [child] [_pWrap "div" "carousel-item" @[child]]
+            ]
+        ]
+        children: slides
+    ]
+    if kind = "steps" [
+        _stepNodes: []
+        ignored: @[loop children 'child [append '_stepNodes (string? child)? [_pWrap "li" "step" @[child]] [child]]]
+        children: _stepNodes
+    ]
+    if kind = "timeline" [
+        events: []
+        ignored: @[
+            loop.with: '_index children 'child [
+                parts: new child\children
+                if _index > 0 [insert 'parts 0 _pNode "hr" #[] []]
+                if _index < _pSubtract (size children) 1 [append 'parts _pNode "hr" #[] []]
+                append 'events _pNode "li" child\properties parts
+            ]
+        ]
+        children: events
+    ]
+    if kind = "tabs" [
+        name: _pGroupName options "tabs"
+        active: (neg 1)
+        firstEnabled: (neg 1)
+        ignored: @[
+            loop.with: '_index children 'child [
+                ensure.that: "tabs expects tab children" -> (:petalNode = type child)
+                ensure.that: "tabs expects tab children" -> child\tag = "petal-tab"
+                disabled: _pGet child\properties 'disabled false
+                if and? (firstEnabled = (neg 1)) (not? disabled) [firstEnabled: _index]
+                if _pGet child\properties 'active false [
+                    ensure.that: "tabs permits one enabled active tab" -> and? (active = (neg 1)) (not? disabled)
+                    active: _index
+                ]
+            ]
+        ]
+        if active = (neg 1) [active: firstEnabled]
+        _tabNodes: []
+        ignored: @[
+            loop.with: '_index children 'child [
+                props: new child\properties
+                ignored: _pTake props 'active false
+                props\class: "tab"
+                props\type: "radio"
+                props\name: name
+                props\checked: _index = active
+                append '_tabNodes _pNode "input" props []
+                append '_tabNodes _pWrap "div" "tab-content" child\children
+            ]
+        ]
+        children: _tabNodes
+    ]
+    if kind = "megamenu" [
+        id: _pIdentity options "megamenu"
+        options\id: id
+        options\popover: ""
+        _pClass options "max-sm:megamenu-vertical"
+        insert 'children 0 _pNode "span" #[class: "megamenu-active" aria_hidden: true] []
+    ]
+    tags: #[list: "ul" timeline: "ul" steps: "ul"]
+    tag: _pGet tags kind "div"
+    if kind = "dock" [tag: "nav" options\aria_label: "Bottom navigation"]
+    _pVariants options kind [xs sm md lg xl vertical horizontal start center end compact border box lift bottom wide full]
+    _pUtilities options
+    result: _pNode tag options children
+    if kind = "megamenu" [
+        trigger: _pNode "button" #[type: "button" class: "btn sm:hidden" popovertarget: id] ["Menu"]
+        return _pFragment @[trigger result]
+    ]
+    result
+]
+
+_pRating: $[options score context] [
+    count: _pTake options 'count 5
+    ensure.that: "rating count and score must be integers" -> and? (integer? count) (integer? score)
+    ensure.that: "rating score must be between 1 and count" -> and? count > 0 (and? score >= 1 score =< count)
+    frozen: _pTake options 'frozen false
+    name: _pGroupName options "rating"
+    mask: _pTake options 'mask 'star
+    children: []
+    ignored: @[
+        loop _pSequence 1 count 'number [
+            props: #[class: "mask mask-" ++ to :string mask]
+            switch frozen [
+                props\aria_hidden: true
+                if number = score [props\aria_current: true]
+                append 'children _pNode "div" props []
+            ] [
+                props\type: "radio"
+                props\name: name
+                props\value: number
+                props\aria_label: (to :string number) ++ " out of " ++ to :string count
+                props\checked: number = score
+                append 'children _pNode "input" props []
+            ]
+        ]
+    ]
+    options\role: (frozen)? ["img"] ["radiogroup"]
+    options\aria_label: (frozen)? [(to :string score) ++ " out of " ++ to :string count] ["Rating"]
+    _pVariants options "rating" _pSizes
+    _pUtilities options
+    _pNode "div" options children
+]
+
+_pTable: $[options rows context] [
+    ensure.that: "table requires a block of rows" -> block? rows
+    _headerRow: _pTake options 'header null
+    _footerRow: _pTake options 'footer null
+    align: _pTake options 'align null
+    sections: []
+    unless null? _headerRow [append 'sections _pWrap "thead" "" @[_pRow _headerRow true align context]]
+    _bodyNodes: []
+    ignored: @[loop rows 'row [append '_bodyNodes _pRow row false align context]]
+    append 'sections _pWrap "tbody" "" _bodyNodes
+    unless null? _footerRow [append 'sections _pWrap "tfoot" "" @[_pRow _footerRow false align context]]
+    _pVariants options "table" [zebra xs sm md lg xl]
+    _pUtilities options
+    _pWrap "div" "overflow-x-auto" @[_pNode "table" options sections]
+]
+
+_pRow: $[row heading align context] [
+    ensure.that: "table rows must be blocks" -> block? row
+    cells: []
+    ; Evaluate cells in Petal scope so composed values such as badges work.
+    values: _pScope row context
+    ignored: @[
+        loop.with: '_index values 'value [
+            props: #[]
+            if heading [props\scope: "col"]
+            alignment: align
+            if block? align [alignment: (_index < size align)? [align\[_index]] [null]]
+            unless null? alignment [
+                ensure.that: "table alignment must be left, center, or right" -> in? (to :string alignment) ["left" "center" "right"]
+                props\class: "text-" ++ to :string alignment
+            ]
+            if in? type value [:integer :floating] [value: to :string value]
+            append 'cells _pNode (heading)? ["th"] ["td"] props @[value]
+        ]
+    ]
+    _pWrap "tr" "" cells
+]

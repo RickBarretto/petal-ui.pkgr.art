@@ -31,9 +31,9 @@ fab #[
 
 ; => <div class="fab">
 ;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-success">F</div>
-;   <div>Label B <button class="btn btn-lg btn-circle">A</button></div>
-;   <div>Label C <button class="btn btn-lg btn-circle">B</button></div>
-;   <div>Label D <button class="btn btn-lg btn-circle">C</button></div>
+;   <div>Label A<button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label B<button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label C<button class="btn btn-lg btn-circle">C</button></div>
 ; </div>
 
 
@@ -54,9 +54,9 @@ fab #[
 ;   <div class="fab-close">
 ;     Close <span class="btn btn-circle btn-lg btn-error">✕</span>
 ;   </div>
-;   <div>Label A <button class="btn btn-lg btn-circle">A</button></div>
-;   <div>Label B <button class="btn btn-lg btn-circle">B</button></div>
-;   <div>Label C <button class="btn btn-lg btn-circle">C</button></div>
+;   <div>Label A<button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label B<button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label C<button class="btn btn-lg btn-circle">C</button></div>
 ; </div>
 
 
@@ -77,9 +77,9 @@ fab #[
 ;   <div class="fab-main-action">
 ;     Main Action <button class="btn btn-circle btn-secondary btn-lg">M</button>
 ;   </div>
-;   <div>Label A <button class="btn btn-lg btn-circle">A</button></div>
-;   <div>Label B <button class="btn btn-lg btn-circle">B</button></div>
-;   <div>Label C <button class="btn btn-lg btn-circle">C</button></div>
+;   <div>Label A<button class="btn btn-lg btn-circle">A</button></div>
+;   <div>Label B<button class="btn btn-lg btn-circle">B</button></div>
+;   <div>Label C<button class="btn btn-lg btn-circle">C</button></div>
 ; </div>
 
 
@@ -95,7 +95,7 @@ fab.flower #[
     ]
 ]
 
-; <div class="fab fab-flower">
+; => <div class="fab fab-flower">
 ;   <div tabindex="0" role="button" class="btn btn-lg btn-circle btn-primary">F</div>
 ;   <button class="btn btn-lg btn-circle">A</button>
 ;   <button class="btn btn-lg btn-circle">B</button>

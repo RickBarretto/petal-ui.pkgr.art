@@ -1,11 +1,11 @@
 ; Dialog Modal
 ;
 ; Generates a random ID and wires the opening button to showModal().
-; The generated ID below is illustrative; each modal gets its own ID.
+; Examples supply explicit IDs; omission generates a unique ID.
 ; Content is wrapped in modal-box; close is wrapped in modal-action.
 ; The close button uses a form with method="dialog". Escape also closes it.
 
-modal #[
+modal.id: "modal-a7f3c9e2" #[
     open: button.primary "Open"
     content: [
         h3 "Hello!"

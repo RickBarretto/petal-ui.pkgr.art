@@ -48,3 +48,37 @@ import {petal-ui}!
 
 ## Documentation
 
+
+Import the package and compose styled components with the HTML DSL:
+
+```art
+import {petal-ui}!
+
+print html.lang: "en" [
+    body [
+        petal [
+            card #[
+                title: "Hello, Petal"
+                content: [p "Components built on the HTML DSL."]
+                actions: [button.primary "Continue"]
+            ]
+        ]
+    ]
+]
+```
+
+Use Arturo 0.10.0+, HTML 1.0.0+, and Unitt 3.1.1+. The host page must
+load DaisyUI 5 and the Tailwind utilities used by its components. Calendar
+also requires the host to load Cally. Petal generates markup; it does not
+install browser dependencies or load stylesheets.
+
+See [the API contracts](api/README.md) and [composition examples](api/composition.art).
+Content and named slots execute once. HTML handles escaping and serialization.
+Controls that Petal must adapt structurally must be created inside Petal;
+ordinary content slots also accept existing HTML markup.
+
+Run `unitt` from the repository root. Tests cover all 417 output examples,
+including multiline `; =>` comments, composition, generated identities, and
+accessibility/scope regressions. Example IDs and form names are deterministic;
+generated identities have separate tests. Browser behavior is not tested.
+CI also validates the completed runner report using `scripts/check-tests.art`.

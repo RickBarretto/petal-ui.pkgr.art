@@ -4,10 +4,10 @@
 ; Generates the checkbox, main content and sidebar wrappers, overlay, and wiring.
 ; Open and close are buttons; clicking the overlay also unchecks the toggle.
 ; This is a sidebar layout, without modal focus trapping or automatic Escape handling.
-; IDs are generated; sample values below illustrate. .id sets the root ID,
+; Examples supply deterministic IDs. .id sets the root ID,
 ; with -toggle and -side suffixes used for internal references.
 
-drawer #[
+drawer.id: "drawer-a7f3c9e2" #[
     open: button "Open sidebar"
     content: [p "Main page content"]
     sidebar: menu.w: 64 .bg: 'base100 [
