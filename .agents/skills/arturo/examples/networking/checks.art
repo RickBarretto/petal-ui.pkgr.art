@@ -1,0 +1,7 @@
+; Inspect signatures only: no sockets, HTTP requests, or listeners are opened.
+ensure -> dictionary? info.get 'request
+ensure -> dictionary? info.get 'connect
+ensure -> dictionary? info.get 'listen
+ensure -> dictionary? info.get 'receive
+ensure -> dictionary? info.get 'unplug
+print "networking metadata ok"

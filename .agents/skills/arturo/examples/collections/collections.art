@@ -1,0 +1,70 @@
+items: [1 2 3 4]
+ensure -> [2 4] = select items 'x -> even? x
+ensure -> [1 3] = filter items 'x -> even? x
+ensure -> [2 4 6 8] = map items 'x -> x * 2
+ensure -> 10 = fold.seed: 0 items [acc x] -> acc + x
+ensure -> 0 = fold.seed: 0 [] [acc x] -> acc + x
+ensure -> items = [1 2 3 4]
+ensure -> 17 = fold.seed: 17 [] [acc x] -> throw "empty fold body ran"
+record: #[name: "Ada" count: 2]
+ensure -> key? record 'name
+ensure -> "Ada" = record\name
+; Missing keys differ from present keys whose value is null.
+ensure -> not? key? #[] 'missing
+nullable: #[value: null]
+ensure -> key? nullable 'value
+ensure -> null? get nullable 'value
+counts: #[apples: 2 pears: 3]
+countTotal: 0
+loop counts [fruit quantity] -> countTotal: countTotal + quantity
+ensure -> 5 = countTotal
+ensure -> counts = #[apples: 2 pears: 3]
+loop #[] [fruit quantity] -> throw "empty dictionary body ran"
+ensure -> 5 = countTotal
+ensure -> ["a" "b"] = split.words "a b"
+ensure -> "a,b" = join.with: "," ["a" "b"]
+ensure -> [2 3] = ([1 2 3] ∩ [2 3 4])
+ensure -> [1 3] ⊆ [1 2 3]
+
+; Iterator bindings restore previous values; other assignments persist.
+item: "outside"
+i: 99
+total: 0
+loop.with: 'i [2 3] 'item [
+    total: total + item
+    lastSeen: item
+]
+ensure -> "outside" = item
+ensure -> 99 = i
+ensure -> 5 = total
+ensure -> 3 = lastSeen
+ensure -> [] = map [] 'x -> x * 2
+ensure -> [] = select [] 'x -> true
+ensure -> [] = filter [] 'x -> false
+ensure -> null? first []
+ensure -> throws? -> get #[name: "Ada"] 'missing
+mixed: [1 "two"]
+ensure -> throws? -> map mixed 'number -> number * 2
+ensure -> mixed = [1 "two"]
+
+; Empty text and empty output parts have explicit results.
+ensure -> [] = split ""
+ensure -> [] = split.words ""
+ensure -> "" = join.with: "," []
+ensure -> [] = match "" {/\d+/}
+ensure -> 2 = size "é猫"
+ensure -> 5 = size to :binary "é猫"
+ensure -> ["é" "猫"] = split "é猫"
+ensure -> 1 = size "é"
+ensure -> 2 = size "é"
+ensure -> not? "é" = "é"
+ensure -> ["12"] = match "id=12" {/\d+/}
+ensure -> ["12"] = match "id=12" to :regex "\\d+"
+needle: "a.b"
+pattern: to :regex escape.regex needle
+ensure -> ["a.b"] = match "a.b axb" pattern
+ensure -> ["a.b" "axb"] = match "a.b axb" {/a.b/}
+ensure -> [] = match "abc" {/\d+/}
+ensure -> throws? -> to :regex "["
+
+print "collections ok"

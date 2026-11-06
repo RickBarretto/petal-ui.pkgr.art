@@ -1,0 +1,34 @@
+; Parse one nonnegative count. Keep identifiers as raw strings instead.
+countFrom: $[inputs][
+    ensure -> 1 = size inputs
+    count: to :integer first inputs
+    ensure -> count >= 0
+    return count
+]
+
+count: 99
+raw: ["001"]
+ensure -> 1 = countFrom raw
+ensure -> raw = ["001"]
+ensure -> count = 99
+ensure -> 0 = countFrom ["0"]
+
+ensure -> throws? -> countFrom []
+ensure -> throws? -> countFrom ["1" "2"]
+ensure -> throws? -> countFrom [""]
+ensure -> throws? -> countFrom ["invalid"]
+ensure -> throws? -> countFrom ["-1"]
+; A failure after the local assignment must also restore the caller's binding.
+ensure -> count = 99
+ensure -> raw = ["001"]
+
+; try returns null/error, so keep a successful result in a separate binding.
+parsed: null
+success: try -> parsed: countFrom ["12"]
+ensure -> null? success
+ensure -> parsed = 12
+failed: try -> parsed: countFrom ["invalid"]
+ensure -> error? failed
+ensure -> parsed = 12
+
+print "input count ok"

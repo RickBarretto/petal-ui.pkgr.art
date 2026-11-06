@@ -1,0 +1,15 @@
+ensure -> leap? 2024
+ensure -> not? leap? 2023
+fixed: to.format:"yyyy-MM-dd" :date "2024-02-28"
+nextDay: after.days: 1 fixed
+ensure -> "2024-02-29" = to.format:"yyyy-MM-dd" :string nextDay
+ensure -> "2024-02-28" = to.format:"yyyy-MM-dd" :string fixed
+ensure -> fixed = before.days: 1 nextDay
+ensure -> throws? -> to.format:"yyyy-MM-dd" :date "invalid"
+ensure -> throws? -> to.format:"yyyy-MM-dd" :date "2024-02-30"
+captured: now
+ensure -> date? captured
+ensure -> (before.days: 1 captured) < captured
+ensure -> (after.days: 1 captured) > captured
+ensure -> today? captured
+print "dates ok"

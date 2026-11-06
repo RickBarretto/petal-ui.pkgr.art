@@ -1,0 +1,9 @@
+; Resolve beside this script, independently of the shell's working directory.
+import ./{helpers}!
+
+ensure -> 12 = projectDouble 6
+ensure -> 0 = projectDouble 0
+ensure -> throws? -> projectDouble "bad"
+; An explicit local path keeps missing-file checks offline.
+ensure -> throws? -> import ./{missing-helper.art}
+print "project ok"

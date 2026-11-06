@@ -1,0 +1,7 @@
+package: import.lean ./{package}!
+ensure -> 12 = package\doubleValue 6
+ensure -> 0 = package\doubleValue 0
+ensure -> not? set? 'doubleValue
+ensure -> throws? -> package\doubleValue "bad"
+ensure -> throws? -> import ./{missing-local-file.art}
+print "packages ok"

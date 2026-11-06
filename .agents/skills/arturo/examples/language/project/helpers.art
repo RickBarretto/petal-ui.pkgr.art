@@ -1,0 +1,1 @@
+projectDouble: $[value :integer] -> value * 2

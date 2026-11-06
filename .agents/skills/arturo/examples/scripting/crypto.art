@@ -1,0 +1,6 @@
+ensure -> "aGVsbG8=" = encode "hello"
+ensure -> "hello" = decode "aGVsbG8="
+ensure -> "Arturo" = decode encode "Arturo"
+ensure -> "414FA339" = crc "The quick brown fox jumps over the lazy dog"
+ensure -> (hash [1 2 3]) = hash [1 2 3]
+print "crypto ok"
