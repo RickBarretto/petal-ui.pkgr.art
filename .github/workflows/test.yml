@@ -67,8 +67,13 @@ jobs:
               if: ${{ matrix.os == 'windows' }}
               run: |
                 # Preserve CMD switches when invoking it from MSYS2.
-                MSYS2_ARG_CONV_EXCL='*' cmd.exe /D /C unitt.bat > .unitt-ci.log 2>&1
+                unitt_status=0
+                MSYS2_ARG_CONV_EXCL='*' cmd.exe /D /C unitt.bat > .unitt-ci.log 2>&1 || unitt_status=$?
                 cat .unitt-ci.log
+                if [ "$unitt_status" -ne 0 ]; then
+                    echo "Unitt exited with status $unitt_status"
+                    exit "$unitt_status"
+                fi
                 arturo scripts/check-tests.art
 
             - name: Test Package (FreeBSD)
