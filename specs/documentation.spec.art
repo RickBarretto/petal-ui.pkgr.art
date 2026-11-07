@@ -1,0 +1,75 @@
+import {unitt}!
+import {examples/documentation/main.art}!
+
+describe "Documentation example" [
+    it "answers initial requests before rendering the reference" [
+        expects.be: 'equal? @[false docsState\loaded]
+        response: docsServer\handle #[path: "/health"]
+        expects.be: 'equal? @[200 response\status]
+        response: docsServer\handle #[path: "/"]
+        expects.be: 'equal? @[200 response\status]
+        expects.be: 'equal? @[true in? "The server is running" response\body]
+        expects.be: 'equal? @[false docsState\loaded]
+    ]
+
+    it "serves the Petal document from memory" [
+        response: docsServer\handle #[path: "/ready"]
+        expects.be: 'equal? @[200 response\status]
+        expects.be: 'equal? @[true docsState\loaded]
+        response: docsServer\handle #[path: "/"]
+        expects.be: 'equal? @[200 response\status]
+        expects.be: 'equal? @["text/html; charset=utf-8" response\headers\["Content-Type"]]
+        expects.be: 'equal? @[true in? {class="btn btn-primary"} response\body]
+        expects.be: 'equal? @[71 size match response\body to :regex {<article }]
+        expects.be: 'equal? @[true in? "&lt;button" response\body]
+        expects.be: 'equal? @[423 size match response\body to :regex {class="preview-document"}]
+    ]
+
+    it "serves the static assets through Lanx" [
+        loop ["/styles.css" "/app.js" "/petal.svg" "/preview.css" "/preview.js"] 'asset [
+            response: docsServer\handle #[path: asset]
+            expects.be: 'equal? @[200 response\status]
+            expects.be: 'equal? @[false empty? response\body]
+        ]
+    ]
+
+    it "includes every API file and every documented example" [
+        loaded: docsState\data
+        expects.be: 'equal? @[64 loaded\referenceCounts\components]
+        expects.be: 'equal? @[419 loaded\referenceCounts\snippets]
+        expects.be: 'equal? @[417 loaded\referenceCounts\expectations]
+        loop loaded\pages 'entry [
+            expects.be: 'equal? @[true in? ~{id="|entry\id|"} (to :string loaded\documentation)]
+            response: docsServer\handle #[path: "/reference/" ++ entry\id ++ ".art"]
+            expects.be: 'equal? @[200 response\status]
+            expects.be: 'equal? @[read loaded\apiRoot ++ entry\path response\body]
+            loop entry\entries 'specimen [
+                expects.be: 'equal? @[true in? (loaded\escapeHtml specimen\copyable) (to :string loaded\documentation)]
+            ]
+        ]
+    ]
+
+    it "serves isolated previews and their local illustrations" [
+        loaded: docsState\data
+        expects.be: 'equal? @[423 size loaded\previewDocuments]
+        loop loaded\previewDocuments [previewPath previewHtml] [
+            response: docsServer\handle #[path: previewPath]
+            expects.be: 'equal? @[200 response\status]
+            expects.be: 'equal? @[previewHtml response\body]
+        ]
+        loop referenceImages [imagePath imageSvg] [
+            response: docsServer\handle #[path: imagePath]
+            expects.be: 'equal? @[200 response\status]
+            expects.be: 'equal? @["image/svg+xml" response\headers\["Content-Type"]]
+            expects.be: 'equal? @[imageSvg response\body]
+        ]
+    ]
+
+    it "returns 404 for missing routes" [
+        response: docsServer\handle #[path: "/missing"]
+        expects.be: 'equal? @[404 response\status]
+    ]
+]
+
+if and? standalone? not? key? args 'filename ::
+    unitt\report 'full

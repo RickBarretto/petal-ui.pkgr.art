@@ -34,7 +34,7 @@ and `'dark` are Arturo literals, not custom types (`:heart`).
 
 Utility attributes such as `.w`, `.bg`, and `.p` belong to Petal's DSL layer.
 They are an intentional convenience, not attributes supported by the HTML
-package. The component examples show the proposed Petal scope; contextual
+package. The component examples show the Petal scope; contextual
 helpers such as `item`, `tab`, and `li.title` exist only in their owning scope.
 Do not create global aliases for them or modify the shared `markup` object.
 
@@ -44,7 +44,7 @@ signatures: `img.alt: "Ana" "ana.jpg"` takes the source as its positional argume
 just as `avatar.alt: "Ana" "ana.jpg"` does. The adapter delegates to the HTML
 package's `img.src: "ana.jpg" .alt: "Ana" []` internally.
 
-The proposed image contract requires an explicit `.alt` string. Use a description
+The image contract requires an explicit `.alt` string. Use a description
 for meaningful images and `.alt: ""` for decorative ones. Missing `.alt` should
 raise a clear error; do not infer it from a filename or silently insert empty
 text. This keeps the source positional and makes the accessibility choice
@@ -69,7 +69,7 @@ stringify and reinsert them or use `raw` to compose.
 
 [Composition examples](composition.art) mix native forms, semantic sections,
 loops, and reusable Arturo functions with Petal regions. They assume the HTML
-package has been loaded and the future `petal` entry point is available.
+package has been loaded and the `petal` entry point is available.
 
 Expected HTML comments describe structure, attributes, and behavior; formatting,
 attribute order are illustrative. Examples supply deterministic IDs or native group names; generated identities are tested separately. Runtime and browser

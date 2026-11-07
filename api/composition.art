@@ -1,5 +1,5 @@
-; Composition proposals: HTML's fragment/html and the future petal scope.
-; These are API designs, not runnable examples of the current template library.
+; Composition examples: native HTML with scoped Petal components.
+; These examples are executed by the test suite and documentation website.
 ; petal [...] supplies short component names and returns an HTML markup fragment.
 
 ; A native form composed with styled controls. Form submission stays native.

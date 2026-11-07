@@ -1,0 +1,296 @@
+; Render the documentation in memory. main.art serves it with Lanx.
+import relative "../../src/lib.art"!
+import ./{content.art}!
+import ./{previews.art}!
+
+groups: ["Actions" "Data display" "Data input" "Feedback" "Layout" "Navigation"]
+repository: "https://github.com/RickBarretto/petal-ui.pkgr.art"
+
+copyControl: petal [button.ghost.xs.type: "button" .class: "copy-code" "Copy"]
+
+codebox: $[snippet :string language :string] [
+    ; Reuse the Petal control and compose already-rendered markup directly.
+    ; Re-entering the DSL for every wrapper is costly across 419 snippets.
+    bar: markup\div.class: "codebar" fragment @[markup\span language copyControl]
+    listing: markup\pre markup\code snippet
+    markup\div.class: "codebox" fragment @[bar listing]
+]
+
+example: $[snippet :string] [
+    ; Only repository-owned Arturo is evaluated, never user input.
+    rendered: petal to :block snippet
+    petal [
+        div.class: "example" [
+            div.class: "preview" [rendered]
+            details.class: "source-view" .open [
+                summary "Arturo source"
+                codebox snippet "ARTURO"
+            ]
+            details.class: "source-view" [
+                summary "Generated HTML"
+                codebox (to :string rendered) "HTML"
+            ]
+        ]
+    ]
+]
+
+import ./{guides.art}!
+
+documentation: html.lang: "en" .data_theme: "light" [
+    head [
+        meta.charset: "utf-8" []
+        meta.name: "viewport" .content: "width=device-width, initial-scale=1" []
+        meta.name: "description" .content: "Build something beautiful with Petal UI. Live Arturo examples, component documentation, and DaisyUI themes." []
+        title "Petal UI — Components for expressive code"
+        link.rel: "icon" .href: "petal.svg" .type: "image/svg+xml" []
+        link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/daisyui.css" []
+        link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/themes.css" []
+        script.src: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18" []
+        link.rel: "stylesheet" .href: "styles.css" []
+        script.src: "app.js" .defer []
+    ]
+    body [
+        a.class: "skip-link" .href: "#main" "Skip to content"
+        header.class: "site-header" [
+            petal [
+                button.ghost.sm.id: "menu-toggle" .class: "mobile-toggle" .type: "button" .aria_expanded: "false" .aria_controls: "sidebar" .label: "Toggle navigation" "☰"
+                a.class: "brand" .href: "#overview" [
+                    span.class: "brand-mark" .aria_hidden: "true" "✿"
+                    span "petal"
+                    span.class: "brand-ui" "UI"
+                ]
+                badge.sm.ghost "Arturo library"
+                div.class: "header-links" [
+                    a.class: "header-docs" .href: "#installation" "Docs"
+                    a.href: "#components" "Components"
+                    a.href: repository "GitHub ↗"
+                ]
+                select.id: "theme-picker" .sm.label: "Color theme" [
+                    option.value: "light" "◐ Light"
+                    option.value: "dark" "◐ Dark"
+                    option.value: "cupcake" "◐ Cupcake"
+                    option.value: "forest" "◐ Forest"
+                    option.value: "retro" "◐ Retro"
+                ]
+            ]
+        ]
+        aside.id: "sidebar" .class: "sidebar" [
+            petal [
+                div.class: "search-wrap" [
+                    input.search.id: "docs-search" .label: "Search documentation" .placeholder: "Search docs…" ""
+                    kbd.sm "/"
+                ]
+                nav.aria_label: "Documentation" [
+                    menu.class: "docs-menu" [
+                        li.title "GETTING STARTED"
+                        li -> a.href: "#overview" "Welcome to Petal"
+                        li -> a.href: "#installation" "Installation"
+                        li -> a.href: "#composition" "Composition"
+                        li -> a.href: "#contracts" "API conventions"
+                        li -> a.href: "#styling" "Styling & themes"
+                        li -> a.href: "#accessibility" "Accessibility"
+                        li -> a.href: "#components" ["Components" badge.sm.ghost to :string size pages]
+                        loop groups 'group [
+                            li.title group
+                            loop pages 'entry [
+                                if entry\group = group [li -> a.href: "#" ++ entry\id entry\title]
+                            ]
+                        ]
+                    ]
+                ]
+                p.id: "search-empty" .hidden "No matching pages. Try “button” or “input”."
+                div.class: "sidebar-note" [
+                    span.class: "brand-mark" .aria_hidden: "true" "✿"
+                    p "Small pieces. Endless possibilities."
+                    a.href: "https://arturo-lang.io" "Made for Arturo ↗"
+                ]
+            ]
+        ]
+        main.id: "main" .tabindex: "-1" [
+            article.id: "overview" .class: "doc-page" .data_title: "Welcome to Petal" [
+                petal [
+                    div.class: "eyebrow" [span.class: "tiny-flower" "✿" " A LITTLE CODE. A LOT OF POSSIBILITY."]
+                    h1.class: "hero-title" ["Good ideas deserve " em "beautiful interfaces."]
+                    p.class: "lead" "Meet Petal UI. DaisyUI components, the HTML DSL, and the expressive simplicity of Arturo. All growing together."
+                    div.class: "hero-actions" [
+                        button.primary.href: "#installation" "Start building →"
+                        button.ghost.href: "#components" "Explore components"
+                    ]
+                    div.class: "hero-demo" [
+                        div.class: "hero-demo-copy" [
+                            badge.soft.primary "YOUR NEXT IDEA STARTS HERE"
+                            h2 "Less markup. More making."
+                            p "Describe what belongs together. Let Petal take care of the little details."
+                            div.class: "color-dots" .aria_hidden: "true" [span "" span "" span "" span ""]
+                        ]
+                        card.border.bg: 'base100 .shadow: 'sm #[
+                            title: "Hello, possibility."
+                            content: [
+                                p "Something lovely is just a few lines away."
+                                div.class: "demo-badges" [badge.soft.primary "Arturo" badge.soft.secondary "DaisyUI" badge.outline "You"]
+                            ]
+                            actions: [button.primary.href: "#card" "Make it yours ↗"]
+                        ]
+                    ]
+                    codebox {petal [
+    card.border #[
+        title: "Hello, possibility."
+        content: [p "Something lovely is just a few lines away."]
+        actions: [button.primary "Make it yours"]
+    ]
+]} "A LITTLE ARTURO"
+                    div.class: "feature-grid" [
+                        div [span.class: "feature-number" "01" h3 "Compose naturally" p "Content stays positional. Named slots give bigger components a clear shape."]
+                        div [span.class: "feature-number" "02" h3 "Make it your own" p "Try a different theme above. Every preview follows your lead."]
+                        div [span.class: "feature-number" "03" h3 "Keep it readable" p "Real HTML underneath. Expressive Arturo on the surface."]
+                    ]
+                    a.class: "next-page" .href: "#installation" [span "Ready when you are" strong "Installation →"]
+                ]
+            ]
+            article.id: "installation" .class: "doc-page" .data_title: "Installation" [
+                petal [
+                    p.class: "eyebrow" "GETTING STARTED"
+                    h1 "A fresh start."
+                    p.class: "lead" "From an empty file to your first component in a few small steps."
+                    h2 "1. Install Petal UI"
+                    p "Use Arturo 0.10.0 or newer. The package declares HTML 1.0.0 or newer as a dependency."
+                    codebox "arturo -p install petal-ui" "TERMINAL"
+                    h2 "2. Compose your page"
+                    p "HTML owns the document. Enter a Petal region wherever you want styled components."
+                    codebox {import {petal-ui}!
+
+print html.lang: "en" [
+    head [
+        title "My first Petal page"
+        link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/daisyui.css" []
+        script.src: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18" []
+    ]
+    body [
+        petal [
+            button.primary "Hello, Petal!"
+        ]
+    ]
+]} "hello.art"
+                    h2 "3. Generate your HTML"
+                    codebox "arturo hello.art > index.html" "TERMINAL"
+                    alert.soft.info "Petal generates markup. Your host page loads DaisyUI 5 and Tailwind utilities; this example uses their browser CDNs. Network access is needed for these styles."
+                    h2 "Run this repository example"
+                    codebox "arturo -p install lanx\narturo examples/documentation/main.art" "FROM THE REPOSITORY ROOT"
+                    p "Open http://localhost:18966/ after Lanx starts. The page is rendered in memory; no build or output directory is needed. Restart after changing Arturo sources."
+                    p "This example imports ../../src/lib.art directly, so it always exercises your local Petal implementation. No JavaScript build tools are needed."
+                    a.class: "next-page" .href: "#composition" [span "Next up" strong "Composition →"]
+                ]
+            ]
+            article.id: "composition" .class: "doc-page" .data_title: "Composition" [
+                petal [
+                    p.class: "eyebrow" "GETTING STARTED"
+                    h1 "Small pieces, together."
+                    p.class: "lead" "Petal is a scope for composing components. Ordinary HTML and your own Arturo functions fit right in."
+                    h2 "Content and named slots"
+                    p "Simple components take text or a child block. Composite components use dictionaries for named slots. The slots execute once, inside the component scope."
+                    example {card.border #[
+    title: "A space for your idea"
+    content: [
+        p "Mix text, native HTML, and Petal components."
+        badge.primary "Composable"
+    ]
+    actions: [button.href: "#card" "Explore cards →"]
+]}
+                    h2 "Return markup from your own functions"
+                    codebox {profile: $[name :string] -> petal [
+    card.border #[
+        title: name
+        content: [badge.soft.primary "Arturo developer"]
+    ]
+]
+
+petal [
+    section [
+        profile "Ana"
+        profile "Rick & friends"
+    ]
+]} "ARTURO"
+                    h2 "Let HTML handle the text"
+                    p "Keep markup values intact when nesting components. HTML escapes text and attributes. Do not stringify and reinsert markup, or use raw for untrusted content."
+                    h2 "Use native behavior"
+                    p "Labels, required inputs, details, radio tabs, and dialogs keep browser semantics. Petal supplies structure and styles; your application owns business logic and submission."
+                    h2 "Complete composition examples"
+                    p "These examples run outside a Petal region and enter petal […] explicitly where needed. Function definitions are included with the examples that use them. Preview forms demonstrate structure without submitting data."
+                    loop.with: 'sampleIndex compositionEntries 'specimen [
+                        h3 specimen\heading
+                        unless empty? specimen\explanation [p specimen\explanation]
+                        referenceView ("/preview/composition/" ++ to :string sampleIndex) specimen
+                    ]
+                    a.class: "next-page" .href: "#components" [span "Find your building blocks" strong "Components →"]
+                ]
+            ]
+            sharedGuides
+            article.id: "components" .class: "doc-page" .data_title: "Components" [
+                petal [
+                    p.class: "eyebrow" "THE BUILDING BLOCKS"
+                    h1 "A little of everything."
+                    p.class: "lead" "Every Petal component, with the complete examples and behavior notes from its API contract. Every preview is generated from the Arturo shown beside it."
+                    div.class: "reference-summary" [
+                        badge.soft.primary [(to :string referenceCounts\components) " components"]
+                        badge.soft.secondary [(to :string referenceCounts\snippets) " examples"]
+                        badge.outline [(to :string referenceCounts\expectations) " HTML contracts"]
+                    ]
+                    loop groups 'group [
+                        h2 group
+                        div.class: "catalog-grid" [
+                            loop pages 'entry [
+                                if entry\group = group [
+                                    a.class: "catalog-card" .href: "#" ++ entry\id [
+                                        span.class: "catalog-symbol" .aria_hidden: "true" "✳"
+                                        h3 [entry\title " ↗"]
+                                        p entry\description
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                    p ["These guides stay in sync with " link.href: repository ++ "/tree/main/api" "the repository API contracts ↗" "."]
+                ]
+            ]
+            loop pages 'entry [
+                article.id: entry\id .class: "doc-page" .data_title: entry\title [
+                    petal [
+                        p.class: "eyebrow" ["COMPONENTS / " entry\group]
+                        div.class: "page-heading" [h1 entry\title badge.outline "Petal UI"]
+                        p.class: "lead" entry\description
+                        p "Use these examples inside petal […]. Each preview runs independently. Example navigation destinations and form submissions are disabled in previews."
+                        div.class: "doc-links" [
+                            link.href: "#contracts" "API conventions"
+                            link.href: "/reference/" ++ entry\id ++ ".art" "Read the complete source ↗"
+                        ]
+                        previousHeading: ""
+                        loop.with: 'sampleIndex entry\entries 'specimen [
+                            if specimen\heading <> previousHeading [
+                                h2 specimen\heading
+                                unless empty? specimen\explanation [p specimen\explanation]
+                                previousHeading: specimen\heading
+                            ]
+                            referenceView ("/preview/" ++ entry\id ++ "/" ++ to :string sampleIndex) specimen
+                        ]
+                        div.class: "doc-links" [
+                            link.href: repository ++ "/blob/main/api/" ++ entry\path "Source on GitHub ↗"
+                            link.href: "https://daisyui.com/components/" "DaisyUI style reference ↗"
+                        ]
+                        a.class: "next-page" .href: "#components" [span "Keep exploring" strong "All components →"]
+                    ]
+                ]
+            ]
+            footer.class: "site-footer" [
+                p ["Made with " a.href: "#overview" "Petal UI" ". Powered by Arturo, HTML, and DaisyUI."]
+                a.href: repository "Open source. Open possibilities. ↗"
+            ]
+        ]
+        aside.class: "on-this-page" .aria_label: "On this page" [
+            p "ON THIS PAGE"
+            nav.id: "page-outline" []
+            div.class: "outline-note" [span.aria_hidden: "true" "✿" p "A small library for your next big idea."]
+        ]
+        div.id: "announcement" .class: "sr-only" .role: "status" .aria_live: "polite" []
+    ]
+]
+
