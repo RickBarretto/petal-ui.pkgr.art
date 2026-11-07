@@ -4,3 +4,4 @@ bin
 *.exe
 *.bin
 .unitt-ci.log
+_site/

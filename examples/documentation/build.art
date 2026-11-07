@@ -1,0 +1,55 @@
+; Export the same Petal documentation as Lanx, without starting a server.
+import ./{page.art}!
+import ./{illustrations.art}!
+
+output: "_site"
+basePath: "/"
+if key? args 'output [output: args\output]
+if key? args 'base [basePath: args\base]
+ensure -> prefix? basePath "/"
+unless suffix? basePath "/" [basePath: basePath ++ "/"]
+
+write.directory "" output
+document: to :string documentation
+
+; SVG fixtures need SVG filenames on static hosts, which choose MIME by suffix.
+staticImages: $[source :string] [
+    result: source
+    loop referenceImages [imagePath imageSvg] [
+        filename: remove.prefix imagePath "/"
+        result: replace result ({src="} ++ filename) ({src="} ++ replace filename ".jpg" ".svg")
+    ]
+    result
+]
+
+loop previewDocuments [previewPath previewHtml] [
+    exported: staticImages previewHtml
+    exported: replace exported {href="/} ({href="} ++ basePath)
+    exported: replace exported {src="/} ({src="} ++ basePath)
+    ; Templates contain escaped HTML. Replace the complete document so copyable
+    ; Arturo and generated HTML examples keep their original application URLs.
+    document: replace document (escapeHtml previewHtml) (escapeHtml exported)
+    destination: output ++ previewPath
+    write.directory "" destination
+    write exported destination ++ "/index.html"
+]
+
+document: staticImages document
+document: replace document {href="/reference/} ({href="} ++ basePath ++ "reference/")
+document: replace document {href="/preview/} ({href="} ++ basePath ++ "preview/")
+document: replace document {data-preview="/preview/} ({data-preview="} ++ basePath ++ "preview/")
+write document output ++ "/index.html"
+write "" output ++ "/.nojekyll"
+
+loop ["styles.css" "app.js" "petal.svg" "preview.css" "preview.js"] 'asset [
+    copy (relative asset) output ++ "/" ++ asset
+]
+write.directory "" output ++ "/reference"
+write (read apiRoot ++ "README.md") output ++ "/reference/contracts.md"
+loop pages 'entry [
+    write (read apiRoot ++ entry\path) output ++ "/reference/" ++ entry\id ++ ".art"
+]
+loop referenceImages [imagePath imageSvg] [
+    write imageSvg output ++ replace imagePath ".jpg" ".svg"
+]
+print "Static documentation written to " ++ output

@@ -17,9 +17,29 @@ Lanx starts before Petal and the component reference are loaded. The first brows
 
 The page reads every component file under `api/` and imports `../../src/lib.art` directly, so no published Petal package is needed. Its HTML dependency must be available to Arturo; imports may acquire missing packages. DaisyUI 5.7.50, Tailwind's browser runtime 4.1.18, and Google Fonts load from CDNs, so the styled example needs internet access. The Tailwind browser runtime is convenient for this example; a production website should compile its utilities.
 
+## GitHub Pages
+
+The [published documentation](https://rickbarretto.github.io/petal-ui.pkgr.art/)
+is built by `.github/workflows/pages.yml` on pushes to `implement` and `main`,
+or through a manual workflow run. GitHub Pages uses **GitHub Actions** as its
+publishing source. The workflow exports the page, all standalone previews,
+source references, and SVG fixtures before deploying the `_site` artifact.
+
+To export locally without Lanx:
+
+```sh
+arturo examples/documentation/build.art --base:/petal-ui.pkgr.art/
+```
+
+Use `--base:/` for a domain root or `--base:/another-path/` for another mount
+point. `--output:/tmp/petal-docs` selects a different output directory; the
+default is `_site/` (ignored by Git). Serve that directory at the selected base
+path with any static HTTP server. CDN dependencies still require internet access.
+
 ## Edit the example
 
 - `main.art` starts Lanx and serves the page from memory, with static asset handling inherited from Lanx.
+- `build.art` exports that same documentation for static hosting, including base paths and preview assets.
 - `page.art` composes the document, navigation, guides, and component previews using Petal and HTML.
 - `content.art` discovers every component contract in `api/`, reads its prose and examples with `scripts/api-examples.art`, and executes each file in one Petal scope. Setup definitions accompany dependent examples.
 - `guides.art` documents shared API conventions, styling, themes, browser dependencies, and accessibility.
