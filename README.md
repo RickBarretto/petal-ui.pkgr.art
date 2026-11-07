@@ -73,6 +73,8 @@ also requires the host to load Cally. Petal generates markup; it does not
 install browser dependencies or load stylesheets.
 
 See [the API contracts](api/README.md) and [composition examples](api/composition.art).
+For a runnable documentation website built with Petal UI, see
+[the documentation example](examples/documentation/README.md), including its Lanx setup instructions.
 Content and named slots execute once. HTML handles escaping and serialization.
 Controls that Petal must adapt structurally must be created inside Petal;
 ordinary content slots also accept existing HTML markup.

@@ -1,0 +1,80 @@
+; Start Lanx before loading Petal or rendering the complete documentation.
+if standalone? [print "Starting Petal UI documentation..."]
+import {lanx}!
+import ./{illustrations.art}!
+
+docsPagePath: relative "page.art"
+docsState: #[loaded: false data: null sources: #[]]
+
+; The root page can respond before this work begins. Keep the rendered data in
+; the server's shared state rather than depending on import-local bindings.
+docsLoad: $[] [
+    unless docsState\loaded [
+        print "Preparing the complete Petal UI reference..."
+        import docsPagePath
+        loaded: #[
+            documentation: documentation previewDocuments: previewDocuments
+            pages: pages apiRoot: apiRoot referenceCounts: referenceCounts
+            escapeHtml: var 'escapeHtml
+        ]
+        sources: #["/reference/contracts.md": read loaded\apiRoot ++ "README.md"]
+        loop loaded\pages 'entry [
+            sources\["/reference/" ++ entry\id ++ ".art"]: read loaded\apiRoot ++ entry\path
+        ]
+        docsState\sources: sources
+        docsState\data: loaded
+        docsState\loaded: true
+        print "Petal UI documentation is ready."
+    ]
+    docsState\data
+]
+
+loadingPage: {<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Loading Petal UI</title><style>body{margin:0;background:#faf8fd;color:#30263e;font:16px/1.7 system-ui,sans-serif;display:grid;place-items:center;min-height:100vh}main{padding:32px;max-width:520px}h1{letter-spacing:-1px}span{color:#9773dc;font-size:48px}p{color:#70677b}a{color:#7352b5}</style></head><body><main><span aria-hidden="true">✿</span><h1>Petal UI</h1><p id="status" role="status">The server is running. Preparing the complete component reference…</p><noscript><a href="/documentation.html">Open the documentation</a></noscript></main><script>fetch('/ready').then(async response => {if (!response.ok) throw new Error(await response.text()); location.reload();}).catch(error => {document.getElementById('status').textContent = 'Unable to prepare the documentation: ' + error.message;});</script></body></html>}
+
+define :petalDocumentation is :lanx [
+    handle: method [req] [
+        if req\path = "/health" [
+            return #[body: "OK" status: 200 headers: #["Content-Type": "text/plain"]]
+        ]
+        if in? req\path ["/styles.css" "/app.js" "/petal.svg" "/preview.css" "/preview.js"] [
+            return \serveFile \root ++ req\path
+        ]
+        if key? referenceImages req\path [
+            return #[body: referenceImages\[req\path] status: 200 headers: #["Content-Type": "image/svg+xml"]]
+        ]
+        if req\path = "/ready" [
+            failure: try [docsLoad]
+            if error? failure [
+                return #[body: to :string failure status: 500 headers: #["Content-Type": "text/plain; charset=utf-8"]]
+            ]
+            return #[body: "Ready" status: 200 headers: #["Content-Type": "text/plain"]]
+        ]
+        if in? req\path ["/" "/index.html"] [
+            document: loadingPage
+            if docsState\loaded [document: to :string docsState\data\documentation]
+            return #[body: document status: 200 headers: #["Content-Type": "text/html; charset=utf-8"]]
+        ]
+        if or? (req\path = "/documentation.html") (or? (prefix? req\path "/preview/") (prefix? req\path "/reference/")) [
+            loaded: docsLoad
+            if req\path = "/documentation.html" [
+                return #[body: to :string loaded\documentation status: 200 headers: #["Content-Type": "text/html; charset=utf-8"]]
+            ]
+            if key? loaded\previewDocuments req\path [
+                return #[body: loaded\previewDocuments\[req\path] status: 200 headers: #["Content-Type": "text/html; charset=utf-8"]]
+            ]
+            if key? docsState\sources req\path [
+                return #[body: docsState\sources\[req\path] status: 200 headers: #["Content-Type": "text/plain; charset=utf-8"]]
+            ]
+        ]
+        #[body: "Not Found" status: 404 headers: #["Content-Type": "text/plain"]]
+    ]
+]
+
+docsServer: to :petalDocumentation []!
+docsServer\root: relative "."
+
+if standalone? [
+    print "Petal UI documentation: http://localhost:18966/"
+    print "Press Ctrl+C to stop."
+    docsServer\start
+]

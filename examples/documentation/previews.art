@@ -1,0 +1,62 @@
+; Each example has a separate document so IDs, radio groups, fixed positioning,
+; and theme controllers cannot interfere with the docs or another example.
+previewDocuments: #[]
+
+; Browser dependencies are shared across all preview documents. Construct their
+; markup once rather than rebinding the HTML scope for every script and link.
+previewHead: fragment [
+    meta.charset: "utf-8" []
+    base.href: "/" []
+    meta.name: "viewport" .content: "width=device-width, initial-scale=1" []
+    title "Petal UI component preview"
+    link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/daisyui.css" []
+    link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/themes.css" []
+    script.src: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18" .defer []
+    link.rel: "stylesheet" .href: "/preview.css" []
+    script.src: "/preview.js" .defer []
+]
+previewHeads: #[
+    ordinary: markup\head previewHead
+    calendar: markup\head fragment @[
+        previewHead
+        markup\script.type: "module" .src: "https://unpkg.com/cally" ""
+    ]
+]
+
+referencePreview: $[previewKey :string rendered] [
+    previewMarkup: rendered
+    documentBody: match.capture (to :string rendered) to :regex {(?s)<body[^>]*>(.*)</body>}
+    unless empty? documentBody [previewMarkup: markup\raw first documentBody]
+    selectedHead: previewHeads\ordinary
+    if in? "<calendar-date" to :string rendered [selectedHead: previewHeads\calendar]
+    previewBody: markup\body markup\div.class: "playground-root" previewMarkup
+    previewDocuments\[previewKey]: to :string markup\html.lang: "en" .data_theme: "light" fragment @[selectedHead previewBody]
+    ; Keep inactive documents inert. The browser only initializes a frame when
+    ; its guide is shown or the preview approaches the viewport.
+    fragment @[
+        markup\iframe.class: "component-frame" .data_preview: previewKey .sandbox: "allow-scripts allow-forms" .title: "Interactive Petal UI example" ""
+        markup\template.class: "preview-document" previewDocuments\[previewKey]
+        markup\noscript markup\a.href: previewKey "Open component preview"
+    ]
+]
+
+referenceView: $[previewKey :string specimen] [
+    ; Component rendering still happens in Petal. Documentation wrappers only
+    ; combine existing markup and text, so they need no scoped DSL evaluation.
+    hasPreview: not? empty? to :string specimen\rendered
+    children: []
+    if hasPreview [append 'children referencePreview previewKey specimen\rendered]
+    sourceParts: fragment @[
+        markup\summary "Arturo source"
+        codebox specimen\copyable "ARTURO"
+    ]
+    append 'children markup\details.class: "source-view" .open sourceParts
+    if hasPreview [
+        htmlParts: fragment @[
+            markup\summary "Generated HTML"
+            codebox (to :string specimen\rendered) "HTML"
+        ]
+        append 'children markup\details.class: "source-view" htmlParts
+    ]
+    markup\div.class: "example reference-example" fragment children
+]

@@ -3,6 +3,13 @@ import {src/lib.art}!
 import {specs/support/examples.art}!
 
 describe "Executable example extraction" [
+    it "retains section headings and behavior notes for documentation" [
+        entries: exampleEntries "; Button colors\n;\n; Colors are explicit.\nbutton.primary \"Go\"\n; => <button>Go</button>\n\n; Small buttons\nbutton.sm \"Go\"\n"
+        expects.be: 'equal? @["Button colors" entries\0\heading]
+        expects.be: 'equal? @["Colors are explicit." entries\0\explanation]
+        expects.be: 'equal? @["Small buttons" entries\1\heading]
+        expects.be: 'equal? @["" entries\1\explanation]
+    ]
     it "keeps semicolons in strings and reads inline expectations" [
         entries: exampleEntries {button "A; B" ; => <button>A; B</button>}
         expects.be: 'equal? @[1 size entries]

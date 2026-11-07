@@ -1,0 +1,122 @@
+sharedGuides: petal [
+    article.id: "contracts" .class: "doc-page" .data_title: "API conventions" [
+        p.class: "eyebrow" "GETTING STARTED"
+        h1 "An API that reads naturally."
+        p.class: "lead" "The shared contracts behind every Petal component: content, slots, modifiers, scope, and identity."
+        h2 "Enter the Petal scope"
+        p "petal […] evaluates a child block with short component names and returns an HTML markup fragment. Its child blocks and named slots retain that scope. Text, attributes, and serialization belong to the HTML package. Blocks execute once, and caller bindings are restored afterward."
+        codebox {petal [
+    button.primary "Continue"
+    p "Ordinary HTML helpers work here too."
+]} "ARTURO"
+        p "Inside Petal, button, input, table, menu, link, and footer are styled components. Outside it, native HTML helpers retain their meanings. Native link is metadata; Petal link is a styled anchor. An explicit native fragment, html, or body block establishes HTML helpers again; enter petal inside it when needed."
+        h2 "Positional content and named slots"
+        p "A string supplies text. A block supplies child components. Composite components accept a dictionary of named slots. Omitted optional slots produce no wrapper. A card owns its body and action structure; callers supply the content."
+        table.header: ["Slot" "Purpose"] [
+            ["title" "The component's heading or title"]
+            ["content" "Its main content, often a child block"]
+            ["image" "An image or avatar, where supported"]
+            ["actions" "Related action controls"]
+            ["open" "An opening control for dropdown, FAB, modal, or drawer"]
+            ["close" "A closing control, where supported"]
+        ]
+        p "open: is a slot containing a control; .open is an initial-state or layout flag. Individual component guides document their supported slots."
+        h2 "Flags and valued attributes"
+        p "Flags such as .primary, .outline, and .lg select variants. Valued attributes such as .href:, .name:, and .max: supply options. Names are lowercase and usually one word: gallery, rotate, radial, hint, and .frozen. Values such as 'heart, 'primary, and 'dark are Arturo literals, not custom types."
+        codebox {petal [
+    button.primary.lg "Continue"
+    button.href: "/account" "Your account"
+    input.email.required.placeholder: "you@example.com" ""
+]} "ARTURO"
+        h2 "Choose the right control"
+        table.header: ["API" "Result"] [
+            ["button.href" "Navigation anchor without an invented button role"]
+            ["button.submit / button.reset" "Native form buttons"]
+            ["check / radio" "Ordinary checkbox or radio control"]
+            ["check.button / radio.button" "Button-styled choice controls"]
+            ["upload" "A file control; its text is an accessible label"]
+            ["input.email / .password / .search / .number" "Native text-like input types"]
+            ["tooltip.text: \"Help\" content" "A tooltip wrapper with explicit supplementary text"]
+        ]
+        p "There is no generic .as conversion. Input's positional string supplies its initial value; .placeholder is explicit. Controls that Petal adapts structurally must be constructed inside Petal. Ordinary content slots can also accept existing HTML markup."
+        h2 "Contextual helpers"
+        p "item, tab, step, stat, and li.title belong to their owning components. Use tab inside tabs, stat inside stats, and step inside steps. item serves components such as accordion, carousel, list, timeline, dock, and megamenu. Do not create global aliases or modify the shared markup object."
+        h2 "Images and markup values"
+        p "Petal img and avatar take their image source positionally. An explicit .alt string is required for images. Use descriptive text for meaningful images and an empty string for decorative ones. Missing alt raises an error rather than guessing from the filename. Placeholder avatars use their own text contract."
+        codebox {petal [
+    img.alt: "Mountain landscape" "mountains.jpg"
+    img.alt: "" "flourish.jpg"
+]} "ARTURO"
+        p "Keep markup values intact across scopes. HTML escapes text and attributes; stringifying markup and reinserting it as text escapes it again. Avoid raw when composing markup or handling untrusted content."
+        h2 "IDs and group names"
+        p "Supply .id when an element needs a predictable identity. Otherwise Petal generates IDs for components that require wiring. Keep IDs unique across the document. Form groups use .name; when it is omitted, a supplied root ID can provide deterministic grouping. Independent radio and tab sets need different group names."
+        p "Accordion emits sibling details elements without a wrapper. Its .id supplies the shared details name rather than a root element ID. Drawer IDs also define the related toggle and sidebar identities. Modal owns its opening and closing wiring."
+        h2 "Reading the reference"
+        p "Every component guide includes all the examples and behavior notes from its api/ file. Arturo source is copyable, setup definitions accompany dependent examples, and generated HTML comes from the local renderer. The test suite compares every ; => HTML contract, including multiline expectations."
+        div.class: "doc-links" [link.href: "/reference/contracts.md" "Read the shared contract source ↗" link.href: "#components" "Explore all components →"]
+    ]
+    article.id: "styling" .class: "doc-page" .data_title: "Styling & themes" [
+        p.class: "eyebrow" "GETTING STARTED"
+        h1 "Give your idea a style."
+        p.class: "lead" "DaisyUI supplies component styles. Tailwind supplies utilities. Petal composes the markup."
+        h2 "Load the browser dependencies"
+        p "The host page must load DaisyUI 5 and the Tailwind utilities its components use. Petal does not install browser dependencies or inject stylesheets. For this example, CDN styles and Tailwind's browser runtime keep setup small. A production site can compile its utilities instead."
+        codebox {head [
+    link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/daisyui.css" []
+    link.rel: "stylesheet" .href: "https://cdn.jsdelivr.net/npm/daisyui@5.7.50/themes.css" []
+    script.src: "https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.18" []
+]} "HTML DSL"
+        h2 "Shared colors and sizes"
+        p "Where supported, sizes are .xs, .sm, .md, .lg, and .xl. Semantic colors are .neutral, .primary, .secondary, .accent, .info, .success, .warning, and .error. Individual guides list supported combinations through their examples. A color or size modifier applies to the component's intended element, which can be an inner wrapper."
+        h2 "Utility attributes"
+        p "These conveniences belong to Petal, not the underlying HTML package. Native .class can add other Tailwind utilities or your own styles. Layout and decoration are explicit: a card does not invent a fixed width, background, or shadow."
+        table.header: ["Petal attribute" "Generated utility or behavior"] [
+            [".w: 96 / .h: 64" "w-96 / h-64"]
+            [".p: 4 / .m: 2 / .gap: 3" "p-4 / m-2 / gap-3"]
+            [".z: 10 / .duration: 300" "z-10 / duration-300"]
+            [".bg: 'base100" "bg-base-100 (also base200 and base300)"]
+            [".shadow: 'sm" "shadow-sm"]
+            [".rounded / .flex" "rounded-box / flex"]
+            [".mask: 'heart" "mask mask-heart"]
+            [".class: \"my-component\"" "An explicit CSS class"]
+        ]
+        h2 "Themes"
+        p "Set data-theme on the host document or a container. The HTML DSL writes that attribute as .data_theme:. DaisyUI's default stylesheet includes light and dark; themes.css adds the other built-in themes. The picker above applies to documentation and previews and stores your preference when browser storage is available."
+        codebox {html.data_theme: "cupcake" [
+    body [petal [button.primary "A different mood"]]
+]} "ARTURO"
+        p "The theme component instead uses DaisyUI theme-controller inputs. Those controls do not persist their state automatically. Explore the theme controller guide for checkbox, toggle, and icon variants."
+        h2 "Calendar dependency"
+        p "Petal calendar emits Cally web components. Load Cally in the host page as a module; DaisyUI supplies the calendar styles. Without Cally, the custom elements do not provide calendar interaction. Calendar previews here load that dependency themselves."
+        codebox {script.type: "module" .src: "https://unpkg.com/cally" []} "HTML DSL"
+        h2 "Preview assets and application behavior"
+        p "Image filenames in the API contracts are illustrative. This website serves local SVG illustrations for those filenames, while the copied Arturo and HTML retain the documented source and alt text. Replace the filenames with your own assets in an application."
+        p "Preview links and non-dialog form submissions stay inside the example and do not navigate or submit data. Application endpoints, data persistence, sorting, ticking timers, and other business behavior belong to your application unless a component guide explicitly says otherwise."
+        div.class: "doc-links" [link.href: "#theme" "Theme controller →" link.href: "#calendar" "Calendar →"]
+    ]
+    article.id: "accessibility" .class: "doc-page" .data_title: "Accessibility" [
+        p.class: "eyebrow" "GETTING STARTED"
+        h1 "Built for people."
+        p.class: "lead" "Use meaningful labels, native controls, and explicit state so interfaces remain understandable beyond their appearance."
+        h2 "Accessible names and descriptions"
+        table.header: ["Petal attribute" "HTML attribute"] [
+            [".label: \"Email address\"" "aria-label"]
+            [".busy: true" "aria-busy"]
+            [".description: \"email-help\"" "aria-describedby"]
+        ]
+        p "Prefer visible labels connected with label.for: and an input's .id, or wrap a choice control in a label. Descriptions reference existing element IDs. Accessible names should describe the control's purpose."
+        h2 "Native semantics and keyboard behavior"
+        p "Use navigation anchors for destinations, and buttons for actions. Disabled and read-only controls retain their native attributes. Native required, type, min, max, and other constraints retain browser behavior. Petal does not submit forms automatically."
+        p "Accordions and collapse use details and summary. Modal uses dialog, showModal(), and a close form with method=dialog; Escape closes it. Tabs use native radio semantics rather than incomplete ARIA tab roles. Drawer is a sidebar layout and does not add modal focus trapping or automatic Escape handling."
+        h2 "State and progress"
+        p "Active menu anchors communicate aria-current=page. Current steps use aria-current=step, and colors remain explicit. Alerts use role=alert. Loading and progress need meaningful accessible labels. Countdown displays are values with CSS transitions rather than automatically ticking timers."
+        p "Use status text as well as color. Provide text for progress and loading states that explains what is happening. A disabled menu placeholder has no href or click action and is removed from keyboard focus."
+        h2 "Images and decorative content"
+        p "Every meaningful image needs descriptive .alt text. Decorative images use .alt: \"\". Petal hides decorative generated icons where appropriate; a custom icon should not repeat an already-visible label."
+        h2 "Identity and composition"
+        p "Use unique IDs and group names. Duplicate IDs can connect a control to the wrong dialog or label; repeated radio names can link unrelated choices. Keep structural controls inside Petal so it can adapt their semantics correctly."
+        h2 "What the library does and what to verify"
+        p "Petal's tests verify generated markup and accessibility contracts. They do not establish the accessibility of a complete application. Check your composed page's labels, heading order, keyboard navigation, focus behavior, contrast, and application-specific interactions."
+        div.class: "doc-links" [link.href: "#contracts" "API conventions →" link.href: "#components" "Component behavior reference →"]
+    ]
+]

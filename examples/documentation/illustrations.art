@@ -1,0 +1,15 @@
+; Original vector fixtures for the illustrative filenames in the API examples.
+; These assets are served from memory; no image service or generated files.
+referenceImages: #[]
+landscapeFixture: {<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400"><rect width="640" height="400" fill="SKY"/><circle cx="475" cy="100" r="43" fill="#fff2cb"/><path d="M0 330 170 120 335 330Z" fill="#b1a1cc"/><path d="m190 340 235-245 215 245Z" fill="#786996"/><path d="m365 158 60-63 56 64-40-10-20 20-24-17Z" fill="#f4effa"/><path d="M0 330Q150 275 340 330T640 315V400H0Z" fill="#849f92"/><path d="M0 375Q220 310 440 365T640 350V400H0Z" fill="#536e66"/><text x="28" y="374" fill="white" font-family="sans-serif" font-size="16">CAPTION</text></svg>}
+portraitFixture: {<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240"><rect width="240" height="240" rx="20" fill="SKY"/><circle cx="120" cy="92" r="45" fill="#e0b697"/><path d="M75 84c0-65 95-65 92 7-14-12-20-37-32-35-14 22-42 29-60 28Z" fill="#473b52"/><path d="M30 240c0-98 180-98 180 0" fill="#786996"/><circle cx="104" cy="94" r="3" fill="#473b52"/><circle cx="136" cy="94" r="3" fill="#473b52"/><path d="M106 111q14 13 28 0" fill="none" stroke="#9f635b" stroke-width="3"/></svg>}
+shoeFixture: {<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400"><rect width="640" height="400" fill="SKY"/><ellipse cx="320" cy="315" rx="205" ry="22" fill="#473b5214"/><path d="m120 270 35-135 70 50 90-15 65 60 115 35q40 10 27 40H120Z" fill="#f9f6ff" stroke="#b1a1cc" stroke-width="5"/><path d="m315 170 65 60-40 45-98-70Z" fill="#a38bc5"/><path d="M120 305h400" stroke="#786996" stroke-width="12"/><path d="m265 193 60 23m-38-6 60 23m-38-6 60 23" stroke="#fff" stroke-width="7"/><text x="28" y="374" fill="#786996" font-family="sans-serif" font-size="16">CAPTION</text></svg>}
+loop ["mountains.jpg" "forest.jpg" "coast.jpg" "before.jpg" "after.jpg" "front.jpg" "side.jpg" "back.jpg" "flourish.jpg" "shoes.jpg" "ana.jpg" "rick.jpg"] 'fixtureName [
+    fixture: landscapeFixture
+    if fixtureName = "shoes.jpg" [fixture: shoeFixture]
+    if in? fixtureName ["ana.jpg" "rick.jpg"] [fixture: portraitFixture]
+    sky: "#e8dff4"
+    if in? fixtureName ["forest.jpg" "after.jpg" "side.jpg" "rick.jpg"] [sky: "#d2e3d8"]
+    if in? fixtureName ["coast.jpg" "back.jpg"] [sky: "#d7e8ef"]
+    referenceImages\["/" ++ fixtureName]: replace (replace fixture "SKY" sky) "CAPTION" capitalize remove.suffix fixtureName ".jpg"
+]

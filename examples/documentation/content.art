@@ -1,0 +1,76 @@
+; The API contracts are the source of truth for every component and variant.
+import relative "../../scripts/api-examples.art"!
+
+groups: ["Actions" "Data display" "Data input" "Feedback" "Layout" "Navigation"]
+referenceState: #[entries: []]
+referenceCounts: #[components: 0 snippets: 0 expectations: 0]
+
+referenceCapture: $[position rendered] [
+    referenceState\entries\[position]\rendered: rendered
+    null
+]
+
+; Instrument each file as one program so setup bindings stay in scope.
+referenceExamples: $[sourceText :string native :logical] [
+    entries: exampleEntries sourceText
+    referenceState\entries: entries
+    program: []
+    ignored: @[
+        loop.with: 'position entries 'entry [
+            append 'program to :word "referenceCapture"
+            append 'program position
+            append 'program to :word "_pFragment"
+            append 'program to :word "array"
+            append 'program @[to :block entry\_exampleSource]
+        ]
+        switch native [do program] [petal program]
+    ]
+    setup: ""
+    loop entries 'entry [
+        entry\copyable: setup ++ entry\_exampleSource
+        if empty? to :string entry\rendered [setup: setup ++ entry\_exampleSource ++ "\n"]
+    ]
+    entries
+]
+
+labels: #[
+    hover3d: "Hover 3D"
+    kbd: "Keyboard"
+    otp: "OTP"
+    checkbox: "Checkbox"
+    file: "File input"
+    radial: "Radial progress"
+    theme: "Theme controller"
+    rotate: "Text rotate"
+    stat: "Stat"
+]
+
+pages: []
+apiRoot: relative "../../api/"
+loop.with: 'groupIndex ["actions" "data-display" "data-input" "feedback" "layout" "navigation"] 'category [
+    loop sort list apiRoot ++ category 'fileName [
+        if match? fileName {\.art$} [
+            sourceText: read fileName
+            entries: referenceExamples sourceText false
+            slug: remove.suffix (extract.basename fileName) ".art"
+            heading: capitalize slug
+            if key? labels to :literal slug [heading: labels\[to :literal slug]]
+            lead: entries\0\explanation
+            if empty? lead [lead: "Compose " ++ lower heading ++ " components with Petal UI."]
+            ; Keep the overview brief; each section retains its complete notes.
+            lead: first split.by: ". " lead
+            unless suffix? lead "." [lead: lead ++ "."]
+            append 'pages #[
+                id: slug title: heading group: groups\[groupIndex]
+                description: lead entries: entries
+                path: category ++ "/" ++ slug ++ ".art"
+            ]
+            referenceCounts\components: referenceCounts\components + 1
+            referenceCounts\snippets: referenceCounts\snippets + size entries
+            loop entries 'entry [
+                unless null? entry\expected [referenceCounts\expectations: referenceCounts\expectations + 1]
+            ]
+        ]
+    ]
+]
+compositionEntries: referenceExamples (read apiRoot ++ "composition.art") true
