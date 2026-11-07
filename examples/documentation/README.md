@@ -20,8 +20,8 @@ The page reads every component file under `api/` and imports `../../src/lib.art`
 ## GitHub Pages
 
 The [published documentation](https://rickbarretto.github.io/petal-ui.pkgr.art/)
-is built by `.github/workflows/pages.yml` on pushes to `implement` and `main`,
-or through a manual workflow run. GitHub Pages uses **GitHub Actions** as its
+is built by `.github/workflows/pages.yml` on pushes to `main`,
+or through a manual workflow run on `main`. GitHub Pages uses **GitHub Actions** as its
 publishing source. The workflow exports the page, all standalone previews,
 source references, and SVG fixtures before deploying the `_site` artifact.
 
