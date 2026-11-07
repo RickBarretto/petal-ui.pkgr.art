@@ -1,0 +1,50 @@
+name: Documentation
+
+on:
+    push:
+        branches: [main, implement]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+concurrency:
+    group: github-pages
+    cancel-in-progress: false
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: arturo-lang/setup-arturo@v2
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Configure Pages
+              id: pages
+              uses: actions/configure-pages@v5
+            - name: Build static documentation
+              env:
+                  PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+              run: |
+                  arturo examples/documentation/build.art --base:"${PAGES_BASE_PATH}/"
+                  test -s _site/index.html
+                  test -s _site/preview/button/1/index.html
+                  test -s _site/reference/button.art
+            - uses: actions/upload-pages-artifact@v4
+              with:
+                  path: _site
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+            - name: Deploy documentation
+              id: deployment
+              uses: actions/deploy-pages@v4

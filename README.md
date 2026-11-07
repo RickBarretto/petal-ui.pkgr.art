@@ -48,6 +48,8 @@ import {petal-ui}!
 
 ## Documentation
 
+[Read the documentation](https://rickbarretto.github.io/petal-ui.pkgr.art/)
+for guides, live previews, and the complete component reference.
 
 Import the package and compose styled components with the HTML DSL:
 
